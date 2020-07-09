@@ -1,2 +1,8 @@
-// Include miligram styles
-@import '~milligram/src/milligram.sass'
+/* Variables */
+@import './variables';
+
+/* General styles */
+@import './general';
+
+/* Editor styles */
+@import './editor';

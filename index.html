@@ -31,20 +31,22 @@
                     </div>
                     <div id="options-fields-container">
                         <div id="add-image-container" class="flex">
-                            <div class="add-image-radio-container">
+                            <div class="add-image-radio-container col">
                                 <div class="add-image-radio">
-                                    <input type="radio" name="add-image-method" id="image-url" value="url">URL
+                                    <input type="radio" name="add-image-method" id="image-url-radio" value="url">URL
                                 </div>
                                 <div class="add-image-radio">
-                                    <input type="radio" name="add-image-method" id="image-file" value="file">
-                                    Upload File
+                                    <input type="radio" name="add-image-method" id="image-file-radio"
+                                        value="file">Upload File
                                 </div>
                             </div>
-                            <div class="image-url-container">
-                                <input type="text" name="image-url" id="image-url">
-                                <button type="button" class="button">Submit</button>
+                            <div class="image-url-container col text-center">
+                                <input type="text" name="image-url" id="image-url" value="">
+                                <button type="button" class="button" id="submit-image-url">Submit</button>
                             </div>
-
+                            <div class="col text-right">
+                                <button type="button" class="button cancel-option">Cancel</button>
+                            </div>
                         </div>
                     </div>
 

@@ -6,8 +6,16 @@ export default class GoateeEditor {
         this.elementSelector = elementSelector;
         this.width = config.width;
         this.height = config.height;
+        this.editorWrapper = document.getElementById('editor-wrapper');
+
+        // Main canvas element
+        this.canvas = null;
+
+        // Bind functions
+        this.addImageFromUrl = this.addImageFromUrl.bind(this);
 
         this.init();
+        this.addEvents();
     }
 
     init() {
@@ -19,20 +27,28 @@ export default class GoateeEditor {
         document.querySelector(this.elementSelector).appendChild(canvasElement);
 
         // Plug the fabricjs plugin
-        var canvas = new fabric.Canvas('goatee-editor');
-
-        var rect = new fabric.Rect({
-            top: 100,
-            left: 100,
-            width: 60,
-            height: 70,
-            fill: 'red'
-        });
-
-        canvas.add(rect);
+        this.canvas = new fabric.Canvas('goatee-editor');
     }
 
-    open(url) {
-        document.querySelector(this.elementSelector)
+    addEvents() {
+        const submitImageURLButton = this.editorWrapper.querySelector('#submit-image-url');
+
+
+        if (submitImageURLButton) {
+            submitImageURLButton.addEventListener('click', this.addImageFromUrl);
+        }
+    }
+
+    addImageFromUrl() {
+        console.log('holi');
+        let _localCanvas = this.canvas;
+        let imgURL = this.editorWrapper.querySelector('#image-url').value;
+        console.log(imgURL);
+        if (imgURL != '') {
+            fabric.Image.fromURL(imgURL, function (oImg) {
+                _localCanvas.add(oImg);
+                _localCanvas.renderAll();
+            });
+        }
     }
 }

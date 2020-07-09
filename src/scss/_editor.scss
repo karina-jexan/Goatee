@@ -1,20 +1,33 @@
+$measurement : 2px;
+
+// Import font
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;700&display=swap');
+
+
 #editor-container {
-    border: 1px solid #ccc;
+    border: 2px solid #000;
 }
 
 #options-container {
     height: 70px;
     display: flex;
+    margin-top: 0.2em;
 
     .editor-option {
         height: 100%;
     }
     & button {
-        height: 100%;
-
+        background: white;
+        border: $measurement solid black;
+        cursor: pointer;
+        padding: 0.5em 0.75em;
+        position: relative;
+        font-family: 'Nunito', sans-serif;
+        font-weight: bold;
+        margin-right: 0.2em;
         i {
             display: block;
+            font-size:2em;
         }
     }
-
-}
+}   

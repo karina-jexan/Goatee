@@ -39,6 +39,7 @@ export default class GoateeEditor {
         const browseImageFileButton = this.editorWrapper.querySelector('#browse-image');
         const imageFileInput = this.editorWrapper.querySelector('#image-file');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
+        const addImageOption = this.editorWrapper.querySelector('.add-image-option');
 
         if (submitImageURLButton) {
             submitImageURLButton.addEventListener('click', this.addImageFromUrl);
@@ -54,6 +55,10 @@ export default class GoateeEditor {
 
         if (addImageRadioContainer) {
             addImageRadioContainer.addEventListener('click', this.showHideImageOptions);
+        }
+
+        if (addImageOption) {
+            addImageOption.addEventListener('click', this.showHideImageOptions);
         }
     }
 
@@ -90,6 +95,9 @@ export default class GoateeEditor {
         else if (event.target.id === 'image-file-radio') {
             this.editorWrapper.querySelector('.image-upload-container').classList.remove('hide');
             this.editorWrapper.querySelector('.image-url-container').classList.add('hide');
+        }
+        else if (event.target.classList.contains('add-image-option')) {
+            this.editorWrapper.querySelector('#add-image-container').classList.remove('hide');
         }
     }
 

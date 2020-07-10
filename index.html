@@ -17,28 +17,35 @@
                     <div id="editor-container"></div>
                     <div id="options-container">
                         <div class="editor-option">
-                            <button type="button"><i class="far fa-image"></i> Add Image</button>
+                            <button type="button" class="add-image-option"><i class="far fa-image"></i> Add
+                                Image</button>
                         </div>
                         <div class="editor-option">
-                            <button type="button"><i class="far fa-image"></i> Add Image</button>
+                            <button type="button"><i class="fas fa-font"></i> Add Text</button>
                         </div>
                         <div class="editor-option">
-                            <button type="button"><i class="far fa-image"></i> Add Image</button>
+                            <button type="button"><i class="far fa-kiss-beam"></i> Add Emoji</button>
                         </div>
                         <div class="editor-option">
-                            <button type="button"><i class="far fa-image"></i> Add Image</button>
+                            <button type="button"><i class="fas fa-undo"></i> Undo</button>
+                        </div>
+                        <div class="editor-option">
+                            <button type="button"><i class="fas fa-redo"></i> Redo</button>
+                        </div>
+                        <div class="editor-option">
+                            <button type="button"><i class="fas fa-save"></i> Save</button>
                         </div>
                     </div>
                     <div id="options-fields-container">
-                        <div id="add-image-container" class="flex">
+                        <div id="add-image-container" class="flex hide">
                             <div class="add-image-radio-container col">
                                 <div class="add-image-radio">
-                                    <input type="radio" name="add-image-method" id="image-url-radio" value="url"
-                                        checked>URL
+                                    <input type="radio" class="radio-option" name="add-image-method"
+                                        id="image-url-radio" value="url" checked>URL
                                 </div>
                                 <div class="add-image-radio">
-                                    <input type="radio" name="add-image-method" id="image-file-radio"
-                                        value="file">Upload File
+                                    <input type="radio" class="radio-option" name="add-image-method"
+                                        id="image-file-radio" value="file">Upload File
                                 </div>
                             </div>
                             <div class="image-inputs-container col text-center">

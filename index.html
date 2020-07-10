@@ -33,21 +33,35 @@
                         <div id="add-image-container" class="flex">
                             <div class="add-image-radio-container col">
                                 <div class="add-image-radio">
-                                    <input type="radio" name="add-image-method" id="image-url-radio" value="url">URL
+                                    <input type="radio" name="add-image-method" id="image-url-radio" value="url"
+                                        checked>URL
                                 </div>
                                 <div class="add-image-radio">
                                     <input type="radio" name="add-image-method" id="image-file-radio"
                                         value="file">Upload File
                                 </div>
                             </div>
-                            <div class="image-url-container col text-center">
-                                <input type="text" name="image-url" id="image-url" value="">
-                                <button type="button" class="button" id="submit-image-url">Submit</button>
+                            <div class="image-inputs-container col text-center">
+                                <div class="image-url-container">
+                                    <input type="text" name="image-url" id="image-url" value="">
+                                    <button type="button" class="button" id="submit-image-url">Submit</button>
+                                </div>
+                                <div class="image-upload-container hide">
+                                    <input type="text" name="image-filename" id="image-filename" value=""
+                                        data-fileinputid="image-file">
+                                    <button type="button" class="button" id="browse-image"
+                                        data-fileinputid="image-file">Browse</button>
+                                    <input type="file" name="image-file" id="image-file" class="hide">
+
+                                </div>
                             </div>
+
                             <div class="col text-right">
                                 <button type="button" class="button cancel-option">Cancel</button>
                             </div>
                         </div>
+
+
                     </div>
 
                 </div>

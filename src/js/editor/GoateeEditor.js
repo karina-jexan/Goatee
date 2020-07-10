@@ -8,6 +8,7 @@ export default class GoateeEditor {
         this.height = config.height;
         this.editorWrapper = document.getElementById('editor-wrapper');
         this.optionsWrapper = this.editorWrapper.querySelector('#options-fields-container');
+        this.textElementInCanvas = false;
 
         // Main canvas element
         this.canvas = null;
@@ -20,6 +21,7 @@ export default class GoateeEditor {
         this.addImageFile = this.addImageFile.bind(this);
         this.closeAllOptions = this.closeAllOptions.bind(this);
         this.openOption = this.openOption.bind(this);
+        this.addText = this.addText.bind(this);
 
 
         this.init();
@@ -45,6 +47,7 @@ export default class GoateeEditor {
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
         const addImageOption = this.editorWrapper.querySelector('.add-image-option');
         const mainOptionButtons = this.editorWrapper.querySelectorAll('#options-container .editor-option button.open-options');
+        const addTextInput = this.editorWrapper.querySelector('#add-text-input');
 
         if (submitImageURLButton) {
             submitImageURLButton.addEventListener('click', this.addImageFromUrl);
@@ -66,6 +69,10 @@ export default class GoateeEditor {
             mainOptionButtons.forEach(element => {
                 element.addEventListener('click', this.openOption);
             });
+        }
+
+        if (addTextInput) {
+            addTextInput.addEventListener('keyup', this.addText);
         }
     }
 
@@ -134,5 +141,27 @@ export default class GoateeEditor {
         if (optionID) {
             this.editorWrapper.querySelector('#' + optionID).classList.remove('hide');
         }
+    }
+
+    addText(event) {
+        // Create text object this will only occur the first time the object is added
+        let _localCanvas = this.canvas;
+        const canvasObjects = _localCanvas.getObjects();
+        if (this.textElementInCanvas) {
+            canvasObjects.forEach(object => {
+                if (object.name === 'textElement') {
+                    object.set('text', event.target.value)
+                }
+            });
+        }
+        else {
+            this.textElementInCanvas = true;
+            let inputValue = event.target.value;
+            let textElement = new fabric.Text(inputValue, { name: 'textElement' });
+            textElement.center();
+            _localCanvas.add(textElement);
+        }
+
+        _localCanvas.renderAll();
     }
 }

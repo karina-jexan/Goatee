@@ -7,6 +7,7 @@ export default class GoateeEditor {
         this.width = config.width;
         this.height = config.height;
         this.editorWrapper = document.getElementById('editor-wrapper');
+        this.optionsWrapper = this.editorWrapper.querySelector('#options-fields-container');
 
         // Main canvas element
         this.canvas = null;
@@ -17,6 +18,9 @@ export default class GoateeEditor {
         this.getFileName = this.getFileName.bind(this);
         this.showHideImageOptions = this.showHideImageOptions.bind(this);
         this.addImageFile = this.addImageFile.bind(this);
+        this.closeAllOptions = this.closeAllOptions.bind(this);
+        this.openOption = this.openOption.bind(this);
+
 
         this.init();
         this.addEvents();
@@ -40,6 +44,7 @@ export default class GoateeEditor {
         const imageFileInput = this.editorWrapper.querySelector('#image-file');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
         const addImageOption = this.editorWrapper.querySelector('.add-image-option');
+        const mainOptionButtons = this.editorWrapper.querySelectorAll('#options-container .editor-option button.open-options');
 
         if (submitImageURLButton) {
             submitImageURLButton.addEventListener('click', this.addImageFromUrl);
@@ -57,8 +62,10 @@ export default class GoateeEditor {
             addImageRadioContainer.addEventListener('click', this.showHideImageOptions);
         }
 
-        if (addImageOption) {
-            addImageOption.addEventListener('click', this.showHideImageOptions);
+        if (mainOptionButtons) {
+            mainOptionButtons.forEach(element => {
+                element.addEventListener('click', this.openOption);
+            });
         }
     }
 
@@ -96,9 +103,6 @@ export default class GoateeEditor {
             this.editorWrapper.querySelector('.image-upload-container').classList.remove('hide');
             this.editorWrapper.querySelector('.image-url-container').classList.add('hide');
         }
-        else if (event.target.classList.contains('add-image-option')) {
-            this.editorWrapper.querySelector('#add-image-container').classList.remove('hide');
-        }
     }
 
     addImageFile(event) {
@@ -114,5 +118,21 @@ export default class GoateeEditor {
             }
         }
         reader.readAsDataURL(event.target.files[0]);
+    }
+
+    closeAllOptions() {
+        const optionsElements = this.optionsWrapper.children;
+        for (let i = 0; i < optionsElements.length; i++) {
+            optionsElements[i].classList.add('hide');
+        }
+    }
+
+    openOption(event) {
+        this.closeAllOptions();
+
+        const optionID = event.target.dataset.optionid;
+        if (optionID) {
+            this.editorWrapper.querySelector('#' + optionID).classList.remove('hide');
+        }
     }
 }

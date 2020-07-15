@@ -7,13 +7,18 @@ export default class GoateeEditor {
         this.width = config.width;
         this.height = config.height;
         this.editorWrapper = document.getElementById('editor-wrapper');
+        this.editorContainer = document.getElementById('editor-container');
         this.optionsWrapper = this.editorWrapper.querySelector('#options-fields-container');
         this.textElementInCanvas = false;
 
-        // Main canvas element
+        // Main canvas DOM element
+        this.canvasElement = null;
+        // Main canvas object
         this.canvas = null;
 
         // Bind functions
+        this.init = this.init.bind(this);
+        this.resizeCanvas = this.resizeCanvas.bind(this);
         this.addImageFromUrl = this.addImageFromUrl.bind(this);
         this.openFileExplorer = this.openFileExplorer.bind(this);
         this.getFileName = this.getFileName.bind(this);
@@ -29,18 +34,20 @@ export default class GoateeEditor {
     }
 
     init() {
-        // Create canvas element
-        let canvasElement = document.createElement('CANVAS');
-        canvasElement.width = this.width;
-        canvasElement.height = this.height;
-        canvasElement.id = 'goatee-editor';
-        document.querySelector(this.elementSelector).appendChild(canvasElement);
+
+        this.canvasElement = document.getElementById('goatee-editor');
+        let context = this.canvasElement.getContext("2d");
+        this.editorContainer = document.getElementById('editor-container');
+        context.canvas.width = this.editorContainer.clientWidth;
+        context.canvas.height = this.editorContainer.clientHeight;
 
         // Plug the fabricjs plugin
         this.canvas = new fabric.Canvas('goatee-editor');
+
     }
 
     addEvents() {
+        window.addEventListener('resize', this.resizeCanvas, false);
         const submitImageURLButton = this.editorWrapper.querySelector('#submit-image-url');
         const browseImageFileButton = this.editorWrapper.querySelector('#browse-image');
         const imageFileInput = this.editorWrapper.querySelector('#image-file');
@@ -74,6 +81,11 @@ export default class GoateeEditor {
         if (addTextInput) {
             addTextInput.addEventListener('keyup', this.addText);
         }
+    }
+
+    resizeCanvas(event) {
+        this.canvasElement.width = this.editorContainer.clientWidth;
+        this.canvasElement.height = this.editorContainer.clientHeight;
     }
 
     addImageFromUrl() {

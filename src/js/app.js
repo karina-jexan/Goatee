@@ -1,8 +1,8 @@
 import GoateeEditor from './editor/GoateeEditor'
 
 const config = {
-    width: '600',
-    height: '500'
+    width: '600px',
+    height: '500px'
 }
 
 

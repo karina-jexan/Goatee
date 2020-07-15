@@ -6,6 +6,13 @@ $measurement : 2px;
 #editor-wrapper {
     #editor-container {
         border: 2px solid #000;
+        margin: 0 auto;
+        position: relative;
+        width:100%;
+        canvas {
+            width: 100%;
+        }    
+
     }
     
     #options-container {

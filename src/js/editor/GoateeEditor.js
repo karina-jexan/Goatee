@@ -31,6 +31,7 @@ export default class GoateeEditor {
         this.setActiveTab = this.setActiveTab.bind(this);
         this.showFacebookOptions = this.showFacebookOptions.bind(this);
         this.addImageFromUrlFacebook = this.addImageFromUrlFacebook.bind(this);
+        this.cancelUploadFromFacebook = this.cancelUploadFromFacebook.bind(this);
         this.showElement = this.showElement.bind(this);
         this.hideElement = this.hideElement.bind(this);
 
@@ -70,10 +71,6 @@ export default class GoateeEditor {
         const cancelUploadFromFacebookButton = this.editorWrapper.querySelector('#cancel-facebook-image');
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
 
-        if (submitImageURLFacebookButton) {
-            submitImageURLFacebookButton.addEventListener('click', this.addImageFromUrlFacebook);
-        }
-
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);
         }
@@ -94,6 +91,14 @@ export default class GoateeEditor {
 
         if (uploadFromFacebookButton) {
             uploadFromFacebookButton.addEventListener('click', this.showFacebookOptions)
+        }
+
+        if (submitImageURLFacebookButton) {
+            submitImageURLFacebookButton.addEventListener('click', this.addImageFromUrlFacebook);
+        }
+
+        if (cancelUploadFromFacebookButton) {
+            cancelUploadFromFacebookButton.addEventListener('click', this.cancelUploadFromFacebook);
         }
 
         if (addTextInput) {
@@ -117,6 +122,11 @@ export default class GoateeEditor {
     addImageFromUrlFacebook(event) {
         const imgUrl = this.editorWrapper.querySelector('#image-url-facebook').value;
         this.addImageFromUrl(imgUrl);
+    }
+
+    cancelUploadFromFacebook(event) {
+        this.hideElement('.image-url-container');
+        this.showElement('#image-options-container');
     }
 
     addImageFromUrl(imgURL) {

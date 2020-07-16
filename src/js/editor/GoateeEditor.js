@@ -44,7 +44,15 @@ export default class GoateeEditor {
 
         // Plug the fabricjs plugin
         this.canvas = new fabric.Canvas('goatee-editor');
-
+        let _localCanvas = this.canvas;
+        // Add initial image
+        fabric.Image.fromURL('../img/placeholder-image-purple.png', function (oImg) {
+            oImg.set('name', 'initialImage');
+            oImg.set('selectable', false);
+            _localCanvas.add(oImg);
+            oImg.center();
+            _localCanvas.renderAll();
+        });
     }
 
     addEvents() {
@@ -100,7 +108,6 @@ export default class GoateeEditor {
     addImageFromUrl() {
         let _localCanvas = this.canvas;
         let imgURL = this.editorWrapper.querySelector('#image-url').value;
-        console.log(imgURL);
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
                 _localCanvas.add(oImg);

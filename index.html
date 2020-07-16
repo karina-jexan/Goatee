@@ -32,15 +32,32 @@
                         </div>
                     </div>
                     <div id="options-fields-container">
-                        <div id="add-image-container" class="flex even-cols">
-                            <div class="col text-center">
-                                <button type="button"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
+                        <div id="add-image-container">
+                            <div id="image-options-container" class="flex even-cols">
+                                <div class="col text-center">
+                                    <button type="button" id="browse-image" data-fileinputid="image-file"><i
+                                            class="fas fa-cloud-upload-alt"></i> Upload</button>
+                                    <input type="file" name="image-file" id="image-file" class="hide">
+                                </div>
+                                <div class="col text-center">
+                                    <button type="button" id="upload-facebook"><i class="fab fa-facebook-f"></i>
+                                        Facebook</button>
+                                </div>
+                                <div class="col text-center">
+                                    <button type="button"><i class="fab fa-instagram"></i> Instagram</button>
+                                </div>
                             </div>
-                            <div class="col text-center">
-                                <button type="button"><i class="fab fa-facebook-f"></i> Facebook</button>
-                            </div>
-                            <div class="col text-center">
-                                <button type="button"><i class="fab fa-instagram"></i> Instagram</button>
+                            <div class="image-url-container hide">
+                                <div class="url-input">
+                                    <input type="text" name="image-url-facebook" id="image-url-facebook" value=""
+                                        placeholder="Paste image URL">
+                                </div>
+                                <div class="url-buttons flex even-cols">
+                                    <button type="button" class="small-button bg-main-color white-text"
+                                        id="submit-image-url-facebook">Submit</button>
+                                    <button type="button" class="small-button"
+                                        id="cancel-facebook-image">Cancel</button>
+                                </div>
                             </div>
 
                             <!-- <div class="add-image-radio-container col">
@@ -54,18 +71,7 @@
                                 </div>
                             </div>
                             <div class="image-inputs-container col text-center">
-                                <div class="image-url-container">
-                                    <input type="text" name="image-url" id="image-url" value="">
-                                    <button type="button" class="button" id="submit-image-url">Submit</button>
-                                </div>
-                                <div class="image-upload-container hide">
-                                    <input type="text" name="image-filename" id="image-filename" value=""
-                                        data-fileinputid="image-file">
-                                    <button type="button" class="button" id="browse-image"
-                                        data-fileinputid="image-file">Browse</button>
-                                    <input type="file" name="image-file" id="image-file" class="hide">
 
-                                </div>
                             </div> -->
                         </div>
                         <div id="change-position-container" class="flex hide">

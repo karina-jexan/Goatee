@@ -83,12 +83,29 @@ $lighterMainColor: #C7B1C8;
     }
     
     input[type="text"] {
-        border: 2px solid #000000;
+        border: 1px solid $lighterMainColor;
         font-family: 'Nunito', sans-serif;
         height: 30px;
+        border-radius: 5px;
+    }
+
+    .url-input input{
+        width: 100%;
+        margin-bottom: 0.5em;
+    }
+
+    .small-button {
+        padding: 0.5em 0.7em;
+    }
+
+    .bg-main-color {
+        background-color: $mainColor;
+    }
+    .white-text {
+        color: white;
     }
     .flex {
-        display: flex;;
+        display: flex;
     }
     .even-cols {
         justify-content: space-evenly;

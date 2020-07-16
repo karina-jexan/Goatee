@@ -29,6 +29,10 @@ export default class GoateeEditor {
         this.openOption = this.openOption.bind(this);
         this.addText = this.addText.bind(this);
         this.setActiveTab = this.setActiveTab.bind(this);
+        this.showFacebookOptions = this.showFacebookOptions.bind(this);
+        this.addImageFromUrlFacebook = this.addImageFromUrlFacebook.bind(this);
+        this.showElement = this.showElement.bind(this);
+        this.hideElement = this.hideElement.bind(this);
 
         this.init();
         this.addEvents();
@@ -57,16 +61,17 @@ export default class GoateeEditor {
 
     addEvents() {
         window.addEventListener('resize', this.resizeCanvas, false);
-        const submitImageURLButton = this.editorWrapper.querySelector('#submit-image-url');
+        const submitImageURLFacebookButton = this.editorWrapper.querySelector('#submit-image-url-facebook');
         const browseImageFileButton = this.editorWrapper.querySelector('#browse-image');
-        const imageFileInput = this.editorWrapper.querySelector('#image-file');
+        const imageFileInput = this.editorWrapper.querySelector('#image-file-facebook');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
-        const addImageOption = this.editorWrapper.querySelector('.add-image-option');
         const mainOptionsTabs = this.editorWrapper.querySelectorAll('#tabs-container .editor-tab .tab-link');
+        const uploadFromFacebookButton = this.editorWrapper.querySelector('#upload-facebook');
+        const cancelUploadFromFacebookButton = this.editorWrapper.querySelector('#cancel-facebook-image');
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
 
-        if (submitImageURLButton) {
-            submitImageURLButton.addEventListener('click', this.addImageFromUrl);
+        if (submitImageURLFacebookButton) {
+            submitImageURLFacebookButton.addEventListener('click', this.addImageFromUrlFacebook);
         }
 
         if (browseImageFileButton) {
@@ -87,6 +92,10 @@ export default class GoateeEditor {
             });
         }
 
+        if (uploadFromFacebookButton) {
+            uploadFromFacebookButton.addEventListener('click', this.showFacebookOptions)
+        }
+
         if (addTextInput) {
             addTextInput.addEventListener('keyup', this.addText);
         }
@@ -105,9 +114,13 @@ export default class GoateeEditor {
         this.canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
     }
 
-    addImageFromUrl() {
+    addImageFromUrlFacebook(event) {
+        const imgUrl = this.editorWrapper.querySelector('#image-url-facebook').value;
+        this.addImageFromUrl(imgUrl);
+    }
+
+    addImageFromUrl(imgURL) {
         let _localCanvas = this.canvas;
-        let imgURL = this.editorWrapper.querySelector('#image-url').value;
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
                 _localCanvas.add(oImg);
@@ -198,5 +211,18 @@ export default class GoateeEditor {
         }
 
         _localCanvas.renderAll();
+    }
+
+    showFacebookOptions(event) {
+        this.hideElement('#image-options-container');
+        this.showElement('.image-url-container');
+    }
+
+    hideElement(elementSelector) {
+        this.editorWrapper.querySelector(elementSelector).classList.add('hide');
+    }
+
+    showElement(elementSelector) {
+        this.editorWrapper.querySelector(elementSelector).classList.remove('hide');
     }
 }

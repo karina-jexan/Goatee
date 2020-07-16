@@ -6,6 +6,7 @@ export default class GoateeEditor {
         this.elementSelector = elementSelector;
         this.width = config.width;
         this.height = config.height;
+        this.canvasRatio = 0.703;
         this.editorWrapper = document.getElementById('editor-wrapper');
         this.editorContainer = document.getElementById('editor-container');
         this.optionsWrapper = this.editorWrapper.querySelector('#options-fields-container');
@@ -39,7 +40,7 @@ export default class GoateeEditor {
         let context = this.canvasElement.getContext("2d");
         this.editorContainer = document.getElementById('editor-container');
         context.canvas.width = this.editorContainer.clientWidth;
-        context.canvas.height = this.editorContainer.clientHeight;
+        context.canvas.height = this.editorContainer.clientWidth * this.canvasRatio;
 
         // Plug the fabricjs plugin
         this.canvas = new fabric.Canvas('goatee-editor');
@@ -84,8 +85,16 @@ export default class GoateeEditor {
     }
 
     resizeCanvas(event) {
-        this.canvasElement.width = this.editorContainer.clientWidth;
-        this.canvasElement.height = this.editorContainer.clientHeight;
+        const outerCanvasContainer = document.getElementById('editor-container');
+
+        const ratio = this.canvas.getWidth() / this.canvas.getHeight();
+        const containerWidth = outerCanvasContainer.clientWidth;
+        const containerHeight = outerCanvasContainer.clientHeight;
+
+        const scale = containerWidth / this.canvas.getWidth();
+        const zoom = this.canvas.getZoom() * scale;
+        this.canvas.setDimensions({ width: containerWidth, height: containerWidth / ratio });
+        this.canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
     }
 
     addImageFromUrl() {

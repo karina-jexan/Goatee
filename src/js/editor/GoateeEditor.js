@@ -32,6 +32,9 @@ export default class GoateeEditor {
         this.showFacebookOptions = this.showFacebookOptions.bind(this);
         this.addImageFromUrlFacebook = this.addImageFromUrlFacebook.bind(this);
         this.cancelUploadFromFacebook = this.cancelUploadFromFacebook.bind(this);
+        this.showInstagramOptions = this.showInstagramOptions.bind(this);
+        this.addImageFromUrlInstagram = this.addImageFromUrlInstagram.bind(this);
+        this.cancelUploadFromInstagram = this.cancelUploadFromInstagram.bind(this);
         this.showElement = this.showElement.bind(this);
         this.hideElement = this.hideElement.bind(this);
 
@@ -62,13 +65,16 @@ export default class GoateeEditor {
 
     addEvents() {
         window.addEventListener('resize', this.resizeCanvas, false);
-        const submitImageURLFacebookButton = this.editorWrapper.querySelector('#submit-image-url-facebook');
         const browseImageFileButton = this.editorWrapper.querySelector('#browse-image');
         const imageFileInput = this.editorWrapper.querySelector('#image-file-facebook');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
         const mainOptionsTabs = this.editorWrapper.querySelectorAll('#tabs-container .editor-tab .tab-link');
         const uploadFromFacebookButton = this.editorWrapper.querySelector('#upload-facebook');
         const cancelUploadFromFacebookButton = this.editorWrapper.querySelector('#cancel-facebook-image');
+        const submitImageURLFacebookButton = this.editorWrapper.querySelector('#submit-image-url-facebook');
+        const uploadFromInstagramButton = this.editorWrapper.querySelector('#upload-instagram');
+        const cancelUploadFromInstagramButton = this.editorWrapper.querySelector('#cancel-instagram-image');
+        const submitImageURLInstagramButton = this.editorWrapper.querySelector('#submit-image-url-instagram');
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
 
         if (browseImageFileButton) {
@@ -101,6 +107,18 @@ export default class GoateeEditor {
             cancelUploadFromFacebookButton.addEventListener('click', this.cancelUploadFromFacebook);
         }
 
+        if (uploadFromInstagramButton) {
+            uploadFromInstagramButton.addEventListener('click', this.showInstagramOptions)
+        }
+
+        if (submitImageURLInstagramButton) {
+            submitImageURLInstagramButton.addEventListener('click', this.addImageFromUrlInstagram);
+        }
+
+        if (cancelUploadFromInstagramButton) {
+            cancelUploadFromInstagramButton.addEventListener('click', this.cancelUploadFromInstagram);
+        }
+
         if (addTextInput) {
             addTextInput.addEventListener('keyup', this.addText);
         }
@@ -125,7 +143,17 @@ export default class GoateeEditor {
     }
 
     cancelUploadFromFacebook(event) {
-        this.hideElement('.image-url-container');
+        this.hideElement('.image-url-container-fb');
+        this.showElement('#image-options-container');
+    }
+
+    addImageFromUrlInstagram(event) {
+        const imgUrl = this.editorWrapper.querySelector('#image-url-instagram').value;
+        this.addImageFromUrl(imgUrl);
+    }
+
+    cancelUploadFromInstagram(event) {
+        this.hideElement('.image-url-container-ig');
         this.showElement('#image-options-container');
     }
 
@@ -225,7 +253,13 @@ export default class GoateeEditor {
 
     showFacebookOptions(event) {
         this.hideElement('#image-options-container');
-        this.showElement('.image-url-container');
+        this.showElement('.image-url-container-fb');
+    }
+
+
+    showInstagramOptions(event) {
+        this.hideElement('#image-options-container');
+        this.showElement('.image-url-container-ig');
     }
 
     hideElement(elementSelector) {

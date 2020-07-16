@@ -1,4 +1,4 @@
-$measurement : 2px;
+$measurement : 1px;
 $mainColor: #88008B;
 $darkerMainColor: #4C044D;
 $lighterMainColor: #C7B1C8;
@@ -21,8 +21,10 @@ $lighterMainColor: #C7B1C8;
     #tabs-container {
         justify-content: space-evenly;
         margin-top: 0.5em;
+        margin-bottom: 0.5em;
 
         .editor-tab {
+            flex:1;
             text-align: center;
             a {
                 font-weight:bold;
@@ -31,9 +33,10 @@ $lighterMainColor: #C7B1C8;
             }
 
             &.active {
-                border-bottom: 5px solid $mainColor;
+
                 a {
                     color: $darkerMainColor;
+                    border-bottom: 5px solid $mainColor;
                 }
 
             }
@@ -53,29 +56,29 @@ $lighterMainColor: #C7B1C8;
     #options-fields-container {
         font-family: 'Nunito', sans-serif;
         font-weight:normal;
-        text-transform: uppercase;
-
-        #add-image-container .col:nth-child(2) {
-            width: 50%;
-        }        
+        text-transform: uppercase; 
+        padding-right: 0.1em;
+        padding-left: 0.1em;
     }
+
     button {
         background: white;
-        color: black;
-        border: $measurement solid black;
+        color: $mainColor;
+        border: $measurement solid $lighterMainColor;
         cursor: pointer;
-        padding: 0.5em 0.75em;
+        padding: 1em 1.25em;
         position: relative;
         font-family: 'Nunito', sans-serif;
         font-weight: bold;
+        border-radius: 5px;
         margin-right: 0.2em;
-        box-shadow : inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
         text-align : center;
-        text-transform: uppercase;
+        min-width: 100px;
 
         i {
             display: block;
-            font-size:2em;
+            font-size:1.5em;
+            margin-bottom: 0.1em;
         }
     }
     
@@ -86,6 +89,9 @@ $lighterMainColor: #C7B1C8;
     }
     .flex {
         display: flex;;
+    }
+    .even-cols {
+        justify-content: space-evenly;
     }
     .col {
         padding-left: 5px;
@@ -105,3 +111,9 @@ $lighterMainColor: #C7B1C8;
         display: none;
     }
 }
+
+@media all and (max-width: 768px) {
+    #editor-wrapper #tabs-container .editor-tab:nth-child(1) {
+        flex-grow: 1.8 !important;
+    }
+} 

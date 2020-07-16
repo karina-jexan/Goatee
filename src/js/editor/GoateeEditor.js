@@ -28,7 +28,7 @@ export default class GoateeEditor {
         this.closeAllOptions = this.closeAllOptions.bind(this);
         this.openOption = this.openOption.bind(this);
         this.addText = this.addText.bind(this);
-
+        this.setActiveTab = this.setActiveTab.bind(this);
 
         this.init();
         this.addEvents();
@@ -62,7 +62,7 @@ export default class GoateeEditor {
         const imageFileInput = this.editorWrapper.querySelector('#image-file');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
         const addImageOption = this.editorWrapper.querySelector('.add-image-option');
-        const mainOptionButtons = this.editorWrapper.querySelectorAll('#options-container .editor-option button.open-options');
+        const mainOptionsTabs = this.editorWrapper.querySelectorAll('#tabs-container .editor-tab .tab-link');
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
 
         if (submitImageURLButton) {
@@ -81,8 +81,8 @@ export default class GoateeEditor {
             addImageRadioContainer.addEventListener('click', this.showHideImageOptions);
         }
 
-        if (mainOptionButtons) {
-            mainOptionButtons.forEach(element => {
+        if (mainOptionsTabs) {
+            mainOptionsTabs.forEach(element => {
                 element.addEventListener('click', this.openOption);
             });
         }
@@ -163,12 +163,19 @@ export default class GoateeEditor {
     }
 
     openOption(event) {
+        event.preventDefault();
         this.closeAllOptions();
-
+        this.setActiveTab(event);
         const optionID = event.target.dataset.optionid;
         if (optionID) {
             this.editorWrapper.querySelector('#' + optionID).classList.remove('hide');
         }
+    }
+
+    setActiveTab(event) {
+        const currentActiveTab = this.editorWrapper.querySelector('#tabs-container .editor-tab.active');
+        currentActiveTab.classList.remove('active');
+        event.target.parentElement.classList.add('active');
     }
 
     addText(event) {

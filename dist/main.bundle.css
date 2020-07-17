@@ -7563,6 +7563,11 @@ a.button:active {
       display: block;
       font-size: 1.5em;
       margin-bottom: 0.1em; }
+  #editor-wrapper #change-position-container .direction-arrow i {
+    font-size: 1.5em;
+    color: #88008B;
+    padding: 0.2em;
+    cursor: pointer; }
   #editor-wrapper input[type="text"] {
     border: 1px solid #C7B1C8;
     font-family: 'Nunito', sans-serif;

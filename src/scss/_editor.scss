@@ -81,6 +81,12 @@ $lighterMainColor: #C7B1C8;
             margin-bottom: 0.1em;
         }
     }
+    #change-position-container .direction-arrow i {
+        font-size: 1.5em;
+        color: $mainColor;
+        padding: 0.2em;
+        cursor: pointer;
+    }
     
     input[type="text"] {
         border: 1px solid $lighterMainColor;

@@ -35,6 +35,7 @@ export default class GoateeEditor {
         this.showInstagramOptions = this.showInstagramOptions.bind(this);
         this.addImageFromUrlInstagram = this.addImageFromUrlInstagram.bind(this);
         this.cancelUploadFromInstagram = this.cancelUploadFromInstagram.bind(this);
+        this.removeObjectFromCanvas = this.removeObjectFromCanvas.bind(this);
         this.showElement = this.showElement.bind(this);
         this.hideElement = this.hideElement.bind(this);
 
@@ -66,7 +67,7 @@ export default class GoateeEditor {
     addEvents() {
         window.addEventListener('resize', this.resizeCanvas, false);
         const browseImageFileButton = this.editorWrapper.querySelector('#browse-image');
-        const imageFileInput = this.editorWrapper.querySelector('#image-file-facebook');
+        const imageFileInput = this.editorWrapper.querySelector('#image-file');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
         const mainOptionsTabs = this.editorWrapper.querySelectorAll('#tabs-container .editor-tab .tab-link');
         const uploadFromFacebookButton = this.editorWrapper.querySelector('#upload-facebook');
@@ -139,6 +140,7 @@ export default class GoateeEditor {
 
     addImageFromUrlFacebook(event) {
         const imgUrl = this.editorWrapper.querySelector('#image-url-facebook').value;
+        this.removeObjectFromCanvas('initialImage');
         this.addImageFromUrl(imgUrl);
     }
 
@@ -148,6 +150,7 @@ export default class GoateeEditor {
     }
 
     addImageFromUrlInstagram(event) {
+        this.removeObjectFromCanvas('initialImage');
         const imgUrl = this.editorWrapper.querySelector('#image-url-instagram').value;
         this.addImageFromUrl(imgUrl);
     }
@@ -158,9 +161,12 @@ export default class GoateeEditor {
     }
 
     addImageFromUrl(imgURL) {
+        this.removeObjectFromCanvas('initialImage');
         let _localCanvas = this.canvas;
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
+                oImg.scaleToWidth(_localCanvas.getWidth());
+                oImg.scaleToHeight(_localCanvas.getHeight());
                 _localCanvas.add(oImg);
                 _localCanvas.renderAll();
             });
@@ -177,6 +183,7 @@ export default class GoateeEditor {
         if (displayNameInput) {
             displayNameInput.value = event.target.files[0].name;
         }
+        this.removeObjectFromCanvas('initialImage');
         this.addImageFile(event);
     }
 
@@ -199,6 +206,8 @@ export default class GoateeEditor {
             imgObj.src = e.target.result;
             imgObj.onload = function () {
                 let image = new fabric.Image(imgObj);
+                image.scaleToWidth(_localCanvas.getWidth());
+                image.scaleToHeight(_localCanvas.getHeight());
                 _localCanvas.add(image);
                 _localCanvas.renderAll();
             }
@@ -268,5 +277,16 @@ export default class GoateeEditor {
 
     showElement(elementSelector) {
         this.editorWrapper.querySelector(elementSelector).classList.remove('hide');
+    }
+
+    removeObjectFromCanvas(objectName) {
+        let _localCanvas = this.canvas;
+        var objects = _localCanvas.getObjects();
+        objects.forEach(function (element) {
+            if (element.name && element.name === objectName) {
+                _localCanvas.remove(element);
+            }
+        });
+        _localCanvas.renderAll()
     }
 }

@@ -41,6 +41,8 @@ export default class GoateeEditor {
         this.changeElementPositionArrows = this.changeElementPositionArrows.bind(this);
         this.updateObjectCoords = this.updateObjectCoords.bind(this);
         this.showAlert = this.showAlert.bind(this);
+        this.zoomElementMagnifying = this.zoomElementMagnifying.bind(this);
+        this.zoomElement = this.zoomElement.bind(this);
 
         this.init();
         this.addEvents();
@@ -80,7 +82,8 @@ export default class GoateeEditor {
         const cancelUploadFromInstagramButton = this.editorWrapper.querySelector('#cancel-instagram-image');
         const submitImageURLInstagramButton = this.editorWrapper.querySelector('#submit-image-url-instagram');
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
-        const positionArrows = this.editorWrapper.querySelectorAll('#change-position-container i');
+        const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container i');
+        const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
 
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -131,6 +134,12 @@ export default class GoateeEditor {
         if(positionArrows) {
             positionArrows.forEach(arrowElement => {
                 arrowElement.addEventListener('click', this.changeElementPositionArrows);
+            });
+        }
+
+        if(zoomMagnifying) {
+            zoomMagnifying.forEach(zoomElement => {
+                zoomElement.addEventListener('click', this.zoomElementMagnifying);
             });
         }
     }
@@ -357,5 +366,37 @@ export default class GoateeEditor {
         alertContainer.appendChild(alertMessage);
 
         return alertContainer;
+    }
+
+    zoomElementMagnifying(event) {
+        const activeObject = this.canvas.getActiveObject();
+
+        if(activeObject != undefined) {
+            const currentXScale = activeObject.scaleX;
+            const currentYScale = activeObject.scaleY;
+            const scaleUpFactor = 1.1;
+            const scaleDownFactor = 0.1;
+            switch (event.target.dataset.zoom) {
+                case 'in':
+                    this.zoomElement(activeObject, currentXScale * scaleUpFactor, currentYScale * scaleUpFactor);
+                break;
+                case 'out':
+                    this.zoomElement(activeObject, currentXScale - (currentXScale * scaleDownFactor), currentYScale - (currentYScale * scaleDownFactor));
+                break;
+           
+                default:
+                break; 
+            }
+        }
+        else {
+            this.showAlert('error', 'Please select an element from the editor first.')
+        }
+    }
+
+    zoomElement(objectToZoom, scaleX, scaleY) {
+        objectToZoom.scaleX = scaleX;
+        objectToZoom.scaleY = scaleY;
+        objectToZoom.setCoords();
+        this.canvas.renderAll();
     }
 }

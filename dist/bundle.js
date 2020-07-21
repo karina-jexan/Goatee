@@ -135,6 +135,7 @@ class GoateeEditor {
     this.zoomElement = this.zoomElement.bind(this);
     this.rotateElementButton = this.rotateElementButton.bind(this);
     this.rotateElement = this.rotateElement.bind(this);
+    this.downloadImage = this.downloadImage.bind(this);
     this.init();
     this.addEvents();
   }
@@ -241,6 +242,19 @@ class GoateeEditor {
         rotateButton.addEventListener('click', this.rotateElementButton);
       });
     }
+
+    document.getElementById('download').addEventListener('click', this.downloadImage);
+  }
+
+  downloadImage(event) {
+    const imageURL = this.canvas.toDataURL({
+      format: 'png',
+      width: 405,
+      height: 285
+    }); // const imageURL = this.canvas.toDataURL()
+
+    document.getElementById('download-link').href = imageURL;
+    document.getElementById('download-link').click();
   }
 
   resizeCanvas(event) {

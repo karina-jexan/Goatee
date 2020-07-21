@@ -7615,10 +7615,10 @@ a.button:active {
       opacity: 0; }
     #editor-wrapper #alert-container .alert {
       padding: 0.5em;
-      color: white;
+      color: #a94442;
       border-radius: 5px; }
       #editor-wrapper #alert-container .alert.error {
-        background-color: #e52a2a; }
+        background-color: #f2dede; }
 
 @media all and (max-width: 768px) {
   #editor-wrapper #tabs-container .editor-tab:nth-child(1) {

@@ -7563,16 +7563,24 @@ a.button:active {
       display: block;
       font-size: 1.5em;
       margin-bottom: 0.1em; }
-  #editor-wrapper #change-position-container .direction-arrow i {
+  #editor-wrapper #change-position-container i {
     font-size: 1.5em;
     color: #88008B;
     padding: 0.5em;
     cursor: pointer; }
+  #editor-wrapper #change-position-container .col:not(:last-child) {
+    border-right: 1px solid #C7B1C8; }
   #editor-wrapper input[type="text"] {
     border: 1px solid #C7B1C8;
     font-family: 'Nunito', sans-serif;
     height: 30px;
     border-radius: 5px; }
+  #editor-wrapper .width-80 {
+    width: 80%; }
+  #editor-wrapper .width-60 {
+    width: 60%; }
+  #editor-wrapper .width-50 {
+    width: 50%; }
   #editor-wrapper .url-input input {
     width: 100%;
     margin-bottom: 0.5em; }
@@ -7590,6 +7598,8 @@ a.button:active {
     padding-left: 5px;
     padding-right: 5px;
     flex-grow: 1; }
+  #editor-wrapper .justify-center {
+    justify-content: center; }
   #editor-wrapper .text-center {
     text-align: center; }
   #editor-wrapper .text-right {

@@ -130,6 +130,7 @@ class GoateeEditor {
     this.hideElement = this.hideElement.bind(this);
     this.changeElementPositionArrows = this.changeElementPositionArrows.bind(this);
     this.updateObjectCoords = this.updateObjectCoords.bind(this);
+    this.showAlert = this.showAlert.bind(this);
     this.init();
     this.addEvents();
   }
@@ -409,29 +410,34 @@ class GoateeEditor {
 
   changeElementPositionArrows(event) {
     const activeObject = this.canvas.getActiveObject();
-    const currentXCoords = activeObject.left;
-    const currentYCoords = activeObject.top;
-    const pixelsToMove = 10;
 
-    switch (event.target.dataset.direction) {
-      case 'up':
-        this.updateObjectCoords(activeObject, currentXCoords, currentYCoords - pixelsToMove);
-        break;
+    if (activeObject != undefined) {
+      const currentXCoords = activeObject.left;
+      const currentYCoords = activeObject.top;
+      const pixelsToMove = 10;
 
-      case 'down':
-        this.updateObjectCoords(activeObject, currentXCoords, currentYCoords + pixelsToMove);
-        break;
+      switch (event.target.dataset.direction) {
+        case 'up':
+          this.updateObjectCoords(activeObject, currentXCoords, currentYCoords - pixelsToMove);
+          break;
 
-      case 'left':
-        this.updateObjectCoords(activeObject, currentXCoords - pixelsToMove, currentYCoords);
-        break;
+        case 'down':
+          this.updateObjectCoords(activeObject, currentXCoords, currentYCoords + pixelsToMove);
+          break;
 
-      case 'right':
-        this.updateObjectCoords(activeObject, currentXCoords + pixelsToMove, currentYCoords);
-        break;
+        case 'left':
+          this.updateObjectCoords(activeObject, currentXCoords - pixelsToMove, currentYCoords);
+          break;
 
-      default:
-        break;
+        case 'right':
+          this.updateObjectCoords(activeObject, currentXCoords + pixelsToMove, currentYCoords);
+          break;
+
+        default:
+          break;
+      }
+    } else {
+      this.showAlert('error', 'Please select an element from the editor first.');
     }
   }
 
@@ -441,6 +447,25 @@ class GoateeEditor {
     objectToUpdate.top = yCoords;
     objectToUpdate.setCoords();
     this.canvas.renderAll();
+  }
+
+  showAlert(type, message) {
+    const alertElement = this.createAlert(type, message);
+    const alertContainer = this.editorWrapper.querySelector('#alert-container');
+    alertContainer.classList.add('fade');
+    alertContainer.appendChild(alertElement);
+    setTimeout(function () {
+      alertContainer.classList.remove('fade');
+      alertElement.remove();
+    }, 5000);
+  }
+
+  createAlert(type, message) {
+    let alertContainer = document.createElement('DIV');
+    let alertMessage = document.createTextNode(message);
+    alertContainer.classList.add('alert', 'fade', type);
+    alertContainer.appendChild(alertMessage);
+    return alertContainer;
   }
 
 }

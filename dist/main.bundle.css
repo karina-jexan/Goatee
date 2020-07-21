@@ -7606,6 +7606,19 @@ a.button:active {
     text-align: right; }
   #editor-wrapper .hide {
     display: none; }
+  #editor-wrapper #alert-container {
+    margin: 0.5em 0;
+    opacity: 1;
+    transition: opacity 1s;
+    transition-delay: 4s; }
+    #editor-wrapper #alert-container.fade {
+      opacity: 0; }
+    #editor-wrapper #alert-container .alert {
+      padding: 0.5em;
+      color: white;
+      border-radius: 5px; }
+      #editor-wrapper #alert-container .alert.error {
+        background-color: #e52a2a; }
 
 @media all and (max-width: 768px) {
   #editor-wrapper #tabs-container .editor-tab:nth-child(1) {

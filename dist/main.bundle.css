@@ -7566,7 +7566,7 @@ a.button:active {
   #editor-wrapper #change-position-container .direction-arrow i {
     font-size: 1.5em;
     color: #88008B;
-    padding: 0.2em;
+    padding: 0.5em;
     cursor: pointer; }
   #editor-wrapper input[type="text"] {
     border: 1px solid #C7B1C8;

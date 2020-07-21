@@ -128,6 +128,8 @@ class GoateeEditor {
     this.removeObjectFromCanvas = this.removeObjectFromCanvas.bind(this);
     this.showElement = this.showElement.bind(this);
     this.hideElement = this.hideElement.bind(this);
+    this.changeElementPositionArrows = this.changeElementPositionArrows.bind(this);
+    this.updateObjectCoords = this.updateObjectCoords.bind(this);
     this.init();
     this.addEvents();
   }
@@ -167,6 +169,7 @@ class GoateeEditor {
     const cancelUploadFromInstagramButton = this.editorWrapper.querySelector('#cancel-instagram-image');
     const submitImageURLInstagramButton = this.editorWrapper.querySelector('#submit-image-url-instagram');
     const addTextInput = this.editorWrapper.querySelector('#add-text-input');
+    const positionArrows = this.editorWrapper.querySelectorAll('#change-position-container i');
 
     if (browseImageFileButton) {
       browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -212,6 +215,12 @@ class GoateeEditor {
 
     if (addTextInput) {
       addTextInput.addEventListener('keyup', this.addText);
+    }
+
+    if (positionArrows) {
+      positionArrows.forEach(arrowElement => {
+        arrowElement.addEventListener('click', this.changeElementPositionArrows);
+      });
     }
   }
 
@@ -396,6 +405,42 @@ class GoateeEditor {
     });
 
     _localCanvas.renderAll();
+  }
+
+  changeElementPositionArrows(event) {
+    const activeObject = this.canvas.getActiveObject();
+    const currentXCoords = activeObject.left;
+    const currentYCoords = activeObject.top;
+    const pixelsToMove = 10;
+
+    switch (event.target.dataset.direction) {
+      case 'up':
+        this.updateObjectCoords(activeObject, currentXCoords, currentYCoords - pixelsToMove);
+        break;
+
+      case 'down':
+        this.updateObjectCoords(activeObject, currentXCoords, currentYCoords + pixelsToMove);
+        break;
+
+      case 'left':
+        this.updateObjectCoords(activeObject, currentXCoords - pixelsToMove, currentYCoords);
+        break;
+
+      case 'right':
+        this.updateObjectCoords(activeObject, currentXCoords + pixelsToMove, currentYCoords);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  updateObjectCoords(objectToUpdate, xCoords, yCoords) {
+    console.log(objectToUpdate);
+    objectToUpdate.left = xCoords;
+    objectToUpdate.top = yCoords;
+    objectToUpdate.setCoords();
+    this.canvas.renderAll();
   }
 
 }

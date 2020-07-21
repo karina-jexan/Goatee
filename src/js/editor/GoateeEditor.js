@@ -43,6 +43,8 @@ export default class GoateeEditor {
         this.showAlert = this.showAlert.bind(this);
         this.zoomElementMagnifying = this.zoomElementMagnifying.bind(this);
         this.zoomElement = this.zoomElement.bind(this);
+        this.rotateElementButton = this.rotateElementButton.bind(this);
+        this.rotateElement = this.rotateElement.bind(this);
 
         this.init();
         this.addEvents();
@@ -84,6 +86,7 @@ export default class GoateeEditor {
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
         const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container i');
         const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
+        const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container i');
 
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -140,6 +143,12 @@ export default class GoateeEditor {
         if(zoomMagnifying) {
             zoomMagnifying.forEach(zoomElement => {
                 zoomElement.addEventListener('click', this.zoomElementMagnifying);
+            });
+        }
+
+        if(rotateButtons) {
+            rotateButtons.forEach(rotateButton => {
+                rotateButton.addEventListener('click', this.rotateElementButton);
             });
         }
     }
@@ -397,6 +406,34 @@ export default class GoateeEditor {
         objectToZoom.scaleX = scaleX;
         objectToZoom.scaleY = scaleY;
         objectToZoom.setCoords();
+        this.canvas.renderAll();
+    }
+
+    rotateElementButton(event) {
+        const activeObject = this.canvas.getActiveObject();
+
+        if(activeObject != undefined) {
+            const currentObjectAngle = activeObject.get('angle');
+            const rotateDegrees = 10;
+            switch (event.target.dataset.rotate) {
+                case 'left':
+                    this.rotateElement(activeObject, currentObjectAngle - rotateDegrees);
+                break;
+                case 'right':
+                    this.rotateElement(activeObject, currentObjectAngle + rotateDegrees);
+                break;           
+                default:
+                break; 
+            }
+        }
+        else {
+            this.showAlert('error', 'Please select an element from the editor first.')
+        }
+    }
+
+    rotateElement(objectToRotate, objectAngle) {
+        objectToRotate.rotate(objectAngle);
+        objectToRotate.setCoords();
         this.canvas.renderAll();
     }
 }

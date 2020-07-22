@@ -609,6 +609,7 @@ class GoateeEditor {
 
   addSticker(event) {
     this.animateElement(event.target, 'wiggle');
+    this.addImageFromUrl(event.target.src);
   }
 
   animateElement(elementToAnimate, className) {

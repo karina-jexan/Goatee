@@ -11,6 +11,8 @@ export default class GoateeEditor {
         this.editorContainer = document.getElementById('editor-container');
         this.optionsWrapper = this.editorWrapper.querySelector('#options-fields-container');
         this.textElementInCanvas = false;
+        this.initialStickersPosition = 0;
+
 
         // Main canvas DOM element
         this.canvasElement = null;
@@ -45,6 +47,7 @@ export default class GoateeEditor {
         this.zoomElement = this.zoomElement.bind(this);
         this.rotateElementButton = this.rotateElementButton.bind(this);
         this.rotateElement = this.rotateElement.bind(this);
+        this.stickerCarouselElementButton = this.stickerCarouselElementButton.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
 
         this.init();
@@ -88,6 +91,7 @@ export default class GoateeEditor {
         const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container i');
         const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
         const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container i');
+        const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
 
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -150,6 +154,12 @@ export default class GoateeEditor {
         if(rotateButtons) {
             rotateButtons.forEach(rotateButton => {
                 rotateButton.addEventListener('click', this.rotateElementButton);
+            });
+        }
+        
+        if(stickersCarouselButtons) {
+            stickersCarouselButtons.forEach(stickerButtonElement => {
+                stickerButtonElement.addEventListener('click', this.stickerCarouselElementButton);
             });
         }
 
@@ -452,5 +462,29 @@ export default class GoateeEditor {
         objectToRotate.rotate(objectAngle);
         objectToRotate.setCoords();
         this.canvas.renderAll();
+    }
+
+    stickerCarouselElementButton(event) {
+        const stickers = this.editorWrapper.querySelectorAll('.carousel-images-wrapper img');
+        const pixelsToMove = 80;
+        switch(event.target.dataset.direction) {
+            case 'forward':
+                if(this.initialStickersPosition >= -480) {
+                    this.initialStickersPosition = this.initialStickersPosition - pixelsToMove;
+                    stickers.forEach(stickerElement => {
+                        stickerElement.style.transform = "translateX(" + this.initialStickersPosition + "px)"
+                    });  
+                }
+             
+            break;
+            case 'back':
+                if(this.initialStickersPosition < 0) {
+                    this.initialStickersPosition = this.initialStickersPosition + pixelsToMove;
+                    stickers.forEach(stickerElement => {
+                        stickerElement.style.transform = "translateX(" + this.initialStickersPosition + "px)"
+                    });
+                }               
+            break;
+        }
     }
 }

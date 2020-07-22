@@ -113,7 +113,8 @@ $alertTextColor : #a94442;
 
             i {
                 color: $darkerMainColor;
-                font-size: 2em;
+                font-size: 2.5em;
+                cursor: pointer;
             }            
             & .carousel-back {
                 margin-right: 0.5em;
@@ -218,6 +219,25 @@ $alertTextColor : #a94442;
                 background-color: $errorColor;
             }
         }
+    }
+    @keyframes wiggle {
+        0% { transform: skewX(9deg); }
+        10% { transform: skewX(-8deg); }
+        20% { transform: skewX(7deg); }
+        30% { transform: skewX(-6deg); }
+        40% { transform: skewX(5deg); }
+        50% { transform: skewX(-4deg); }
+        60% { transform: skewX(3deg); }
+        70% { transform: skewX(-2deg); }
+        80% { transform: skewX(1deg); }
+        90% { transform: skewX(0deg); }
+        100% { transform: skewX(0deg); }
+    }
+    
+    .wiggle {
+        animation-name: wiggle;
+        animation-timing-function: ease-in;
+        animation-duration: 1s;
     }
 }
 

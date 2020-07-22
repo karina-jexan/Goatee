@@ -7537,6 +7537,7 @@ a.button:active {
     #editor-wrapper #options-container .editor-option {
       height: 100%; }
   #editor-wrapper #options-fields-container {
+    margin-top: 1.5em;
     font-family: 'Nunito', sans-serif;
     font-weight: normal;
     text-transform: uppercase;
@@ -7573,6 +7574,22 @@ a.button:active {
     background-color: rgba(199, 177, 200, 0.2);
     padding: 0.2em 0.5em;
     border-radius: 5px; }
+  #editor-wrapper #add-stickers-container #stickers-carousel {
+    width: 70%;
+    align-items: center; }
+    #editor-wrapper #add-stickers-container #stickers-carousel i {
+      color: #4C044D;
+      font-size: 2em; }
+    #editor-wrapper #add-stickers-container #stickers-carousel .carousel-back {
+      margin-right: 0.5em; }
+    #editor-wrapper #add-stickers-container #stickers-carousel .carousel-forward {
+      margin-left: 0.5em; }
+    #editor-wrapper #add-stickers-container #stickers-carousel .carousel-images-wrapper {
+      overflow: hidden;
+      width: 70%; }
+      #editor-wrapper #add-stickers-container #stickers-carousel .carousel-images-wrapper img {
+        width: 80px;
+        height: auto; }
   #editor-wrapper a {
     font-weight: bold;
     text-decoration: none;

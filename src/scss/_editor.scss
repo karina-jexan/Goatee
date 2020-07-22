@@ -55,6 +55,7 @@ $alertTextColor : #a94442;
     }
     
     #options-fields-container {
+        margin-top: 1.5em;
         font-family: 'Nunito', sans-serif;
         font-weight:normal;
         text-transform: uppercase; 
@@ -104,6 +105,31 @@ $alertTextColor : #a94442;
             @include rgba-background($lighterMainColor, 0.2);
             padding: 0.2em 0.5em;
             border-radius: 5px;;
+        }
+
+        #stickers-carousel {
+            width: 70%;
+            align-items: center;
+
+            i {
+                color: $darkerMainColor;
+                font-size: 2em;
+            }            
+            & .carousel-back {
+                margin-right: 0.5em;
+            }
+
+            & .carousel-forward {
+                margin-left: 0.5em;
+            }
+            .carousel-images-wrapper {
+                overflow: hidden;
+                width: 70%;
+                img {
+                    width: 80px;
+                    height: auto;
+                }
+            }
         }
     }
 

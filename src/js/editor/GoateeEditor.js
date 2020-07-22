@@ -48,6 +48,7 @@ export default class GoateeEditor {
         this.rotateElementButton = this.rotateElementButton.bind(this);
         this.rotateElement = this.rotateElement.bind(this);
         this.stickerCarouselElementButton = this.stickerCarouselElementButton.bind(this);
+        this.addSticker = this.addSticker.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
 
         this.init();
@@ -92,6 +93,7 @@ export default class GoateeEditor {
         const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
         const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container i');
         const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
+        const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
 
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -160,6 +162,12 @@ export default class GoateeEditor {
         if(stickersCarouselButtons) {
             stickersCarouselButtons.forEach(stickerButtonElement => {
                 stickerButtonElement.addEventListener('click', this.stickerCarouselElementButton);
+            });
+        }
+
+        if(stickerImages) {
+            stickerImages.forEach(sticker => {
+                sticker.addEventListener('click', this.addSticker);
             });
         }
 
@@ -486,5 +494,17 @@ export default class GoateeEditor {
                 }               
             break;
         }
+    }
+
+    addSticker(event) {
+        this.animateElement(event.target, 'wiggle');
+    }
+
+    animateElement(elementToAnimate, className) {
+        elementToAnimate.classList.add(className);
+
+        setTimeout(function() {
+            elementToAnimate.classList.remove(className);
+        }, 1000); 
     }
 }

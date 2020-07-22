@@ -7527,10 +7527,6 @@ a.button:active {
     #editor-wrapper #tabs-container .editor-tab {
       flex: 1;
       text-align: center; }
-      #editor-wrapper #tabs-container .editor-tab a {
-        font-weight: bold;
-        text-decoration: none;
-        color: #C7B1C8; }
       #editor-wrapper #tabs-container .editor-tab.active a {
         color: #4C044D;
         border-bottom: 5px solid #88008B; }
@@ -7570,6 +7566,18 @@ a.button:active {
     cursor: pointer; }
   #editor-wrapper #change-position-container .col:not(:last-child) {
     border-right: 1px solid #C7B1C8; }
+  #editor-wrapper #add-stickers-container a {
+    font-size: 0.9em; }
+  #editor-wrapper #add-stickers-container .active {
+    color: #4C044D;
+    background-color: rgba(199, 177, 200, 0.2);
+    padding: 0.2em 0.5em;
+    border-radius: 5px; }
+  #editor-wrapper a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #C7B1C8;
+    text-transform: none; }
   #editor-wrapper input[type="text"] {
     border: 1px solid #C7B1C8;
     font-family: 'Nunito', sans-serif;

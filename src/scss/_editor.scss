@@ -5,6 +5,10 @@ $lighterMainColor: #C7B1C8;
 $errorColor : #f2dede;
 $alertTextColor : #a94442;
 
+@mixin rgba-background($hexcolor, $opacity) {
+    background-color: rgba($hexcolor, $opacity); 
+  }
+
 // Import font
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;700&display=swap');
 
@@ -28,11 +32,6 @@ $alertTextColor : #a94442;
         .editor-tab {
             flex:1;
             text-align: center;
-            a {
-                font-weight:bold;
-                text-decoration: none;
-                color: $lighterMainColor;
-            }
 
             &.active {
 
@@ -94,7 +93,27 @@ $alertTextColor : #a94442;
             border-right: 1px solid $lighterMainColor;
         }
     }
-    
+
+    #add-stickers-container {
+        a {
+            font-size: 0.9em;
+        }
+
+        .active {
+            color: $darkerMainColor;
+            @include rgba-background($lighterMainColor, 0.2);
+            padding: 0.2em 0.5em;
+            border-radius: 5px;;
+        }
+    }
+
+    a {
+        font-weight:bold;
+        text-decoration: none;
+        color: $lighterMainColor;
+        text-transform: none;
+    }
+
     input[type="text"] {
         border: 1px solid $lighterMainColor;
         font-family: 'Nunito', sans-serif;
@@ -180,4 +199,5 @@ $alertTextColor : #a94442;
     #editor-wrapper #tabs-container .editor-tab:nth-child(1) {
         flex-grow: 1.8 !important;
     }
-} 
+}
+

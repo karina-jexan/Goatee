@@ -4,6 +4,7 @@ $darkerMainColor: #4C044D;
 $lighterMainColor: #C7B1C8;
 $errorColor : #f2dede;
 $alertTextColor : #a94442;
+$inputHeight: 40px; 
 
 @mixin rgba-background($hexcolor, $opacity) {
     background-color: rgba($hexcolor, $opacity); 
@@ -11,6 +12,7 @@ $alertTextColor : #a94442;
 
 // Import font
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Pacifico&family=Roboto+Mono&display=swap');
 
 #editor-wrapper {
     max-width: 680px;
@@ -137,6 +139,25 @@ $alertTextColor : #a94442;
                 }
             }
         }
+    }
+
+    #custom-text  {
+        input[type="text"] {
+            width: 100%;
+            height: $inputHeight;
+    
+            &:focus {
+                border-color: $darkerMainColor;
+            }
+        }
+
+        select {
+            border: 1px solid $lighterMainColor;
+            border-radius: 5px;
+            height: $inputHeight;
+            margin-bottom: 0.5em;
+        }
+
     }
 
     a {

@@ -1,4 +1,5 @@
 import { fabric } from 'fabric';
+let FontFaceObserver = require('fontfaceobserver');
 
 export default class GoateeEditor {
 
@@ -47,8 +48,10 @@ export default class GoateeEditor {
         this.zoomElement = this.zoomElement.bind(this);
         this.rotateElementButton = this.rotateElementButton.bind(this);
         this.rotateElement = this.rotateElement.bind(this);
+        this.showStickerOptions = this.showStickerOptions.bind(this);
         this.stickerCarouselElementButton = this.stickerCarouselElementButton.bind(this);
         this.addSticker = this.addSticker.bind(this);
+        this.getSelectedFont = this.getSelectedFont.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
 
         this.init();
@@ -92,6 +95,7 @@ export default class GoateeEditor {
         const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container i');
         const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
         const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container i');
+        const stickerOptionButtons = this.editorWrapper.querySelectorAll('.sticker-options a');
         const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
         const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
 
@@ -159,6 +163,12 @@ export default class GoateeEditor {
             });
         }
         
+        if(stickerOptionButtons) {
+            stickerOptionButtons.forEach(stickerOption => {
+                stickerOption.addEventListener('click', this.showStickerOptions);
+            });
+        }
+
         if(stickersCarouselButtons) {
             stickersCarouselButtons.forEach(stickerButtonElement => {
                 stickerButtonElement.addEventListener('click', this.stickerCarouselElementButton);
@@ -308,7 +318,8 @@ export default class GoateeEditor {
         if (this.textElementInCanvas) {
             canvasObjects.forEach(object => {
                 if (object.name === 'textElement') {
-                    object.set('text', event.target.value)
+                    object.set('text', event.target.value);
+                    _localCanvas.renderAll();
                 }
             });
         }
@@ -316,12 +327,31 @@ export default class GoateeEditor {
             this.textElementInCanvas = true;
             let inputValue = event.target.value;
             let textElement = new fabric.Text(inputValue, { name: 'textElement' });
-            textElement.center();
-            _localCanvas.add(textElement);
+            const selectedFont = this.getSelectedFont();
+               let font = new FontFaceObserver(selectedFont);
+            font.load()
+              .then(function() {
+                // when font is loaded, use it.
+                textElement.set("fontFamily", selectedFont);
+                textElement.center();
+                _localCanvas.add(textElement);
+                _localCanvas.renderAll();
+              }).catch(e => {
+                textElement.set("fontFamily", 'Trebuchet MS');
+                textElement.center();
+                _localCanvas.add(textElement);
+                _localCanvas.renderAll();
+              });
         }
-
-        _localCanvas.renderAll();
     }
+
+    getSelectedFont() {
+        return this.editorWrapper.querySelector('#custom-text #font').value;
+    }
+
+    loadFontAndUser(font) {
+
+      }
 
     showFacebookOptions(event) {
         this.hideElement('#image-options-container');
@@ -470,6 +500,18 @@ export default class GoateeEditor {
         objectToRotate.rotate(objectAngle);
         objectToRotate.setCoords();
         this.canvas.renderAll();
+    }
+
+    showStickerOptions(event) {
+        event.preventDefault();
+        const currentActiveTab = this.editorWrapper.querySelector(".sticker-options .active");
+        const currentActiveOptionID = currentActiveTab.dataset.optionid;
+
+        currentActiveTab.classList.remove('active');
+        event.target.classList.add('active');
+
+        this.hideElement('#' + currentActiveOptionID);
+        this.showElement('#' + event.target.dataset.optionid);
     }
 
     stickerCarouselElementButton(event) {

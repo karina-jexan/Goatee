@@ -240,7 +240,7 @@ export default class GoateeEditor {
         this.showElement('#image-options-container');
     }
 
-    addImageFromUrl(imgURL) {
+    addImageFromUrl(imgURL, type = null) {
         this.removeObjectFromCanvas('initialImage');
         let _localCanvas = this.canvas;
         if (imgURL != '') {
@@ -249,6 +249,9 @@ export default class GoateeEditor {
                 oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
                 _localCanvas.add(oImg);
                 _localCanvas.setActiveObject(oImg);
+                if(type === 'sticker') {
+                    _localCanvas.bringToFront(oImg);
+                }
                 _localCanvas.renderAll();
             });
         }
@@ -340,20 +343,28 @@ export default class GoateeEditor {
             let inputValue = event.target.value;
             let textElement = new fabric.Text(inputValue, { name: 'textElement' });
             const selectedFont = this.getSelectedFont();
-               let font = new FontFaceObserver(selectedFont);
-            font.load()
-              .then(function() {
-                // when font is loaded, use it.
-                textElement.set("fontFamily", selectedFont);
+            let font = new FontFaceObserver(selectedFont);
+            if(this.checkIfSafeFont(font) === false) {
+                font.load()
+                .then(function() {
+                  // when font is loaded, use it.
+                  textElement.set("fontFamily", selectedFont);
+                  textElement.center();
+                  _localCanvas.add(textElement);
+                  _localCanvas.renderAll();
+                }).catch(e => {
+                  textElement.set("fontFamily", 'Trebuchet MS');
+                  textElement.center();
+                  _localCanvas.add(textElement);
+                  _localCanvas.renderAll();
+                });
+            }
+            else {
+                textElement.set("fontFamily", font);
                 textElement.center();
                 _localCanvas.add(textElement);
                 _localCanvas.renderAll();
-              }).catch(e => {
-                textElement.set("fontFamily", 'Trebuchet MS');
-                textElement.center();
-                _localCanvas.add(textElement);
-                _localCanvas.renderAll();
-              });
+            }
         }
     }
 
@@ -361,9 +372,10 @@ export default class GoateeEditor {
         return this.editorWrapper.querySelector('#custom-text #font').value;
     }
 
-    loadFontAndUser(font) {
-
-      }
+    checkIfSafeFont(font) {
+        let safeFonts = ["Trebuchet MS"];
+        return safeFonts.includes(font);
+    }
 
     showFacebookOptions(event) {
         this.hideElement('#image-options-container');
@@ -552,7 +564,7 @@ export default class GoateeEditor {
 
     addSticker(event) {
         this.animateElement(event.target, 'wiggle');
-        this.addImageFromUrl(event.target.src);
+        this.addImageFromUrl(event.target.src, 'sticker');
         this.editorWrapper.querySelector('#tabs-container .position-tab').click();
     }
 

@@ -7512,7 +7512,8 @@ a.button:active {
 
 /* Editor styles */
 #editor-wrapper {
-  max-width: 680px; }
+  max-width: 680px;
+  margin-top: 1em; }
   #editor-wrapper #editor-container {
     margin: 0 auto;
     position: relative;

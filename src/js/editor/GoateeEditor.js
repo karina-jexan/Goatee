@@ -215,6 +215,8 @@ export default class GoateeEditor {
         const imgUrl = this.editorWrapper.querySelector('#image-url-facebook').value;
         this.removeObjectFromCanvas('initialImage');
         this.addImageFromUrl(imgUrl);
+        this.editorWrapper.querySelector('#tabs-container .position-tab').click();
+
     }
 
     cancelUploadFromFacebook(event) {
@@ -238,9 +240,10 @@ export default class GoateeEditor {
         let _localCanvas = this.canvas;
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
-                oImg.scaleToWidth(_localCanvas.getWidth());
-                oImg.scaleToHeight(_localCanvas.getHeight());
+                oImg.scaleToWidth(_localCanvas.getWidth() * 0.95);
+                oImg.scaleToHeight(_localCanvas.getHeight() * 0.95);
                 _localCanvas.add(oImg);
+                _localCanvas.setActiveObject(oImg);
                 _localCanvas.renderAll();
             });
         }
@@ -545,6 +548,7 @@ export default class GoateeEditor {
     addSticker(event) {
         this.animateElement(event.target, 'wiggle');
         this.addImageFromUrl(event.target.src);
+        this.editorWrapper.querySelector('#tabs-container .position-tab').click();
     }
 
     animateElement(elementToAnimate, className) {

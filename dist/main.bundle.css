@@ -130,6 +130,17 @@ a.button:active {
     min-width: 50px;
     padding: 0.5em;
     color: #5a5a5a; }
+  #editor-wrapper #custom-text button.color-picker-button {
+    position: relative;
+    display: inline-block; }
+    #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper {
+      width: 120px;
+      position: absolute;
+      z-index: 1;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -60px;
+      /* Use half of the width (120/2 = 60), to center the tooltip */ }
   #editor-wrapper a {
     font-weight: bold;
     text-decoration: none;
@@ -218,5 +229,5 @@ a.button:active {
     flex-grow: 1.8 !important; } }
 
 @media all and (min-width: 768px) {
-  #add-stickers-container #stickers-carousel {
+  #editor-wrapper #add-stickers-container #stickers-carousel {
     width: 70% !important; } }

@@ -143,12 +143,20 @@
                             </div>
                             <div class="hide col" id="custom-text">
                                 <div class="text-options-wrapper flex">
-                                    <select name="font" id="font">
-                                        <option value="Open Sans" selected>Open Sans</option>
-                                        <option value="Pacifico">Pacifico</option>
-                                        <option value="Roboto Mono">Roboto Mono</option>
-                                    </select>
-                                    <button><i class="fas fa-fill-drip"></i></button>
+                                    <div class="font-select-wrapper">
+                                        <select name="font" id="font">
+                                            <option value="Open Sans" selected>Open Sans</option>
+                                            <option value="Pacifico">Pacifico</option>
+                                            <option value="Roboto Mono">Roboto Mono</option>
+                                        </select>
+                                    </div>
+                                    <div class="color-picker-options-wrapper">
+                                        <button class="color-picker-button">
+                                            <i class="fas fa-fill-drip color-picker-button"></i>
+                                            <span class="a-color-picker-wrapper"></span>
+                                        </button>
+
+                                    </div>
                                 </div>
                                 <input type="text" name="add-text-input" id="add-text-input"
                                     placeholder="Type in your message ;)">

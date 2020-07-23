@@ -1,5 +1,6 @@
 import { fabric } from 'fabric';
-let FontFaceObserver = require('fontfaceobserver');
+const FontFaceObserver = require('fontfaceobserver');
+const AColorPicker = require('a-color-picker');
 
 export default class GoateeEditor {
 
@@ -14,6 +15,7 @@ export default class GoateeEditor {
         this.textElementInCanvas = false;
         this.initialStickersPosition = 0;
         this.textObject = null;
+        this.pickerElement = null;
 
 
         // Main canvas DOM element
@@ -53,6 +55,7 @@ export default class GoateeEditor {
         this.stickerCarouselElementButton = this.stickerCarouselElementButton.bind(this);
         this.addSticker = this.addSticker.bind(this);
         this.getSelectedFont = this.getSelectedFont.bind(this);
+        this.toggleColorPicker = this.toggleColorPicker.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
 
         this.init();
@@ -86,7 +89,17 @@ export default class GoateeEditor {
             oImg.center();
             _localCanvas.renderAll();
         });
+
+        // Initialize a-color-picker package
+        this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
+            "color": "#000000",
+            "showHSL" : false,
+            "showRGB": false,
+            "showAlpha" : false
+        });
+        this.pickerElement.toggle();
     }
+
 
     afterRender(event) {
         console.log('After render event triggered!');
@@ -111,6 +124,7 @@ export default class GoateeEditor {
         const stickerOptionButtons = this.editorWrapper.querySelectorAll('.sticker-options a');
         const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
         const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
+        const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
 
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);           
@@ -194,6 +208,10 @@ export default class GoateeEditor {
             });
         }
 
+        if(colorPickerButton) {
+            colorPickerButton.addEventListener('click', this.toggleColorPicker);
+        }
+
         document.getElementById('download').addEventListener('click', this.downloadImage);
     }
 
@@ -210,6 +228,13 @@ export default class GoateeEditor {
           document.getElementById('download-link').click();
         
     }
+
+    toggleColorPicker(event) {
+        if(event.target.classList.contains('color-picker-button')) {
+            this.pickerElement.toggle();
+        }        
+    }
+
 
     resizeCanvas(event) {
         const outerCanvasContainer = document.getElementById('editor-container');

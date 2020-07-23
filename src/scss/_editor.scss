@@ -169,9 +169,20 @@ $inputHeight: 40px;
                 color: #5a5a5a;
             }
        }
-       
 
+        button.color-picker-button {
+        position: relative;
+        display: inline-block;
 
+        .a-color-picker-wrapper {
+            width: 120px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+        }
+       }
     }
 
     a {
@@ -280,7 +291,25 @@ $inputHeight: 40px;
         animation-duration: 1s;
     }
 }
+// @media all and (max-width: 330px) {
+//     #editor-wrapper {        
+//         #custom-text {
+//             .a-color-picker-wrapper {
+//                 top: 30px !important
+//             }
+//         }
+//     }
+// }
 
+// @media all and (max-width: 370px) {
+//     #editor-wrapper {        
+//         #custom-text {
+//             .a-color-picker-wrapper {
+//                 top: 40px !important
+//             }
+//         }
+//     }
+// }
 @media all and (max-width: 768px) {
     #editor-wrapper #tabs-container .editor-tab:nth-child(1) {
         flex-grow: 1.8 !important;
@@ -288,9 +317,11 @@ $inputHeight: 40px;
 }
 
 @media all and (min-width: 768px) {
-    #add-stickers-container {
-        #stickers-carousel {
-            width: 70% !important;
-        }
-    } 
+    #editor-wrapper {
+        #add-stickers-container {
+            #stickers-carousel {
+                width: 70% !important;
+            }
+       } 
+    }
 }

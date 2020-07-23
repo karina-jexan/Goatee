@@ -172,7 +172,7 @@ class GoateeEditor {
 
   addEvents() {
     window.addEventListener('resize', this.resizeCanvas, false);
-    const browseImageFileButton = this.editorWrapper.querySelector('#browse-image');
+    const browseImageFileButton = this.editorWrapper.querySelector('#image-options-container .browse-image');
     const imageFileInput = this.editorWrapper.querySelector('#image-file');
     const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
     const mainOptionsTabs = this.editorWrapper.querySelectorAll('#tabs-container .editor-tab .tab-link');
@@ -339,8 +339,10 @@ class GoateeEditor {
   }
 
   openFileExplorer(event) {
-    let fileInput = this.editorWrapper.querySelector('#' + event.target.dataset.fileinputid);
-    fileInput.click();
+    if (event.target.classList.contains('browse-image-button')) {
+      let fileInput = this.editorWrapper.querySelector('#' + event.target.dataset.fileinputid);
+      fileInput.click();
+    }
   }
 
   getFileName(event) {

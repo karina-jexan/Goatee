@@ -354,6 +354,7 @@ class GoateeEditor {
 
     this.removeObjectFromCanvas('initialImage');
     this.addImageFile(event);
+    this.editorWrapper.querySelector('#tabs-container .position-tab').click();
   }
 
   showHideImageOptions(event) {
@@ -376,10 +377,12 @@ class GoateeEditor {
 
       imgObj.onload = function () {
         let image = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image(imgObj);
-        image.scaleToWidth(_localCanvas.getWidth());
-        image.scaleToHeight(_localCanvas.getHeight());
+        image.scaleToWidth(_localCanvas.getWidth() * 0.95);
+        image.scaleToHeight(_localCanvas.getHeight() * 0.95);
 
         _localCanvas.add(image);
+
+        _localCanvas.setActiveObject(image);
 
         _localCanvas.renderAll();
       };

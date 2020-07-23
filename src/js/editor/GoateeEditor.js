@@ -260,6 +260,7 @@ export default class GoateeEditor {
         }
         this.removeObjectFromCanvas('initialImage');
         this.addImageFile(event);
+        this.editorWrapper.querySelector('#tabs-container .position-tab').click();
     }
 
     showHideImageOptions(event) {
@@ -281,10 +282,11 @@ export default class GoateeEditor {
             imgObj.src = e.target.result;
             imgObj.onload = function () {
                 let image = new fabric.Image(imgObj);
-                image.scaleToWidth(_localCanvas.getWidth());
-                image.scaleToHeight(_localCanvas.getHeight());
+                image.scaleToWidth(_localCanvas.getWidth() * 0.95);
+                image.scaleToHeight(_localCanvas.getHeight() * 0.95);
                 _localCanvas.add(image);
-                _localCanvas.renderAll();
+                _localCanvas.setActiveObject(image);
+                _localCanvas.renderAll();                
             }
         }
         reader.readAsDataURL(event.target.files[0]);

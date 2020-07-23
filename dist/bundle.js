@@ -153,7 +153,12 @@ class GoateeEditor {
     let context = this.canvasElement.getContext("2d");
     this.editorContainer = document.getElementById('editor-container');
     context.canvas.width = this.editorContainer.clientWidth;
-    context.canvas.height = this.editorContainer.clientWidth * this.canvasRatio; // Plug the fabricjs plugin
+    context.canvas.height = this.editorContainer.clientWidth * this.canvasRatio;
+    __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Object.prototype.set({
+      transparentCorners: false,
+      borderColor: '#88008B',
+      cornerColor: '#88008B'
+    }); // Plug the fabricjs plugin
 
     this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor');
     let _localCanvas = this.canvas; // Add initial image
@@ -329,8 +334,8 @@ class GoateeEditor {
 
     if (imgURL != '') {
       __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.fromURL(imgURL, function (oImg) {
-        oImg.scaleToWidth(_localCanvas.getWidth() * 0.95);
-        oImg.scaleToHeight(_localCanvas.getHeight() * 0.95);
+        oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
+        oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
 
         _localCanvas.add(oImg);
 
@@ -380,8 +385,8 @@ class GoateeEditor {
 
       imgObj.onload = function () {
         let image = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image(imgObj);
-        image.scaleToWidth(_localCanvas.getWidth() * 0.95);
-        image.scaleToHeight(_localCanvas.getHeight() * 0.95);
+        image.scaleToWidth(_localCanvas.getWidth() * 0.80);
+        image.scaleToHeight(_localCanvas.getHeight() * 0.80);
 
         _localCanvas.add(image);
 

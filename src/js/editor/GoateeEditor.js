@@ -13,6 +13,7 @@ export default class GoateeEditor {
         this.optionsWrapper = this.editorWrapper.querySelector('#options-fields-container');
         this.textElementInCanvas = false;
         this.initialStickersPosition = 0;
+        this.textObject = null;
 
 
         // Main canvas DOM element
@@ -73,6 +74,9 @@ export default class GoateeEditor {
         });
         // Plug the fabricjs plugin
         this.canvas = new fabric.Canvas('goatee-editor');
+        // Add event handler when any object is selected;
+        this.canvas.on('object:selected', this.afterRender);
+
         let _localCanvas = this.canvas;
         // Add initial image
         fabric.Image.fromURL('../img/placeholder-image-purple.png', function (oImg) {
@@ -82,6 +86,10 @@ export default class GoateeEditor {
             oImg.center();
             _localCanvas.renderAll();
         });
+    }
+
+    afterRender(event) {
+        console.log('After render event triggered!');
     }
 
     addEvents() {
@@ -331,32 +339,33 @@ export default class GoateeEditor {
         let _localCanvas = this.canvas;
         const canvasObjects = _localCanvas.getObjects();
         if (this.textElementInCanvas) {
-            canvasObjects.forEach(object => {
-                if (object.name === 'textElement') {
-                    object.set('text', event.target.value);
-                    _localCanvas.renderAll();
-                }
-            });
+            this.textObject.set('text', event.target.value);
+            _localCanvas.renderAll();
         }
         else {
             this.textElementInCanvas = true;
             let inputValue = event.target.value;
             let textElement = new fabric.Text(inputValue, { name: 'textElement' });
+            this.textObject = textElement;
             const selectedFont = this.getSelectedFont();
             let font = new FontFaceObserver(selectedFont);
+
+            this.removeObjectFromCanvas('initialImage');
+
             if(this.checkIfSafeFont(font) === false) {
                 font.load()
                 .then(function() {
                   // when font is loaded, use it.
-                  textElement.set("fontFamily", selectedFont);
-                  textElement.center();
-                  _localCanvas.add(textElement);
-                  _localCanvas.renderAll();
+                    textElement.set({"fontFamily":selectedFont, 'fill': '#ff0000'});
+                    textElement.center();
+                    _localCanvas.add(textElement);
+                    _localCanvas.renderAll();
                 }).catch(e => {
-                  textElement.set("fontFamily", 'Trebuchet MS');
-                  textElement.center();
-                  _localCanvas.add(textElement);
-                  _localCanvas.renderAll();
+                    console.log(e);
+                    textElement.set("fontFamily", 'Trebuchet MS');
+                    textElement.center();
+                    _localCanvas.add(textElement);
+                    _localCanvas.renderAll();
                 });
             }
             else {

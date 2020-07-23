@@ -18,7 +18,6 @@
   "dependencies": {
     "@babel/core": "^7.10.4",
     "babel-loader": "^8.1.0",
-    "bulma": "^0.9.0",
     "css-loader": "^0.28.7",
     "fabric": "^3.6.3",
     "node-sass": "^4.7.2",

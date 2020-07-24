@@ -82,6 +82,8 @@ export default class GoateeEditor {
         this.canvas = new fabric.Canvas('goatee-editor');
         // Add event handler when any object is selected;
         this.canvas.on('object:selected', this.afterRender);
+        // Prevent that all selected objects go to the front automatically
+        this.canvas.preserveObjectStacking = true;
 
         let _localCanvas = this.canvas;
         // Add initial image
@@ -298,15 +300,19 @@ export default class GoateeEditor {
     addImageFromUrl(imgURL, type = null) {
         this.removeObjectFromCanvas('initialImage');
         let _localCanvas = this.canvas;
+        const numberOfObjects = _localCanvas.getObjects().length;
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
                 oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
                 oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
-                _localCanvas.add(oImg);
-                _localCanvas.setActiveObject(oImg);
                 if(type === 'sticker') {
-                    _localCanvas.bringToFront(oImg);
+                    _localCanvas.insertAt(oImg, 1);
                 }
+                else {
+                    _localCanvas.add(oImg);
+                    _localCanvas.sendToBack(oImg);
+                }
+                _localCanvas.setActiveObject(oImg);
                 _localCanvas.renderAll();
             });
         }
@@ -342,6 +348,7 @@ export default class GoateeEditor {
 
     addImageFile(event) {
         let _localCanvas = this.canvas;
+        const numberOfObjects = _localCanvas.getObjects().length;
         let reader = new FileReader();
         reader.onload = function (e) {
             let imgObj = new Image();
@@ -351,6 +358,7 @@ export default class GoateeEditor {
                 image.scaleToWidth(_localCanvas.getWidth() * 0.80);
                 image.scaleToHeight(_localCanvas.getHeight() * 0.80);
                 _localCanvas.add(image);
+                _localCanvas.sendToBack(image, true);
                 _localCanvas.setActiveObject(image);
                 _localCanvas.renderAll();                
             }
@@ -410,7 +418,7 @@ export default class GoateeEditor {
                     textElement.set({"fontFamily":selectedFont});
                     textElement.center();
                     _localCanvas.bringToFront(textElement);
-                    _localCanvas.add(textElement);
+                    _localCanvas.insertAt(textElement, 0);
                     
                     _localCanvas.renderAll();
                 }).catch(e => {
@@ -418,7 +426,7 @@ export default class GoateeEditor {
                     textElement.set("fontFamily", 'Trebuchet MS');
                     textElement.center();
                     _localCanvas.bringToFront(textElement);
-                    _localCanvas.add(textElement);
+                    _localCanvas.insertAt(textElement, 0);
                     
                     _localCanvas.renderAll();
                 });
@@ -426,7 +434,7 @@ export default class GoateeEditor {
             else {
                 textElement.set("fontFamily", font);
                 textElement.center();
-                _localCanvas.add(textElement);
+                _localCanvas.insertAt(textElement, 0);
                 _localCanvas.renderAll();
             }
         }

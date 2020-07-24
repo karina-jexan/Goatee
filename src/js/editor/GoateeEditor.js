@@ -56,6 +56,9 @@ export default class GoateeEditor {
         this.addSticker = this.addSticker.bind(this);
         this.getSelectedFont = this.getSelectedFont.bind(this);
         this.toggleColorPicker = this.toggleColorPicker.bind(this);
+        this.updateTextColorInput = this.updateTextColorInput.bind(this);
+        this.updateTextColor = this.updateTextColor.bind(this);
+        this.getCurrentColor = this.getCurrentColor.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
 
         this.init();
@@ -97,6 +100,7 @@ export default class GoateeEditor {
             "showRGB": false,
             "showAlpha" : false
         });
+        this.pickerElement.on('change', this.updateTextColorInput)
         this.pickerElement.toggle();
     }
 
@@ -235,6 +239,24 @@ export default class GoateeEditor {
         }        
     }
 
+    updateTextColorInput(picker, color) {
+        // Update hidden input with 
+        let hexColor = AColorPicker.parseColor(color, "hex")
+        this.editorWrapper.querySelector('.color-picker-options-wrapper .text-color').value = hexColor;
+        if(this.textElementInCanvas) {
+            this.updateTextColor(hexColor);
+        }
+    }
+
+    updateTextColor(color) {
+        this.textObject.set({"fill" : color});
+        this.canvas.renderAll();
+    }
+
+    getCurrentColor() {
+        return this.editorWrapper.querySelector('.color-picker-options-wrapper .text-color').value;
+    }
+
 
     resizeCanvas(event) {
         const outerCanvasContainer = document.getElementById('editor-container');
@@ -371,6 +393,9 @@ export default class GoateeEditor {
             this.textElementInCanvas = true;
             let inputValue = event.target.value;
             let textElement = new fabric.Text(inputValue, { name: 'textElement' });
+            const currentColor = this.getCurrentColor();
+            textElement.set('fill', currentColor);
+
             this.textObject = textElement;
             const selectedFont = this.getSelectedFont();
             let font = new FontFaceObserver(selectedFont);
@@ -381,7 +406,7 @@ export default class GoateeEditor {
                 font.load()
                 .then(function() {
                   // when font is loaded, use it.
-                    textElement.set({"fontFamily":selectedFont, 'fill': '#ff0000'});
+                    textElement.set({"fontFamily":selectedFont});
                     textElement.center();
                     _localCanvas.add(textElement);
                     _localCanvas.renderAll();

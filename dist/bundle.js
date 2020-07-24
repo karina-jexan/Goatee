@@ -492,6 +492,8 @@ class GoateeEditor {
     if (this.textElementInCanvas) {
       this.textObject.set('text', event.target.value);
 
+      _localCanvas.bringToFront(this.textObject);
+
       _localCanvas.renderAll();
     } else {
       this.textElementInCanvas = true;
@@ -514,6 +516,8 @@ class GoateeEditor {
           });
           textElement.center();
 
+          _localCanvas.bringToFront(textElement);
+
           _localCanvas.add(textElement);
 
           _localCanvas.renderAll();
@@ -521,6 +525,8 @@ class GoateeEditor {
           console.log(e);
           textElement.set("fontFamily", 'Trebuchet MS');
           textElement.center();
+
+          _localCanvas.bringToFront(textElement);
 
           _localCanvas.add(textElement);
 

@@ -387,6 +387,7 @@ export default class GoateeEditor {
         const canvasObjects = _localCanvas.getObjects();
         if (this.textElementInCanvas) {
             this.textObject.set('text', event.target.value);
+            _localCanvas.bringToFront(this.textObject);
             _localCanvas.renderAll();
         }
         else {
@@ -395,7 +396,7 @@ export default class GoateeEditor {
             let textElement = new fabric.Text(inputValue, { name: 'textElement' });
             const currentColor = this.getCurrentColor();
             textElement.set('fill', currentColor);
-
+            
             this.textObject = textElement;
             const selectedFont = this.getSelectedFont();
             let font = new FontFaceObserver(selectedFont);
@@ -408,13 +409,17 @@ export default class GoateeEditor {
                   // when font is loaded, use it.
                     textElement.set({"fontFamily":selectedFont});
                     textElement.center();
+                    _localCanvas.bringToFront(textElement);
                     _localCanvas.add(textElement);
+                    
                     _localCanvas.renderAll();
                 }).catch(e => {
                     console.log(e);
                     textElement.set("fontFamily", 'Trebuchet MS');
                     textElement.center();
+                    _localCanvas.bringToFront(textElement);
                     _localCanvas.add(textElement);
+                    
                     _localCanvas.renderAll();
                 });
             }

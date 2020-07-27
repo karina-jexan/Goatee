@@ -60,6 +60,7 @@ export default class GoateeEditor {
         this.updateTextColorInput = this.updateTextColorInput.bind(this);
         this.updateTextColor = this.updateTextColor.bind(this);
         this.getCurrentColor = this.getCurrentColor.bind(this);
+        this.closeEverything = this.closeEverything.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
 
         this.init();
@@ -99,6 +100,7 @@ export default class GoateeEditor {
         // Initialize a-color-picker package
         this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
             "color": "#000000",
+            "palette" : ["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4","#00bcd4", "#00bcd4", "#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800","#ff5722", "#795548", "#9e9e9e", "#607d8b", "#000000"],
             "showHSL" : false,
             "showRGB": false,
             "showAlpha" : false
@@ -114,6 +116,7 @@ export default class GoateeEditor {
 
     addEvents() {
         window.addEventListener('resize', this.resizeCanvas, false);
+        document.addEventListener('click', this.closeEverything);
         const browseImageFileButton = this.editorWrapper.querySelector('#image-options-container .browse-image');
         const imageFileInput = this.editorWrapper.querySelector('#image-file');
         const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
@@ -279,6 +282,12 @@ export default class GoateeEditor {
         const zoom = this.canvas.getZoom() * scale;
         this.canvas.setDimensions({ width: containerWidth, height: containerWidth / ratio });
         this.canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+    }
+
+    closeEverything(event) {
+        // If it's inside the canvas
+        // Do nothi
+              
     }
 
     addImageFromUrlFacebook(event) {

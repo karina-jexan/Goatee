@@ -143,6 +143,7 @@ class GoateeEditor {
     this.zoomElement = this.zoomElement.bind(this);
     this.rotateElementButton = this.rotateElementButton.bind(this);
     this.rotateElement = this.rotateElement.bind(this);
+    this.changeElementLayer = this.changeElementLayer.bind(this);
     this.showStickerOptions = this.showStickerOptions.bind(this);
     this.stickerCarouselElementButton = this.stickerCarouselElementButton.bind(this);
     this.addSticker = this.addSticker.bind(this);
@@ -216,6 +217,7 @@ class GoateeEditor {
     const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container i');
     const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
     const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container i');
+    const layerButtons = this.editorWrapper.querySelectorAll('.layers-container i');
     const stickerOptionButtons = this.editorWrapper.querySelectorAll('.sticker-options a');
     const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
     const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
@@ -282,6 +284,12 @@ class GoateeEditor {
     if (rotateButtons) {
       rotateButtons.forEach(rotateButton => {
         rotateButton.addEventListener('click', this.rotateElementButton);
+      });
+    }
+
+    if (layerButtons) {
+      layerButtons.forEach(layerButton => {
+        layerButton.addEventListener('click', this.changeElementLayer);
       });
     }
 
@@ -766,6 +774,27 @@ class GoateeEditor {
     setTimeout(function () {
       elementToAnimate.classList.remove(className);
     }, 1000);
+  }
+
+  changeElementLayer(event) {
+    const activeObject = this.canvas.getActiveObject();
+
+    if (activeObject != undefined) {
+      switch (event.target.dataset.direction) {
+        case 'back':
+          this.canvas.sendBackwards(activeObject);
+          break;
+
+        case 'forward':
+          this.canvas.bringForward(activeObject);
+          break;
+
+        default:
+          break;
+      }
+    } else {
+      this.showAlert('error', 'Please select an element from the editor first.');
+    }
   }
 
 }

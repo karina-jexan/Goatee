@@ -136,6 +136,7 @@ export default class GoateeEditor {
         const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
         const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
         const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
+        const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
 
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);           
@@ -229,6 +230,10 @@ export default class GoateeEditor {
             colorPickerButton.addEventListener('click', this.toggleColorPicker);
         }
 
+        if(colorPickerOptionsWrapper) {
+            colorPickerOptionsWrapper.addEventListener('click', this.toggleColorPicker);
+        }
+
         document.getElementById('download').addEventListener('click', this.downloadImage);
     }
 
@@ -247,8 +252,11 @@ export default class GoateeEditor {
     }
 
     toggleColorPicker(event) {
-        if(event.target.classList.contains('color-picker-button')) {
+        // Open or close the color picker
+        if(event.target.classList.contains('color-picker-button') || event.target.classList.contains('close-color-picker')) {
             this.pickerElement.toggle();
+            // Show or hide the little close color picker button
+            this.editorWrapper.querySelector('.color-picker-options-wrapper .close-color-picker').classList.toggle('hide');
         }        
     }
 

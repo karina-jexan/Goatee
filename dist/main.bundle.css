@@ -75,6 +75,8 @@ a.button:active {
     margin-right: 0.2em;
     text-align: center;
     min-width: 100px; }
+    #editor-wrapper button:focus {
+      outline: none; }
     #editor-wrapper button i {
       display: block;
       font-size: 1.5em;
@@ -143,6 +145,18 @@ a.button:active {
       /* Use half of the width (120/2 = 60), to center the tooltip */ }
       #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper .a-color-picker-row:not(:last-child) {
         display: none !important; }
+      #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper div.close-color-picker {
+        position: absolute;
+        right: -110%;
+        font-size: 1em;
+        top: -22px;
+        width: 30px;
+        height: 30px;
+        background-color: #88008B;
+        border-radius: 50%; }
+        #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper div.close-color-picker i {
+          color: white;
+          padding: 4px; }
   #editor-wrapper a {
     font-weight: bold;
     text-decoration: none;

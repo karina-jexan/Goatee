@@ -79,6 +79,10 @@ $inputHeight: 40px;
         margin-right: 0.2em;
         text-align : center;
         min-width: 100px;
+        
+        &:focus {
+            outline: none;
+        }
 
         i {
             display: block;
@@ -186,6 +190,23 @@ $inputHeight: 40px;
             .a-color-picker-row:not(:last-child) {
                 display: none !important;
             }
+
+            div.close-color-picker {
+                position: absolute;
+                right: -110%;
+                font-size: 1em;
+                top: -22px;
+                width: 30px;
+                height: 30px;
+                background-color: $mainColor;
+                border-radius: 50%;
+
+                i {
+                    color: white;
+                    padding: 4px;
+                }
+                
+             }
         }
        }
     }

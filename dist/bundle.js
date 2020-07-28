@@ -158,6 +158,7 @@ class GoateeEditor {
     this.hideDeleteButton = this.hideDeleteButton.bind(this);
     this.globalOptions = this.globalOptions.bind(this);
     this.deleteElement = this.deleteElement.bind(this);
+    this.canvasCleared = this.canvasCleared.bind(this);
     this.downloadImage = this.downloadImage.bind(this);
     this.init();
     this.addEvents();
@@ -177,7 +178,9 @@ class GoateeEditor {
 
     this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor'); // Add event handler when any object is selected;
 
-    this.canvas.on('selection:created', this.objectSelected); // Prevent that all selected objects go to the front automatically
+    this.canvas.on('selection:created', this.objectSelected); // Add event handler when there is no object selected in the canvas
+
+    this.canvas.on('selection:cleared', this.canvasCleared); // Prevent that all selected objects go to the front automatically
 
     this.canvas.preserveObjectStacking = true;
     let _localCanvas = this.canvas; // Add initial image
@@ -216,6 +219,10 @@ class GoateeEditor {
   hideDeleteButton() {
     const deleteButton = this.editorWrapper.querySelector('.global-options-wrapper .delete-element');
     deleteButton.classList.add('hide');
+  }
+
+  canvasCleared(event) {
+    this.hideDeleteButton();
   }
 
   addEvents() {

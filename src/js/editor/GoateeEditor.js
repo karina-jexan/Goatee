@@ -83,7 +83,7 @@ export default class GoateeEditor {
         // Plug the fabricjs plugin
         this.canvas = new fabric.Canvas('goatee-editor');
         // Add event handler when any object is selected;
-        this.canvas.on('object:selected', this.afterRender);
+        this.canvas.on('selection:created', this.objectSelected);
         // Prevent that all selected objects go to the front automatically
         this.canvas.preserveObjectStacking = true;
 
@@ -110,8 +110,12 @@ export default class GoateeEditor {
     }
 
 
-    afterRender(event) {
-        console.log('After render event triggered!');
+    objectSelected(event) {
+        this.showDeleteButton();
+    }
+
+    showDeleteButton() {
+        
     }
 
     addEvents() {

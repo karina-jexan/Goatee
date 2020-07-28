@@ -172,7 +172,7 @@ class GoateeEditor {
 
     this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor'); // Add event handler when any object is selected;
 
-    this.canvas.on('object:selected', this.afterRender); // Prevent that all selected objects go to the front automatically
+    this.canvas.on('selection:created', this.objectSelected); // Prevent that all selected objects go to the front automatically
 
     this.canvas.preserveObjectStacking = true;
     let _localCanvas = this.canvas; // Add initial image
@@ -199,9 +199,11 @@ class GoateeEditor {
     this.pickerElement.toggle();
   }
 
-  afterRender(event) {
-    console.log('After render event triggered!');
+  objectSelected(event) {
+    this.showDeleteButton();
   }
+
+  showDeleteButton() {}
 
   addEvents() {
     window.addEventListener('resize', this.resizeCanvas, false);

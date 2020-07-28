@@ -30,7 +30,12 @@ a.button:active {
 /* Editor styles */
 #editor-wrapper {
   max-width: 680px;
-  margin-top: 1em; }
+  margin-top: 1em;
+  position: relative; }
+  #editor-wrapper .global-options-wrapper {
+    position: absolute;
+    right: -5%;
+    top: 10px; }
   #editor-wrapper #editor-container {
     margin: 0 auto;
     position: relative;

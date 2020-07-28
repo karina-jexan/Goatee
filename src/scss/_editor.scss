@@ -17,6 +17,14 @@ $inputHeight: 40px;
 #editor-wrapper {
     max-width: 680px;
     margin-top : 1em;
+    position: relative;
+
+    .global-options-wrapper{
+        position: absolute;
+        right: -5%;
+        top: 10px;
+    }
+
     #editor-container {
         margin: 0 auto;
         position: relative;

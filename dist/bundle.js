@@ -345,7 +345,11 @@ class GoateeEditor {
 
     if (this.textElementInCanvas) {
       this.updateTextColor(hexColor);
-    }
+    } // Update open color picker icon color
+
+
+    const colorPickerButtonIcon = this.editorWrapper.querySelector('.color-picker-options-wrapper .color-picker-button i');
+    colorPickerButtonIcon.style.color = hexColor;
   }
 
   updateTextColor(color) {

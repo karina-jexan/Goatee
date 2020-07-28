@@ -32,10 +32,16 @@ a.button:active {
   max-width: 680px;
   margin-top: 1em;
   position: relative; }
-  #editor-wrapper .global-options-wrapper {
-    position: absolute;
-    right: -5%;
-    top: 10px; }
+  #editor-wrapper .global-options-wrapper div.delete-element {
+    width: 35px;
+    height: 35px;
+    background-color: #88008B;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 2;
+    margin-top: 0.5em;
+    cursor: pointer; }
   #editor-wrapper #editor-container {
     margin: 0 auto;
     position: relative;
@@ -197,6 +203,8 @@ a.button:active {
     flex-grow: 1; }
   #editor-wrapper .justify-center {
     justify-content: center; }
+  #editor-wrapper .justify-end {
+    justify-content: flex-end; }
   #editor-wrapper .text-center {
     text-align: center; }
   #editor-wrapper .text-right {

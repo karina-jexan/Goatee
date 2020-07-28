@@ -153,6 +153,11 @@ class GoateeEditor {
     this.updateTextColor = this.updateTextColor.bind(this);
     this.getCurrentColor = this.getCurrentColor.bind(this);
     this.closeEverything = this.closeEverything.bind(this);
+    this.objectSelected = this.objectSelected.bind(this);
+    this.showDeleteButton = this.showDeleteButton.bind(this);
+    this.hideDeleteButton = this.hideDeleteButton.bind(this);
+    this.globalOptions = this.globalOptions.bind(this);
+    this.deleteElement = this.deleteElement.bind(this);
     this.downloadImage = this.downloadImage.bind(this);
     this.init();
     this.addEvents();
@@ -203,7 +208,15 @@ class GoateeEditor {
     this.showDeleteButton();
   }
 
-  showDeleteButton() {}
+  showDeleteButton() {
+    const deleteButton = this.editorWrapper.querySelector('.global-options-wrapper .delete-element');
+    deleteButton.classList.remove('hide');
+  }
+
+  hideDeleteButton() {
+    const deleteButton = this.editorWrapper.querySelector('.global-options-wrapper .delete-element');
+    deleteButton.classList.add('hide');
+  }
 
   addEvents() {
     window.addEventListener('resize', this.resizeCanvas, false);
@@ -228,6 +241,7 @@ class GoateeEditor {
     const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
     const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
     const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
+    const globalOptionsWrapper = this.editorWrapper.querySelector('.global-options-wrapper');
 
     if (browseImageFileButton) {
       browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -325,6 +339,10 @@ class GoateeEditor {
       colorPickerOptionsWrapper.addEventListener('click', this.toggleColorPicker);
     }
 
+    if (globalOptionsWrapper) {
+      globalOptionsWrapper.addEventListener('click', this.globalOptions);
+    }
+
     document.getElementById('download').addEventListener('click', this.downloadImage);
   }
 
@@ -371,6 +389,19 @@ class GoateeEditor {
 
   getCurrentColor() {
     return this.editorWrapper.querySelector('.color-picker-options-wrapper .text-color').value;
+  }
+
+  globalOptions(event) {
+    const activeObject = this.canvas.getActiveObject();
+
+    if (event.target.classList.contains('delete-element')) {
+      this.deleteElement(activeObject);
+    }
+  }
+
+  deleteElement(elementToDelete) {
+    this.canvas.remove(elementToDelete);
+    this.hideDeleteButton();
   }
 
   resizeCanvas(event) {

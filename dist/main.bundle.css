@@ -39,6 +39,17 @@ a.button:active {
     #editor-wrapper #editor-container canvas {
       box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.1);
       width: 100%; }
+    #editor-wrapper #editor-container div.delete-button {
+      text-align: center;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      background-color: #a94442;
+      position: absolute;
+      cursor: pointer; }
+      #editor-wrapper #editor-container div.delete-button i {
+        color: white;
+        padding: 5px; }
   #editor-wrapper #tabs-container {
     justify-content: space-evenly;
     margin-top: 0.5em;

@@ -110,7 +110,18 @@ class GoateeEditor {
     this.textElementInCanvas = false;
     this.initialStickersPosition = 0;
     this.textObject = null;
-    this.pickerElement = null; // Main canvas DOM element
+    this.pickerElement = null;
+    this.hideControls = {
+      'tl': true,
+      'tr': false,
+      'bl': true,
+      'br': true,
+      'ml': true,
+      'mt': true,
+      'mr': true,
+      'mb': true,
+      'mtr': true
+    }; // Main canvas DOM element
 
     this.canvasElement = null; // Main canvas object
 
@@ -153,14 +164,18 @@ class GoateeEditor {
     this.updateTextColor = this.updateTextColor.bind(this);
     this.getCurrentColor = this.getCurrentColor.bind(this);
     this.closeEverything = this.closeEverything.bind(this);
-    this.objectSelected = this.objectSelected.bind(this);
-    this.showDeleteButton = this.showDeleteButton.bind(this);
-    this.hideDeleteButton = this.hideDeleteButton.bind(this);
     this.globalOptions = this.globalOptions.bind(this);
     this.deleteOption = this.deleteOption.bind(this);
     this.deleteElement = this.deleteElement.bind(this);
+    this.addOnCanvasDeleteBtn = this.addOnCanvasDeleteBtn.bind(this);
+    this.downloadImage = this.downloadImage.bind(this); // Canvas event handlers
+
+    this.objectSelected = this.objectSelected.bind(this);
+    this.objectRotating = this.objectRotating.bind(this);
+    this.objectModified = this.objectModified.bind(this);
+    this.objectScaled = this.objectScaled.bind(this);
+    this.objectMoving = this.objectMoving.bind(this);
     this.canvasCleared = this.canvasCleared.bind(this);
-    this.downloadImage = this.downloadImage.bind(this);
     this.init();
     this.addEvents();
   }
@@ -179,7 +194,17 @@ class GoateeEditor {
 
     this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor'); // Add event handler when any object is selected;
 
-    this.canvas.on('selection:created', this.objectSelected); // Add event handler when there is no object selected in the canvas
+    this.canvas.on('selection:created', this.objectSelected); // Add event handler when any object is selected;
+
+    this.canvas.on('selection:updated', this.objectSelected); // Add event when any object is rotating
+
+    this.canvas.on('object:rotating', this.objectRotating); // Add event handler when any object is modified
+
+    this.canvas.on('object:modified', this.objectModified); // Add event handler when any object is beign scaled
+
+    this.canvas.on('object:scaling', this.objectScaled); // Add event handler when any object is beign moved
+
+    this.canvas.on('object:moving', this.objectMoving); // Add event handler when there is no object selected in the canvas
 
     this.canvas.on('selection:cleared', this.canvasCleared); // Prevent that all selected objects go to the front automatically
 
@@ -208,23 +233,66 @@ class GoateeEditor {
     this.pickerElement.toggle();
   }
 
+  objectMoving(event) {
+    // Hide delete button from canvas
+    this.removeOnCanvasDeleteButton();
+  }
+
+  objectScaled(event) {
+    // Hide delete button from canvas
+    this.removeOnCanvasDeleteButton();
+  }
+
+  objectModified(event) {
+    // Show delete button
+    this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+  }
+
+  objectRotating(event) {
+    // Hide delete button
+    this.removeOnCanvasDeleteButton();
+  }
+
   objectSelected(event) {
-    // Show the user the position tab menu when it selects an object from the canvas
+    // Show delete button
+    this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y); // Show the user the position tab menu when it selects an object from the canvas
+
     const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
     positionTabElement.click();
   }
 
-  showDeleteButton() {
-    const deleteButton = this.editorWrapper.querySelector('.global-options-wrapper .delete-element');
-    deleteButton.classList.remove('hide');
+  addOnCanvasDeleteBtn(x, y) {
+    // Remove the exisent (if any) delete button
+    this.removeOnCanvasDeleteButton();
+    const deleteButton = this.createDeleteButton(x, y);
+    this.editorContainer.appendChild(deleteButton);
   }
 
-  hideDeleteButton() {
-    const deleteButton = this.editorWrapper.querySelector('.global-options-wrapper .delete-element');
-    deleteButton.classList.add('hide');
+  removeOnCanvasDeleteButton() {
+    // Remove current delete button
+    const domDeleteButton = this.editorWrapper.querySelector('.delete-button');
+
+    if (domDeleteButton) {
+      domDeleteButton.remove();
+    }
   }
 
-  canvasCleared(event) {}
+  createDeleteButton(x, y) {
+    let btnLeft = x - 10;
+    let btnTop = y - 10;
+    let deleteButton = document.createElement('div');
+    let iconElement = document.createElement('i');
+    iconElement.classList.add('fas', 'fa-times');
+    deleteButton.classList.add('delete-button');
+    deleteButton.style.left = btnLeft + 'px';
+    deleteButton.style.top = btnTop + 'px';
+    deleteButton.appendChild(iconElement);
+    return deleteButton;
+  }
+
+  canvasCleared(event) {
+    this.removeOnCanvasDeleteButton();
+  }
 
   addEvents() {
     window.addEventListener('resize', this.resizeCanvas, false);
@@ -468,6 +536,7 @@ class GoateeEditor {
   addImageFromUrl(imgURL, type = null) {
     this.removeObjectFromCanvas('initialImage');
     let _localCanvas = this.canvas;
+    const _localControlsVisibility = this.hideControls;
 
     const numberOfObjects = _localCanvas.getObjects().length;
 
@@ -475,6 +544,7 @@ class GoateeEditor {
       __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.fromURL(imgURL, function (oImg) {
         oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
         oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
+        oImg.setControlsVisibility(_localControlsVisibility);
 
         if (type === 'sticker') {
           _localCanvas.insertAt(oImg, 1);
@@ -535,6 +605,7 @@ class GoateeEditor {
         let image = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image(imgObj);
         image.scaleToWidth(_localCanvas.getWidth() * 0.80);
         image.scaleToHeight(_localCanvas.getHeight() * 0.80);
+        image.setControlsVisibility(this.hideControls);
 
         _localCanvas.add(image);
 
@@ -606,6 +677,7 @@ class GoateeEditor {
             "fontFamily": selectedFont
           });
           textElement.center();
+          textElement.setControlsVisibility(this.hideControls);
 
           _localCanvas.bringToFront(textElement);
 
@@ -613,7 +685,7 @@ class GoateeEditor {
 
           _localCanvas.renderAll();
         }).catch(e => {
-          console.log(e);
+          textElement.setControlsVisibility(this.hideControls);
           textElement.set("fontFamily", 'Trebuchet MS');
           textElement.center();
 
@@ -625,6 +697,7 @@ class GoateeEditor {
         });
       } else {
         textElement.set("fontFamily", font);
+        textElement.setControlsVisibility(this.hideControls);
         textElement.center();
 
         _localCanvas.insertAt(textElement, 0);

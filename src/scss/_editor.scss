@@ -26,7 +26,22 @@ $inputHeight: 40px;
         canvas {
             box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.1);
             width: 100%;
-        }    
+        }
+        
+        div.delete-button {
+            text-align: center;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            background-color: $alertTextColor;
+            position: absolute;
+            cursor: pointer;
+
+            i {
+                color: white;
+                padding: 5px;
+            }
+        }
 
     }
     #tabs-container {

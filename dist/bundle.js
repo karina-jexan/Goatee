@@ -157,6 +157,7 @@ class GoateeEditor {
     this.showDeleteButton = this.showDeleteButton.bind(this);
     this.hideDeleteButton = this.hideDeleteButton.bind(this);
     this.globalOptions = this.globalOptions.bind(this);
+    this.deleteOption = this.deleteOption.bind(this);
     this.deleteElement = this.deleteElement.bind(this);
     this.canvasCleared = this.canvasCleared.bind(this);
     this.downloadImage = this.downloadImage.bind(this);
@@ -208,7 +209,9 @@ class GoateeEditor {
   }
 
   objectSelected(event) {
-    this.showDeleteButton();
+    // Show the user the position tab menu when it selects an object from the canvas
+    const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
+    positionTabElement.click();
   }
 
   showDeleteButton() {
@@ -221,9 +224,7 @@ class GoateeEditor {
     deleteButton.classList.add('hide');
   }
 
-  canvasCleared(event) {
-    this.hideDeleteButton();
-  }
+  canvasCleared(event) {}
 
   addEvents() {
     window.addEventListener('resize', this.resizeCanvas, false);
@@ -248,7 +249,7 @@ class GoateeEditor {
     const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
     const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
     const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
-    const globalOptionsWrapper = this.editorWrapper.querySelector('.global-options-wrapper');
+    const deleteContainer = this.editorWrapper.querySelector('.delete-element-container');
 
     if (browseImageFileButton) {
       browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -346,8 +347,8 @@ class GoateeEditor {
       colorPickerOptionsWrapper.addEventListener('click', this.toggleColorPicker);
     }
 
-    if (globalOptionsWrapper) {
-      globalOptionsWrapper.addEventListener('click', this.globalOptions);
+    if (deleteContainer) {
+      deleteContainer.addEventListener('click', this.deleteOption);
     }
 
     document.getElementById('download').addEventListener('click', this.downloadImage);
@@ -406,10 +407,21 @@ class GoateeEditor {
     }
   }
 
+  deleteOption(event) {
+    const activeObject = this.canvas.getActiveObject();
+
+    if (activeObject != undefined) {
+      if (event.target.classList.contains('delete-element')) {
+        this.deleteElement(activeObject);
+      }
+    } else {
+      this.showAlert('error', 'Please select an element from the editor first.');
+    }
+  }
+
   deleteElement(elementToDelete) {
     this.canvas.remove(elementToDelete);
     this.canvas.discardActiveObject().renderAll();
-    this.hideDeleteButton();
   }
 
   resizeCanvas(event) {

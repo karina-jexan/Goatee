@@ -19,20 +19,6 @@ $inputHeight: 40px;
     margin-top : 1em;
     position: relative;
 
-    .global-options-wrapper{
-       div.delete-element {
-            width: 35px;
-            height: 35px;
-            background-color: $mainColor;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 2;
-            margin-top: 0.5em;
-            cursor: pointer;
-        }
-    }
-
     #editor-container {
         margin: 0 auto;
         position: relative;

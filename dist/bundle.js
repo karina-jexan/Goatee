@@ -408,6 +408,7 @@ class GoateeEditor {
 
   deleteElement(elementToDelete) {
     this.canvas.remove(elementToDelete);
+    this.canvas.discardActiveObject().renderAll();
     this.hideDeleteButton();
   }
 

@@ -432,9 +432,10 @@ export default class GoateeEditor {
     deleteElement(elementToDelete) {
         if(elementToDelete.get('type') === 'text') {
             this.textElementInCanvas = false;
+            this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
         }
         this.canvas.remove(elementToDelete);
-        this.canvas.discardActiveObject().renderAll();
+        this.canvas.renderAll();
     }
 
 
@@ -586,8 +587,8 @@ export default class GoateeEditor {
     addText(event) {
         // Create text object this will only occur the first time the object is added
         let _localCanvas = this.canvas;
-        const canvasObjects = _localCanvas.getObjects();
-        if (this.textElementInCanvas) {
+        const _localControlsVisibility = this.hideControls;
+        if (this.textElementInCanvas === true ) {
             this.textObject.set('text', event.target.value);
             _localCanvas.bringToFront(this.textObject);
             _localCanvas.renderAll();
@@ -611,26 +612,29 @@ export default class GoateeEditor {
                   // when font is loaded, use it.
                     textElement.set({"fontFamily":selectedFont});
                     textElement.center();
-                    textElement.setControlsVisibility(this.hideControls);
+                    textElement.setControlsVisibility(_localControlsVisibility);
                     _localCanvas.bringToFront(textElement);
                     _localCanvas.insertAt(textElement, 0);
+                    console.log('En el then');
                     
                     _localCanvas.renderAll();
                 }).catch(e => {
-                    textElement.setControlsVisibility(this.hideControls);
+                    console.log(e);
+                    textElement.setControlsVisibility(_localControlsVisibility);
                     textElement.set("fontFamily", 'Trebuchet MS');
                     textElement.center();
                     _localCanvas.bringToFront(textElement);
                     _localCanvas.insertAt(textElement, 0);
-                    
+                    console.log('en el catch');
+
                     _localCanvas.renderAll();
                 });
             }
             else {
                 textElement.set("fontFamily", font);
-                textElement.setControlsVisibility(this.hideControls);
-                textElement.center();
+                textElement.setControlsVisibility(_localControlsVisibility);
                 _localCanvas.insertAt(textElement, 0);
+                console.log('en el else');
                 _localCanvas.renderAll();
             }
         }
@@ -655,25 +659,26 @@ export default class GoateeEditor {
         const _localCanvas = this.canvas;
         const _localControlsVisibility = this.hideControls;
         const _localTextElement = this.textObject;
-        font.load()
-        .then(function() {
-          // when font is loaded, use it.
-            _localTextElement.set({"fontFamily":fontName});
-            _localTextElement.setControlsVisibility(_localControlsVisibility);
-            _localCanvas.bringToFront(_localTextElement);
-            _localCanvas.insertAt(_localTextElement, 0);
-            
-            _localCanvas.renderAll();
-        }).catch(e => {
-            console.log(e);
-            _localTextElement.setControlsVisibility(_localControlsVisibility);
-            _localTextElement.set("fontFamily", 'Trebuchet MS');
-            _localCanvas.bringToFront(_localTextElement);
-            _localCanvas.insertAt(_localTextElement, 0);
-            
-            _localCanvas.renderAll();
-        });
-
+        if(this.textElementInCanvas === true) {
+            font.load()
+            .then(function() {
+              // when font is loaded, use it.
+                _localTextElement.set({"fontFamily":fontName});
+                _localTextElement.setControlsVisibility(_localControlsVisibility);
+                _localCanvas.bringToFront(_localTextElement);
+                _localCanvas.insertAt(_localTextElement, 0);
+                
+                _localCanvas.renderAll();
+            }).catch(e => {
+                console.log(e);
+                _localTextElement.setControlsVisibility(_localControlsVisibility);
+                _localTextElement.set("fontFamily", 'Trebuchet MS');
+                _localCanvas.bringToFront(_localTextElement);
+                _localCanvas.insertAt(_localTextElement, 0);
+                
+                _localCanvas.renderAll();
+            });
+        }
     }
 
     showFacebookOptions(event) {

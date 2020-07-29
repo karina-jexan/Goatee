@@ -12,8 +12,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "autoprefixer": "^9.8.5",
     "extract-text-webpack-plugin": "^3.0.2",
-    "fontfaceobserver": "^2.1.0"
+    "fontfaceobserver": "^2.1.0",
+    "postcss-loader": "^3.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.10.4",

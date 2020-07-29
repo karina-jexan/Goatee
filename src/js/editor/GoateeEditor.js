@@ -611,21 +611,19 @@ export default class GoateeEditor {
                 .then(function() {
                   // when font is loaded, use it.
                     textElement.set({"fontFamily":selectedFont});
-                    textElement.center();
                     textElement.setControlsVisibility(_localControlsVisibility);
                     _localCanvas.bringToFront(textElement);
                     _localCanvas.insertAt(textElement, 0);
-                    console.log('En el then');
+                    textElement.centerV();
                     
                     _localCanvas.renderAll();
                 }).catch(e => {
                     console.log(e);
                     textElement.setControlsVisibility(_localControlsVisibility);
                     textElement.set("fontFamily", 'Trebuchet MS');
-                    textElement.center();
                     _localCanvas.bringToFront(textElement);
                     _localCanvas.insertAt(textElement, 0);
-                    console.log('en el catch');
+                    textElement.centerV();
 
                     _localCanvas.renderAll();
                 });
@@ -634,7 +632,7 @@ export default class GoateeEditor {
                 textElement.set("fontFamily", font);
                 textElement.setControlsVisibility(_localControlsVisibility);
                 _localCanvas.insertAt(textElement, 0);
-                console.log('en el else');
+                textElement.centerV();
                 _localCanvas.renderAll();
             }
         }

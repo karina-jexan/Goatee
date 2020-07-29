@@ -68,6 +68,8 @@ export default class GoateeEditor {
         this.stickerCarouselElementButton = this.stickerCarouselElementButton.bind(this);
         this.addSticker = this.addSticker.bind(this);
         this.getSelectedFont = this.getSelectedFont.bind(this);
+        this.changeFont = this.changeFont.bind(this);
+        this.updateFont = this.updateFont.bind(this);
         this.toggleColorPicker = this.toggleColorPicker.bind(this);
         this.updateTextColorInput = this.updateTextColorInput.bind(this);
         this.updateTextColor = this.updateTextColor.bind(this);
@@ -237,6 +239,7 @@ export default class GoateeEditor {
         const stickerOptionButtons = this.editorWrapper.querySelectorAll('.sticker-options a');
         const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
         const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
+        const fontSelect = this.editorWrapper.querySelector('.font-select-wrapper select');
         const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
         const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
         const deleteContainer = this.editorWrapper.querySelector('.delete-element-container');
@@ -281,6 +284,10 @@ export default class GoateeEditor {
 
         if (cancelUploadFromInstagramButton) {
             cancelUploadFromInstagramButton.addEventListener('click', this.cancelUploadFromInstagram);
+        }
+
+        if(fontSelect) {
+            fontSelect.addEventListener('change', this.changeFont);
         }
 
         if (addTextInput) {
@@ -423,6 +430,9 @@ export default class GoateeEditor {
     }
 
     deleteElement(elementToDelete) {
+        if(elementToDelete.get('type') === 'text') {
+            this.textElementInCanvas = false;
+        }
         this.canvas.remove(elementToDelete);
         this.canvas.discardActiveObject().renderAll();
     }
@@ -633,6 +643,37 @@ export default class GoateeEditor {
     checkIfSafeFont(font) {
         let safeFonts = ["Trebuchet MS"];
         return safeFonts.includes(font);
+    }
+
+    changeFont(event) {
+        const fontName = event.target.value;
+        this.updateFont(fontName);
+    }
+
+    updateFont(fontName) {
+        let font = new FontFaceObserver(fontName);
+        const _localCanvas = this.canvas;
+        const _localControlsVisibility = this.hideControls;
+        const _localTextElement = this.textObject;
+        font.load()
+        .then(function() {
+          // when font is loaded, use it.
+            _localTextElement.set({"fontFamily":fontName});
+            _localTextElement.setControlsVisibility(_localControlsVisibility);
+            _localCanvas.bringToFront(_localTextElement);
+            _localCanvas.insertAt(_localTextElement, 0);
+            
+            _localCanvas.renderAll();
+        }).catch(e => {
+            console.log(e);
+            _localTextElement.setControlsVisibility(_localControlsVisibility);
+            _localTextElement.set("fontFamily", 'Trebuchet MS');
+            _localCanvas.bringToFront(_localTextElement);
+            _localCanvas.insertAt(_localTextElement, 0);
+            
+            _localCanvas.renderAll();
+        });
+
     }
 
     showFacebookOptions(event) {

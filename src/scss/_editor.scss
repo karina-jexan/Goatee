@@ -338,25 +338,6 @@ $inputHeight: 40px;
         animation-duration: 1s;
     }
 }
-// @media all and (max-width: 330px) {
-//     #editor-wrapper {        
-//         #custom-text {
-//             .a-color-picker-wrapper {
-//                 top: 30px !important
-//             }
-//         }
-//     }
-// }
-
-// @media all and (max-width: 370px) {
-//     #editor-wrapper {        
-//         #custom-text {
-//             .a-color-picker-wrapper {
-//                 top: 40px !important
-//             }
-//         }
-//     }
-// }
 @media all and (max-width: 768px) {
     #editor-wrapper #tabs-container .editor-tab:nth-child(1) {
         flex-grow: 1.8 !important;

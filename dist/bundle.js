@@ -168,6 +168,7 @@ class GoateeEditor {
     this.deleteOption = this.deleteOption.bind(this);
     this.deleteElement = this.deleteElement.bind(this);
     this.addOnCanvasDeleteBtn = this.addOnCanvasDeleteBtn.bind(this);
+    this.containerActions = this.containerActions.bind(this);
     this.downloadImage = this.downloadImage.bind(this); // Canvas event handlers
 
     this.objectSelected = this.objectSelected.bind(this);
@@ -282,7 +283,7 @@ class GoateeEditor {
     let btnTop = y - 10;
     let deleteButton = document.createElement('div');
     let iconElement = document.createElement('i');
-    iconElement.classList.add('fas', 'fa-times');
+    iconElement.classList.add('fas', 'fa-times', 'delete-button');
     deleteButton.classList.add('delete-button');
     deleteButton.style.left = btnLeft + 'px';
     deleteButton.style.top = btnTop + 'px';
@@ -419,6 +420,10 @@ class GoateeEditor {
       deleteContainer.addEventListener('click', this.deleteOption);
     }
 
+    if (this.editorContainer) {
+      this.editorContainer.addEventListener('click', this.containerActions);
+    }
+
     document.getElementById('download').addEventListener('click', this.downloadImage);
   }
 
@@ -484,6 +489,16 @@ class GoateeEditor {
       }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
+    }
+  }
+
+  containerActions(event) {
+    if (event.target.classList.contains('delete-button')) {
+      const activeObject = this.canvas.getActiveObject();
+
+      if (activeObject !== undefined) {
+        this.deleteElement(activeObject);
+      }
     }
   }
 

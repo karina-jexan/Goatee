@@ -225,7 +225,7 @@ class GoateeEditor {
 
     this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
       "color": "#000000",
-      "palette": ["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#00bcd4", "#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800", "#ff5722", "#795548", "#9e9e9e", "#607d8b", "#000000"],
+      "palette": ["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#00bcd4", "#4caf50", "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800", "#ff5722", "#795548", "#9e9e9e", "#607d8b", "#000000", "#ffffff"],
       "showHSL": false,
       "showRGB": false,
       "showAlpha": false
@@ -257,9 +257,12 @@ class GoateeEditor {
   objectSelected(event) {
     // Show delete button
     this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y); // Show the user the position tab menu when it selects an object from the canvas
+    // except if it's a text type object
 
-    const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
-    positionTabElement.click();
+    if (event.target.get('type') !== 'text') {
+      const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
+      positionTabElement.click();
+    }
   }
 
   addOnCanvasDeleteBtn(x, y) {

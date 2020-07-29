@@ -49,7 +49,7 @@ a.button:active {
       cursor: pointer; }
       #editor-wrapper #editor-container div.delete-button i {
         color: white;
-        padding: 5px; }
+        padding: 7px; }
   #editor-wrapper #tabs-container {
     justify-content: space-evenly;
     margin-top: 0.5em;

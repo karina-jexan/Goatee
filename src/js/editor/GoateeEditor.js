@@ -422,6 +422,13 @@ export default class GoateeEditor {
         const zoom = this.canvas.getZoom() * scale;
         this.canvas.setDimensions({ width: containerWidth, height: containerWidth / ratio });
         this.canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+
+        // If there is any selected objects update the delete button position
+        const activeObject = this.canvas.getActiveObject();
+        if(activeObject !== undefined) {
+            this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+        }
+ 
     }
 
     closeEverything(event) {

@@ -642,6 +642,8 @@ export default class GoateeEditor {
     }
 
     changeElementPositionArrows(event) {
+        // Remove delete button from canvas
+        this.removeOnCanvasDeleteButton()
         const activeObject = this.canvas.getActiveObject();
 
         if(activeObject != undefined) {
@@ -650,7 +652,7 @@ export default class GoateeEditor {
             const pixelsToMove = 10;
             switch (event.target.dataset.direction) {
                 case 'up':
-                    this.updateObjectCoords(activeObject, currentXCoords, currentYCoords - pixelsToMove);
+                    this.updateObjectCoords(activeObject, currentXCoords, currentYCoords - pixelsToMove);              
                 break;
                 case 'down':
                     this.updateObjectCoords(activeObject, currentXCoords, currentYCoords + pixelsToMove);
@@ -665,6 +667,7 @@ export default class GoateeEditor {
                 default:
                 break; 
             }
+            this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
         }
         else {
             this.showAlert('error', 'Please select an element from the editor first.')
@@ -701,6 +704,8 @@ export default class GoateeEditor {
     }
 
     zoomElementMagnifying(event) {
+        // Remove delete button from canvas
+        this.removeOnCanvasDeleteButton();
         const activeObject = this.canvas.getActiveObject();
 
         if(activeObject != undefined) {
@@ -719,6 +724,8 @@ export default class GoateeEditor {
                 default:
                 break; 
             }
+
+            this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
         }
         else {
             this.showAlert('error', 'Please select an element from the editor first.')
@@ -733,6 +740,9 @@ export default class GoateeEditor {
     }
 
     rotateElementButton(event) {
+        // Remove delete button from canvas
+        this.removeOnCanvasDeleteButton();
+
         const activeObject = this.canvas.getActiveObject();
 
         if(activeObject != undefined) {
@@ -748,6 +758,8 @@ export default class GoateeEditor {
                 default:
                 break; 
             }
+
+            this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
         }
         else {
             this.showAlert('error', 'Please select an element from the editor first.')

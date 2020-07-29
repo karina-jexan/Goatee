@@ -749,6 +749,8 @@ class GoateeEditor {
   }
 
   changeElementPositionArrows(event) {
+    // Remove delete button from canvas
+    this.removeOnCanvasDeleteButton();
     const activeObject = this.canvas.getActiveObject();
 
     if (activeObject != undefined) {
@@ -776,6 +778,8 @@ class GoateeEditor {
         default:
           break;
       }
+
+      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
     }
@@ -809,6 +813,8 @@ class GoateeEditor {
   }
 
   zoomElementMagnifying(event) {
+    // Remove delete button from canvas
+    this.removeOnCanvasDeleteButton();
     const activeObject = this.canvas.getActiveObject();
 
     if (activeObject != undefined) {
@@ -829,6 +835,8 @@ class GoateeEditor {
         default:
           break;
       }
+
+      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
     }
@@ -842,6 +850,8 @@ class GoateeEditor {
   }
 
   rotateElementButton(event) {
+    // Remove delete button from canvas
+    this.removeOnCanvasDeleteButton();
     const activeObject = this.canvas.getActiveObject();
 
     if (activeObject != undefined) {
@@ -860,6 +870,8 @@ class GoateeEditor {
         default:
           break;
       }
+
+      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
     }

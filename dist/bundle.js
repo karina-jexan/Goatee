@@ -599,7 +599,8 @@ class GoateeEditor {
     __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Object.prototype.set({
       transparentCorners: false,
       borderColor: '#88008B',
-      cornerColor: '#88008B'
+      cornerColor: '#88008B',
+      cornerSize: 25
     }); // Plug the fabricjs plugin
 
     this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor'); // Add event handler when any object is selected;
@@ -1012,13 +1013,12 @@ class GoateeEditor {
     let _localCanvas = this.canvas;
     const _localControlsVisibility = this.hideControls;
 
-    const numberOfObjects = _localCanvas.getObjects().length;
-
     if (imgURL != '') {
       __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.fromURL(imgURL, function (oImg) {
         oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
         oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
         oImg.setControlsVisibility(_localControlsVisibility);
+        oImg;
 
         if (type === 'sticker') {
           _localCanvas.insertAt(oImg, 1);

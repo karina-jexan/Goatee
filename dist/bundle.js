@@ -1141,7 +1141,11 @@ class GoateeEditor {
         name: 'textElement'
       });
       const currentColor = this.getCurrentColor();
-      textElement.set('fill', currentColor);
+      textElement.set({
+        "fontSize": 50,
+        "fill": currentColor,
+        "cornerSize": 15
+      });
       this.textObject = textElement;
       const selectedFont = this.getSelectedFont();
       let font = new FontFaceObserver(selectedFont);

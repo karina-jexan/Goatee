@@ -647,7 +647,7 @@ export default class GoateeEditor {
             let inputValue = event.target.value;
             let textElement = new fabric.Text(inputValue, { name: 'textElement' });
             const currentColor = this.getCurrentColor();
-            textElement.set('fill', currentColor);
+            textElement.set({"fontSize" : 50, "fill" : currentColor, "cornerSize" : 15})
             
             this.textObject = textElement;
             const selectedFont = this.getSelectedFont();

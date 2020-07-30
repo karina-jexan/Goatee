@@ -76,6 +76,8 @@ export default class GoateeEditor {
         this.changeFont = this.changeFont.bind(this);
         this.updateFont = this.updateFont.bind(this);
         this.toggleColorPicker = this.toggleColorPicker.bind(this);
+        this.closeColorPicker = this.closeColorPicker.bind(this);
+        this.clearCanvasSelection = this.clearCanvasSelection.bind(this);
         this.updateTextColorInput = this.updateTextColorInput.bind(this);
         this.updateTextColor = this.updateTextColor.bind(this);
         this.getCurrentColor = this.getCurrentColor.bind(this);
@@ -176,15 +178,12 @@ export default class GoateeEditor {
             this.mySwiper.update();
             console.log('updated');
         }, 5000);
-
-          
          
-          this.mySwiper.on('click', function (swiper, event) {
-            if(event.target.tagName === 'IMG') {
-                _this.addImageFromUrl(event.target.src, 'sticker');
-            }
-          });
-
+        this.mySwiper.on('click', function (swiper, event) {
+        if(event.target.tagName === 'IMG') {
+            _this.addImageFromUrl(event.target.src, 'sticker');
+        }
+        });
     }
 
     updateSwiper() {
@@ -259,6 +258,7 @@ export default class GoateeEditor {
 
     canvasCleared(event) {
         this.removeOnCanvasDeleteButton();
+        this.closeColorPicker();
     }
 
     addEvents() {
@@ -422,6 +422,14 @@ export default class GoateeEditor {
         }        
     }
 
+    closeColorPicker() {
+        this.pickerElement.hide();
+    }
+
+    clearCanvasSelection() {
+        this.canvas.discardActiveObject();
+    }
+
     updateTextColorInput(picker, color) {
         // Update hidden input with 
         let hexColor = AColorPicker.parseColor(color, "hex")
@@ -504,9 +512,10 @@ export default class GoateeEditor {
     }
 
     closeEverything(event) {
-        // If it's inside the canvas
-        // Do nothi
-              
+       if(!event.targer.classList.contains('clickable')) {
+           this.closeColorPicker();
+           this.clearCanvasSelection();
+       }              
     }
 
     addImageFromUrlFacebook(event) {

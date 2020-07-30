@@ -408,8 +408,7 @@ a.button:active {
       scroll-snap-type: y mandatory; }
 
 .swiper-container {
-  width: 300px;
-  height: 300px; }
+  width: 70%; }
   .swiper-container .swiper-slide {
     width: 80px; }
     .swiper-container .swiper-slide img {

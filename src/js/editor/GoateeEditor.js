@@ -19,6 +19,7 @@ export default class GoateeEditor {
         this.pickerElement = null;
         this.loadedImages = 0;
         this.totalStickerImages = 0;
+        this.mySwiper = null;
 
         this.hideControls = {
             'tl':true,
@@ -41,6 +42,7 @@ export default class GoateeEditor {
         // Bind functions
         this.init = this.init.bind(this);
         this.resizeCanvas = this.resizeCanvas.bind(this);
+        this.updateSwiper = this.updateSwiper.bind(this);
         this.addImageFromUrl = this.addImageFromUrl.bind(this);
         this.openFileExplorer = this.openFileExplorer.bind(this);
         this.getFileName = this.getFileName.bind(this);
@@ -155,12 +157,9 @@ export default class GoateeEditor {
     initSwiper() {
         // configure Swiper to use modules
         Swiper.use([Navigation, Pagination]);
-        console.log('yellow');
-        const mySwiper = new Swiper('.swiper-container', {
+        this.mySwiper = new Swiper('.swiper-container', {
             slidesPerView: 5,
-            setWrapperSize: 300,
-            spaceBetween : 1,
-            slidesPerGroup : 5,
+            spaceBetween : 5,
             direction: 'horizontal',
             centeredSlides: true,
             loopFillGroupWithBlank: false,
@@ -171,15 +170,20 @@ export default class GoateeEditor {
           });
 
           setTimeout(() => {
-            mySwiper.update()
-        }, 2500);
+            this.mySwiper.update();
+            console.log('updated');
+        }, 5000);
 
           
          
-          mySwiper.on('slideChange', function () {
+          this.mySwiper.on('slideChange', function () {
             console.log('slide changed');
           });
 
+    }
+
+    updateSwiper() {
+        this.mySwiper.update();
     }
 
     objectMoving(event) {
@@ -610,6 +614,10 @@ export default class GoateeEditor {
         const optionID = event.target.dataset.optionid;
         if (optionID) {
             this.editorWrapper.querySelector('#' + optionID).classList.remove('hide');
+        }
+
+        if(optionID == 'add-stickers-container') {
+            this.updateSwiper();
         }
     }
 

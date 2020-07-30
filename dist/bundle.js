@@ -115,6 +115,7 @@ class GoateeEditor {
     this.pickerElement = null;
     this.loadedImages = 0;
     this.totalStickerImages = 0;
+    this.mySwiper = null;
     this.hideControls = {
       'tl': true,
       'tr': false,
@@ -133,6 +134,7 @@ class GoateeEditor {
 
     this.init = this.init.bind(this);
     this.resizeCanvas = this.resizeCanvas.bind(this);
+    this.updateSwiper = this.updateSwiper.bind(this);
     this.addImageFromUrl = this.addImageFromUrl.bind(this);
     this.openFileExplorer = this.openFileExplorer.bind(this);
     this.getFileName = this.getFileName.bind(this);
@@ -244,12 +246,9 @@ class GoateeEditor {
   initSwiper() {
     // configure Swiper to use modules
     __WEBPACK_IMPORTED_MODULE_1_swiper__["c" /* default */].use([__WEBPACK_IMPORTED_MODULE_1_swiper__["a" /* Navigation */], __WEBPACK_IMPORTED_MODULE_1_swiper__["b" /* Pagination */]]);
-    console.log('yellow');
-    const mySwiper = new __WEBPACK_IMPORTED_MODULE_1_swiper__["c" /* default */]('.swiper-container', {
+    this.mySwiper = new __WEBPACK_IMPORTED_MODULE_1_swiper__["c" /* default */]('.swiper-container', {
       slidesPerView: 5,
-      setWrapperSize: 300,
-      spaceBetween: 1,
-      slidesPerGroup: 5,
+      spaceBetween: 5,
       direction: 'horizontal',
       centeredSlides: true,
       loopFillGroupWithBlank: false,
@@ -259,11 +258,16 @@ class GoateeEditor {
       }
     });
     setTimeout(() => {
-      mySwiper.update();
-    }, 2500);
-    mySwiper.on('slideChange', function () {
+      this.mySwiper.update();
+      console.log('updated');
+    }, 5000);
+    this.mySwiper.on('slideChange', function () {
       console.log('slide changed');
     });
+  }
+
+  updateSwiper() {
+    this.mySwiper.update();
   }
 
   objectMoving(event) {
@@ -702,6 +706,10 @@ class GoateeEditor {
 
     if (optionID) {
       this.editorWrapper.querySelector('#' + optionID).classList.remove('hide');
+    }
+
+    if (optionID == 'add-stickers-container') {
+      this.updateSwiper();
     }
   }
 

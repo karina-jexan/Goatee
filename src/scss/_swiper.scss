@@ -1,12 +1,11 @@
 @import '~swiper/swiper.scss';
 
 .swiper-container {
-    width: 300px;
-    height: 300px;
+    width: 70%;
 
     .swiper-slide {
         width: 80px;
-
+        
         img {
             width: 80px;
         }

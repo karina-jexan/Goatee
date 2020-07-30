@@ -1,4 +1,5 @@
 import { fabric } from 'fabric';
+import Swiper, { Navigation, Pagination  } from 'swiper';
 const FontFaceObserver = require('fontfaceobserver');
 const AColorPicker = require('a-color-picker');
 
@@ -16,6 +17,8 @@ export default class GoateeEditor {
         this.initialStickersPosition = 0;
         this.textObject = null;
         this.pickerElement = null;
+        this.loadedImages = 0;
+        this.totalStickerImages = 0;
 
         this.hideControls = {
             'tl':true,
@@ -92,6 +95,7 @@ export default class GoateeEditor {
 
         this.init();
         this.addEvents();
+        this.initSwiper();
     }
 
     init() {
@@ -146,6 +150,36 @@ export default class GoateeEditor {
         });
         this.pickerElement.on('change', this.updateTextColorInput)
         this.pickerElement.toggle();
+    }
+
+    initSwiper() {
+        // configure Swiper to use modules
+        Swiper.use([Navigation, Pagination]);
+        console.log('yellow');
+        const mySwiper = new Swiper('.swiper-container', {
+            slidesPerView: 5,
+            setWrapperSize: 300,
+            spaceBetween : 1,
+            slidesPerGroup : 5,
+            direction: 'horizontal',
+            centeredSlides: true,
+            loopFillGroupWithBlank: false,
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+          });
+
+          setTimeout(() => {
+            mySwiper.update()
+        }, 2500);
+
+          
+         
+          mySwiper.on('slideChange', function () {
+            console.log('slide changed');
+          });
+
     }
 
     objectMoving(event) {
@@ -244,6 +278,7 @@ export default class GoateeEditor {
         const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
         const deleteContainer = this.editorWrapper.querySelector('.delete-element-container');
         
+       
         if (browseImageFileButton) {
             browseImageFileButton.addEventListener('click', this.openFileExplorer);           
         }

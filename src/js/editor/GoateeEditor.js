@@ -155,10 +155,11 @@ export default class GoateeEditor {
     }
 
     initSwiper() {
+        const _this = this;
         // configure Swiper to use modules
         Swiper.use([Navigation, Pagination]);
         this.mySwiper = new Swiper('.swiper-container', {
-            slidesPerView: 5,
+            slidesPerView: 4,
             spaceBetween : 5,
             direction: 'horizontal',
             centeredSlides: true,
@@ -176,8 +177,10 @@ export default class GoateeEditor {
 
           
          
-          this.mySwiper.on('slideChange', function () {
-            console.log('slide changed');
+          this.mySwiper.on('click', function (swiper, event) {
+            if(event.target.tagName === 'IMG') {
+                _this.addImageFromUrl(event.target.src);
+            }
           });
 
     }

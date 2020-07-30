@@ -724,7 +724,7 @@ class GoateeEditor {
 
   createDeleteButton(x, y) {
     let btnLeft = x - 10;
-    let btnTop = y - 10;
+    let btnTop = y - 20;
     let deleteButton = document.createElement('div');
     let iconElement = document.createElement('i');
     iconElement.classList.add('fas', 'fa-times', 'delete-button');

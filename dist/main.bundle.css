@@ -145,18 +145,22 @@ a.button:active {
       /* Use half of the width (120/2 = 60), to center the tooltip */ }
       #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper .a-color-picker-row:not(:last-child) {
         display: none !important; }
+      #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper .a-color-picker-palette-color {
+        width: 35px !important;
+        height: 30px !important;
+        flex: 0 1 35px !important; }
       #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper div.close-color-picker {
         position: absolute;
         right: -110%;
         font-size: 1em;
         top: -22px;
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
         background-color: #88008B;
         border-radius: 50%; }
         #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper div.close-color-picker i {
           color: white;
-          padding: 4px; }
+          padding: 7px; }
   #editor-wrapper a {
     font-weight: bold;
     text-decoration: none;

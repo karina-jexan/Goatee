@@ -202,6 +202,8 @@ a.button:active {
     padding-left: 5px;
     padding-right: 5px;
     flex-grow: 1; }
+  #editor-wrapper .align-center {
+    align-items: center; }
   #editor-wrapper .justify-center {
     justify-content: center; }
   #editor-wrapper .justify-end {
@@ -408,7 +410,8 @@ a.button:active {
       scroll-snap-type: y mandatory; }
 
 .swiper-container {
-  width: 70%; }
+  width: 70%;
+  margin: 0; }
   .swiper-container .swiper-slide {
     width: 80px; }
     .swiper-container .swiper-slide img {

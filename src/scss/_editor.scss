@@ -135,30 +135,14 @@ $inputHeight: 40px;
             border-radius: 5px;;
         }
 
-        #stickers-carousel {
-            width: 100%;
-            align-items: center;
-
+        #stickers-carousel-wrapper {
+            .swiper-button-prev, 
+            .swiper-container {
+                margin-right: 0.8em;;
+            }
             i {
-                color: $darkerMainColor;
                 font-size: 2.5em;
                 cursor: pointer;
-            }            
-            & .carousel-back {
-                margin-right: 0.5em;
-            }
-
-            & .carousel-forward {
-                margin-left: 0.5em;
-            }
-            .carousel-images-wrapper {
-                overflow: hidden;
-                width: 70%;
-                img {
-                    width: 80px;
-                    height: auto;
-                    cursor: pointer;
-                }
             }
         }
     }

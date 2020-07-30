@@ -179,7 +179,7 @@ export default class GoateeEditor {
          
           this.mySwiper.on('click', function (swiper, event) {
             if(event.target.tagName === 'IMG') {
-                _this.addImageFromUrl(event.target.src);
+                _this.addImageFromUrl(event.target.src, 'sticker');
             }
           });
 

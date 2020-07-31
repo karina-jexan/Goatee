@@ -743,8 +743,8 @@ class GoateeEditor {
   }
 
   addEvents() {
-    window.addEventListener('resize', this.resizeCanvas, false);
-    document.addEventListener('click', this.closeEverything);
+    window.addEventListener('resize', this.resizeCanvas, false); //document.addEventListener('click', this.closeEverything);
+
     const browseImageFileButton = this.editorWrapper.querySelector('#image-options-container .browse-image');
     const imageFileInput = this.editorWrapper.querySelector('#image-file');
     const addImageRadioContainer = this.editorWrapper.querySelector('.add-image-radio-container');
@@ -767,6 +767,7 @@ class GoateeEditor {
     const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
     const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
     const deleteContainer = this.editorWrapper.querySelector('.delete-element-container');
+    const downloadImage = this.editorWrapper.querySelector('.download-image');
 
     if (browseImageFileButton) {
       browseImageFileButton.addEventListener('click', this.openFileExplorer);
@@ -876,18 +877,23 @@ class GoateeEditor {
       this.editorContainer.addEventListener('click', this.containerActions);
     }
 
-    document.getElementById('download').addEventListener('click', this.downloadImage);
+    if (downloadImage) {
+      downloadImage.addEventListener('click', this.downloadImage);
+    }
   }
 
   downloadImage(event) {
-    const imageURL = this.canvas.toDataURL({
-      format: 'png',
-      width: 405,
-      height: 285
-    }); // const imageURL = this.canvas.toDataURL()
+    let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
+    let filedata = this.canvas.toSVG(); // the SVG file is now in filedata
 
-    document.getElementById('download-link').href = imageURL;
-    document.getElementById('download-link').click();
+    let locfile = new Blob([filedata], {
+      type: "image/svg+xml;charset=utf-8"
+    });
+    let locfilesrc = URL.createObjectURL(locfile); //mylocfile);
+
+    downloadImageLink.href = locfilesrc;
+    downloadImageLink.download = 'mysvg.svg';
+    downloadImageLink.click();
   }
 
   toggleColorPicker(event) {
@@ -900,6 +906,7 @@ class GoateeEditor {
   }
 
   closeColorPicker() {
+    this.editorWrapper.querySelector('.color-picker-options-wrapper .close-color-picker').classList.add('hide');
     this.pickerElement.hide();
   }
 
@@ -993,7 +1000,7 @@ class GoateeEditor {
   }
 
   closeEverything(event) {
-    if (!event.targer.classList.contains('clickable')) {
+    if (!event.target.classList.contains('clickable')) {
       this.closeColorPicker();
       this.clearCanvasSelection();
     }

@@ -647,6 +647,7 @@ export default class GoateeEditor {
     addText(event) {
         // Create text object this will only occur the first time the object is added
         let _localCanvas = this.canvas;
+        const _this = this;
         const _localControlsVisibility = this.hideControls;
         if (this.textElementInCanvas === true ) {
             this.textObject.set('text', event.target.value);
@@ -665,10 +666,11 @@ export default class GoateeEditor {
             let font = new FontFaceObserver(selectedFont);
 
             this.removeObjectFromCanvas('initialImage');
-
-            if(this.checkIfSafeFont(font) === false) {
+            this.showElement('#custom-text .loader');
+            if(this.checkIfSafeFont(font) === false) {                
                 font.load()
                 .then(function() {
+                    _this.hideElement('#custom-text .loader');
                   // when font is loaded, use it.
                     textElement.set({"fontFamily":selectedFont});
                     textElement.setControlsVisibility(_localControlsVisibility);
@@ -678,7 +680,7 @@ export default class GoateeEditor {
                     
                     _localCanvas.renderAll();
                 }).catch(e => {
-                    console.log(e);
+                    _this.hideElement('#custom-text .loader');
                     textElement.setControlsVisibility(_localControlsVisibility);
                     textElement.set("fontFamily", 'Trebuchet MS');
                     _localCanvas.bringToFront(textElement);
@@ -689,6 +691,7 @@ export default class GoateeEditor {
                 });
             }
             else {
+                _this.hideElement('#custom-text .loader');
                 textElement.set("fontFamily", font);
                 textElement.setControlsVisibility(_localControlsVisibility);
                 _localCanvas.insertAt(textElement, 0);
@@ -717,9 +720,13 @@ export default class GoateeEditor {
         const _localCanvas = this.canvas;
         const _localControlsVisibility = this.hideControls;
         const _localTextElement = this.textObject;
+        const _this = this;
+
+        this.showElement('#custom-text .loader');
         if(this.textElementInCanvas === true) {
             font.load()
             .then(function() {
+                _this.hideElement('#custom-text .loader');
               // when font is loaded, use it.
                 _localTextElement.set({"fontFamily":fontName});
                 _localTextElement.setControlsVisibility(_localControlsVisibility);

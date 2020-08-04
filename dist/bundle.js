@@ -1147,6 +1147,9 @@ class GoateeEditor {
   addText(event) {
     // Create text object this will only occur the first time the object is added
     let _localCanvas = this.canvas;
+
+    const _this = this;
+
     const _localControlsVisibility = this.hideControls;
 
     if (this.textElementInCanvas === true) {
@@ -1171,10 +1174,13 @@ class GoateeEditor {
       const selectedFont = this.getSelectedFont();
       let font = new FontFaceObserver(selectedFont);
       this.removeObjectFromCanvas('initialImage');
+      this.showElement('#custom-text .loader');
 
       if (this.checkIfSafeFont(font) === false) {
         font.load().then(function () {
-          // when font is loaded, use it.
+          _this.hideElement('#custom-text .loader'); // when font is loaded, use it.
+
+
           textElement.set({
             "fontFamily": selectedFont
           });
@@ -1188,7 +1194,8 @@ class GoateeEditor {
 
           _localCanvas.renderAll();
         }).catch(e => {
-          console.log(e);
+          _this.hideElement('#custom-text .loader');
+
           textElement.setControlsVisibility(_localControlsVisibility);
           textElement.set("fontFamily", 'Trebuchet MS');
 
@@ -1201,6 +1208,8 @@ class GoateeEditor {
           _localCanvas.renderAll();
         });
       } else {
+        _this.hideElement('#custom-text .loader');
+
         textElement.set("fontFamily", font);
         textElement.setControlsVisibility(_localControlsVisibility);
 
@@ -1233,9 +1242,15 @@ class GoateeEditor {
     const _localControlsVisibility = this.hideControls;
     const _localTextElement = this.textObject;
 
+    const _this = this;
+
+    this.showElement('#custom-text .loader');
+
     if (this.textElementInCanvas === true) {
       font.load().then(function () {
-        // when font is loaded, use it.
+        _this.hideElement('#custom-text .loader'); // when font is loaded, use it.
+
+
         _localTextElement.set({
           "fontFamily": fontName
         });

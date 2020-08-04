@@ -1244,9 +1244,8 @@ class GoateeEditor {
 
     const _this = this;
 
-    this.showElement('#custom-text .loader');
-
     if (this.textElementInCanvas === true) {
+      this.showElement('#custom-text .loader');
       font.load().then(function () {
         _this.hideElement('#custom-text .loader'); // when font is loaded, use it.
 

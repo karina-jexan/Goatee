@@ -179,6 +179,12 @@ $inputHeight: 40px;
         position: relative;
         display: inline-block;
 
+        i.color-picker-button {
+            color: #000;
+            border-bottom: thick solid #000;
+            padding-bottom: 2px;
+        }
+
         .a-color-picker-wrapper {
             width: 120px;
             position: absolute;

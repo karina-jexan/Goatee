@@ -135,6 +135,10 @@ a.button:active {
   #editor-wrapper #custom-text button.color-picker-button {
     position: relative;
     display: inline-block; }
+    #editor-wrapper #custom-text button.color-picker-button i.color-picker-button {
+      color: #000;
+      border-bottom: thick solid #000;
+      padding-bottom: 2px; }
     #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper {
       width: 120px;
       position: absolute;

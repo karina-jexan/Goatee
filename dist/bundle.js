@@ -925,7 +925,7 @@ class GoateeEditor {
 
 
     const colorPickerButtonIcon = this.editorWrapper.querySelector('.color-picker-options-wrapper .color-picker-button i');
-    colorPickerButtonIcon.style.color = hexColor;
+    colorPickerButtonIcon.style.borderBottomColor = hexColor;
   }
 
   updateTextColor(color) {

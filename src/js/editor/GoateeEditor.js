@@ -96,6 +96,7 @@ export default class GoateeEditor {
         this.objectScaled = this.objectScaled.bind(this);
         this.objectMoving = this.objectMoving.bind(this);
         this.canvasCleared = this.canvasCleared.bind(this);
+        this.textChanged = this.textChanged.bind(this);
 
         this.init();
         this.addEvents();
@@ -133,6 +134,8 @@ export default class GoateeEditor {
         this.canvas.on('object:moving', this.objectMoving);
         // Add event handler when there is no object selected in the canvas
         this.canvas.on('selection:cleared', this.canvasCleared);
+        // Add event handler when elements type text are changed by the user
+        this.canvas.on('text:changed', this.textChanged);
         // Prevent that all selected objects go to the front automatically
         this.canvas.preserveObjectStacking = true;
 
@@ -166,7 +169,6 @@ export default class GoateeEditor {
             slidesPerView: 4,
             spaceBetween : 5,
             direction: 'horizontal',
-            centeredSlides: true,
             loopFillGroupWithBlank: false,
             navigation: {
               nextEl: '.swiper-button-next',
@@ -216,10 +218,19 @@ export default class GoateeEditor {
 
         // Show the user the position tab menu when it selects an object from the canvas
         // except if it's a text type object
-        if(event.target.get('type') !== 'text') {
+        if(event.target.get('type') !== 'textbox') {
             const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
             positionTabElement.click();
         }
+    }
+
+    textChanged(event) {
+        // Set the text element as active so the user can see the textbox
+        this.canvas.setActiveObject(this.textObject);
+
+        const addTextInput = this.editorWrapper.querySelector('#add-text-input');
+        // Update the text input with the text that user is adding directly to the canvas
+        addTextInput.value = event.target.text;
     }
 
 
@@ -650,6 +661,8 @@ export default class GoateeEditor {
         const _this = this;
         const _localControlsVisibility = this.hideControls;
         if (this.textElementInCanvas === true ) {
+            _localCanvas.setActiveObject(this.textObject);
+            this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
             this.textObject.set('text', event.target.value);
             _localCanvas.bringToFront(this.textObject);
             _localCanvas.renderAll();
@@ -657,7 +670,7 @@ export default class GoateeEditor {
         else {
             this.textElementInCanvas = true;
             let inputValue = event.target.value;
-            let textElement = new fabric.Text(inputValue, { name: 'textElement' });
+            let textElement = new fabric.Textbox(inputValue, { name: 'textElement' });
             const currentColor = this.getCurrentColor();
             textElement.set({"fontSize" : 50, "fill" : currentColor, "cornerSize" : 15})
             
@@ -677,6 +690,8 @@ export default class GoateeEditor {
                     _localCanvas.bringToFront(textElement);
                     _localCanvas.insertAt(textElement, 0);
                     textElement.centerV();
+                    _localCanvas.setActiveObject(_this.textObject);
+                    _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
                     
                     _localCanvas.renderAll();
                 }).catch(e => {
@@ -686,6 +701,8 @@ export default class GoateeEditor {
                     _localCanvas.bringToFront(textElement);
                     _localCanvas.insertAt(textElement, 0);
                     textElement.centerV();
+                    _localCanvas.setActiveObject(_this.textObject);
+                    _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
 
                     _localCanvas.renderAll();
                 });
@@ -696,6 +713,9 @@ export default class GoateeEditor {
                 textElement.setControlsVisibility(_localControlsVisibility);
                 _localCanvas.insertAt(textElement, 0);
                 textElement.centerV();
+                _localCanvas.setActiveObject(_this.textObject);
+                _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
+
                 _localCanvas.renderAll();
             }
         }

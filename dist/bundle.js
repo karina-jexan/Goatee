@@ -587,6 +587,7 @@ class GoateeEditor {
     this.objectScaled = this.objectScaled.bind(this);
     this.objectMoving = this.objectMoving.bind(this);
     this.canvasCleared = this.canvasCleared.bind(this);
+    this.textChanged = this.textChanged.bind(this);
     this.init();
     this.addEvents();
     this.initSwiper();
@@ -619,7 +620,9 @@ class GoateeEditor {
 
     this.canvas.on('object:moving', this.objectMoving); // Add event handler when there is no object selected in the canvas
 
-    this.canvas.on('selection:cleared', this.canvasCleared); // Prevent that all selected objects go to the front automatically
+    this.canvas.on('selection:cleared', this.canvasCleared); // Add event handler when elements type text are changed by the user
+
+    this.canvas.on('text:changed', this.textChanged); // Prevent that all selected objects go to the front automatically
 
     this.canvas.preserveObjectStacking = true;
     let _localCanvas = this.canvas; // Add initial image
@@ -655,7 +658,6 @@ class GoateeEditor {
       slidesPerView: 4,
       spaceBetween: 5,
       direction: 'horizontal',
-      centeredSlides: true,
       loopFillGroupWithBlank: false,
       navigation: {
         nextEl: '.swiper-button-next',
@@ -702,10 +704,18 @@ class GoateeEditor {
     this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y); // Show the user the position tab menu when it selects an object from the canvas
     // except if it's a text type object
 
-    if (event.target.get('type') !== 'text') {
+    if (event.target.get('type') !== 'textbox') {
       const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
       positionTabElement.click();
     }
+  }
+
+  textChanged(event) {
+    // Set the text element as active so the user can see the textbox
+    this.canvas.setActiveObject(this.textObject);
+    const addTextInput = this.editorWrapper.querySelector('#add-text-input'); // Update the text input with the text that user is adding directly to the canvas
+
+    addTextInput.value = event.target.text;
   }
 
   addOnCanvasDeleteBtn(x, y) {
@@ -1153,6 +1163,9 @@ class GoateeEditor {
     const _localControlsVisibility = this.hideControls;
 
     if (this.textElementInCanvas === true) {
+      _localCanvas.setActiveObject(this.textObject);
+
+      this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
       this.textObject.set('text', event.target.value);
 
       _localCanvas.bringToFront(this.textObject);
@@ -1161,7 +1174,7 @@ class GoateeEditor {
     } else {
       this.textElementInCanvas = true;
       let inputValue = event.target.value;
-      let textElement = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Text(inputValue, {
+      let textElement = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Textbox(inputValue, {
         name: 'textElement'
       });
       const currentColor = this.getCurrentColor();
@@ -1192,6 +1205,10 @@ class GoateeEditor {
 
           textElement.centerV();
 
+          _localCanvas.setActiveObject(_this.textObject);
+
+          _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
+
           _localCanvas.renderAll();
         }).catch(e => {
           _this.hideElement('#custom-text .loader');
@@ -1205,6 +1222,10 @@ class GoateeEditor {
 
           textElement.centerV();
 
+          _localCanvas.setActiveObject(_this.textObject);
+
+          _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
+
           _localCanvas.renderAll();
         });
       } else {
@@ -1216,6 +1237,10 @@ class GoateeEditor {
         _localCanvas.insertAt(textElement, 0);
 
         textElement.centerV();
+
+        _localCanvas.setActiveObject(_this.textObject);
+
+        _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
 
         _localCanvas.renderAll();
       }

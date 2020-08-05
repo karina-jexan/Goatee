@@ -516,6 +516,7 @@ class GoateeEditor {
     this.loadedImages = 0;
     this.totalStickerImages = 0;
     this.mySwiper = null;
+    this.minimumFileSize = 2 * 1024 * 1024;
     this.hideControls = {
       'tl': true,
       'tr': false,
@@ -579,7 +580,8 @@ class GoateeEditor {
     this.deleteElement = this.deleteElement.bind(this);
     this.addOnCanvasDeleteBtn = this.addOnCanvasDeleteBtn.bind(this);
     this.containerActions = this.containerActions.bind(this);
-    this.downloadImage = this.downloadImage.bind(this); // Canvas event handlers
+    this.downloadImage = this.downloadImage.bind(this);
+    this.checkFileSize = this.checkFileSize.bind(this); // Canvas event handlers
 
     this.objectSelected = this.objectSelected.bind(this);
     this.objectRotating = this.objectRotating.bind(this);
@@ -1097,10 +1099,10 @@ class GoateeEditor {
 
   addImageFile(event) {
     let _localCanvas = this.canvas;
+    let reader = new FileReader(); // Show alert if the image uploaded by the user has the minimum file size
+    // If not then show an alert
 
-    const numberOfObjects = _localCanvas.getObjects().length;
-
-    let reader = new FileReader();
+    this.checkFileSize(event.target.files[0]);
 
     reader.onload = function (e) {
       let imgObj = new Image();
@@ -1123,6 +1125,14 @@ class GoateeEditor {
     };
 
     reader.readAsDataURL(event.target.files[0]);
+  }
+
+  checkFileSize(fileElement) {
+    // Check if file's size is higher than the minimum accepted
+    // The show an alert
+    if (fileElement.size < this.minimumFileSize) {
+      this.showAlert('warning', 'The file size is not ideal, try to upload one with size higher than 2MB', 7000);
+    }
   }
 
   closeAllOptions() {
@@ -1379,15 +1389,20 @@ class GoateeEditor {
     this.canvas.renderAll();
   }
 
-  showAlert(type, message) {
+  showAlert(type, message, duration = null) {
+    if (duration === null) {
+      duration = 5000;
+    }
+
     const alertElement = this.createAlert(type, message);
     const alertContainer = this.editorWrapper.querySelector('#alert-container');
     alertContainer.classList.add('fade');
+    alertContainer.style.transitionDelay = `${duration / 1000}s`;
     alertContainer.appendChild(alertElement);
     setTimeout(function () {
       alertContainer.classList.remove('fade');
       alertElement.remove();
-    }, 5000);
+    }, duration);
   }
 
   createAlert(type, message) {

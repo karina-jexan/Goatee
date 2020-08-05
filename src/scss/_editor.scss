@@ -2,8 +2,12 @@ $measurement : 1px;
 $mainColor: #88008B;
 $darkerMainColor: #4C044D;
 $lighterMainColor: #C7B1C8;
-$errorColor : #f2dede;
-$alertTextColor : #a94442;
+$errorBackgroundColor : #f2dede;
+$errorTextColor : #a94442;
+$errorBorderColor : #ebccd1;
+$warningBackgroundColor : #fcf8e3;
+$warningTextColor: #8a6d3b;
+$warningBorderColor: #faebcc;
 $inputHeight: 40px; 
 
 @mixin rgba-background($hexcolor, $opacity) {
@@ -33,7 +37,7 @@ $inputHeight: 40px;
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            background-color: $alertTextColor;
+            background-color: $errorTextColor;
             position: absolute;
             cursor: pointer;
 
@@ -301,7 +305,6 @@ $inputHeight: 40px;
         margin: 0.5em 0;
         opacity: 1;
         transition: opacity 1s;
-        transition-delay: 5s;
 
         &.fade {
             opacity: 0;
@@ -309,11 +312,19 @@ $inputHeight: 40px;
 
         .alert {
             padding:0.5em;
-            color: $alertTextColor;
             border-radius: 5px;
+            font-family: 'Nunito';
 
             &.error {
-                background-color: $errorColor;
+                background-color: $errorBackgroundColor;
+                border-color: $errorBorderColor;
+                color: $errorTextColor;
+            }
+
+            &.warning {
+                background-color: $warningBackgroundColor;
+                border-color: $warningBorderColor;
+                color: $warningTextColor;
             }
         }
     }

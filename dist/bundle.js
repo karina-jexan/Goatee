@@ -517,9 +517,20 @@ class GoateeEditor {
     this.totalStickerImages = 0;
     this.mySwiper = null;
     this.minimumFileSize = 2 * 1024 * 1024;
-    this.hideControls = {
+    this.hideControlsRight = {
       'tl': true,
       'tr': false,
+      'bl': true,
+      'br': true,
+      'ml': true,
+      'mt': true,
+      'mr': true,
+      'mb': true,
+      'mtr': true
+    };
+    this.hideControlsLeft = {
+      'tl': false,
+      'tr': true,
       'bl': true,
       'br': true,
       'ml': true,
@@ -684,6 +695,7 @@ class GoateeEditor {
   objectMoving(event) {
     // Hide delete button from canvas
     this.removeOnCanvasDeleteButton();
+    console.log('Moviiing');
   }
 
   objectScaled(event) {
@@ -692,8 +704,38 @@ class GoateeEditor {
   }
 
   objectModified(event) {
-    // Show delete button
-    this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+    // Check if the object is not out from the rigth side of the canvas
+    const checkObjectRightBoundarie = this.checkObjectRightBoundarie(event.target); // Show delete button
+
+    if (checkObjectRightBoundarie) {
+      this.adjustControlsVisibility(event.target, 'left');
+      this.addOnCanvasDeleteBtn(event.target.oCoords.tl.x, event.target.oCoords.tl.y);
+    } else {
+      this.adjustControlsVisibility(event.target, 'right');
+      this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+    }
+  }
+
+  checkObjectRightBoundarie(object) {
+    let boundingRect = object.getBoundingRect(true);
+
+    if (boundingRect.left + boundingRect.width > this.canvas.getWidth()) {
+      return true;
+    }
+
+    return false;
+  }
+
+  adjustControlsVisibility(object, direction) {
+    switch (direction) {
+      case 'left':
+        object.setControlsVisibility(this.hideControlsLeft);
+        break;
+
+      case 'right':
+        object.setControlsVisibility(this.hideControlsRight);
+        break;
+    }
   }
 
   objectRotating(event) {
@@ -1044,7 +1086,7 @@ class GoateeEditor {
   addImageFromUrl(imgURL, type = null) {
     this.removeObjectFromCanvas('initialImage');
     let _localCanvas = this.canvas;
-    const _localControlsVisibility = this.hideControls;
+    const _localControlsVisibility = this.hideControlsRight;
 
     if (imgURL != '') {
       __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.fromURL(imgURL, function (oImg) {
@@ -1099,7 +1141,7 @@ class GoateeEditor {
 
   addImageFile(event) {
     let _localCanvas = this.canvas;
-    const _localControlsVisibility = this.hideControls;
+    const _localControlsVisibility = this.hideControlsRight;
     let reader = new FileReader(); // Show alert if the image uploaded by the user has the minimum file size
     // If not then show an alert
 
@@ -1171,7 +1213,7 @@ class GoateeEditor {
 
     const _this = this;
 
-    const _localControlsVisibility = this.hideControls;
+    const _localControlsVisibility = this.hideControlsRight;
 
     if (this.textElementInCanvas === true) {
       _localCanvas.setActiveObject(this.textObject);
@@ -1275,7 +1317,7 @@ class GoateeEditor {
   updateFont(fontName) {
     let font = new FontFaceObserver(fontName);
     const _localCanvas = this.canvas;
-    const _localControlsVisibility = this.hideControls;
+    const _localControlsVisibility = this.hideControlsRight;
     const _localTextElement = this.textObject;
 
     const _this = this;

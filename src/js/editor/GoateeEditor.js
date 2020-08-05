@@ -22,7 +22,7 @@ export default class GoateeEditor {
         this.mySwiper = null;
         this.minimumFileSize = (2 * 1024) * 1024;
 
-        this.hideControls = {
+        this.hideControlsRight = {
             'tl':true,
             'tr':false,
             'bl':true,
@@ -33,6 +33,18 @@ export default class GoateeEditor {
             'mb':true,
             'mtr':true
         };
+
+        this.hideControlsLeft = {
+            'tl':false,
+            'tr':true,
+            'bl':true,
+            'br':true,
+            'ml':true,
+            'mt':true,
+            'mr':true,
+            'mb':true,
+            'mtr':true
+        }
 
 
         // Main canvas DOM element
@@ -197,6 +209,7 @@ export default class GoateeEditor {
     objectMoving(event) {
         // Hide delete button from canvas
         this.removeOnCanvasDeleteButton();
+        console.log('Moviiing');
     }
 
     objectScaled(event) {
@@ -205,8 +218,37 @@ export default class GoateeEditor {
     }
 
     objectModified(event) {
+        // Check if the object is not out from the rigth side of the canvas
+        const checkObjectRightBoundarie = this.checkObjectRightBoundarie(event.target);
         // Show delete button
-        this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+        if(checkObjectRightBoundarie) {
+            this.adjustControlsVisibility(event.target,'left');
+            this.addOnCanvasDeleteBtn(event.target.oCoords.tl.x, event.target.oCoords.tl.y);
+        }
+        else {
+            this.adjustControlsVisibility(event.target,'right');
+            this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+        }      
+    }
+
+    checkObjectRightBoundarie(object) {
+        let boundingRect = object.getBoundingRect(true);
+        if(boundingRect.left + boundingRect.width > this.canvas.getWidth()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    adjustControlsVisibility(object, direction) {
+        switch (direction) {
+            case 'left':
+                object.setControlsVisibility(this.hideControlsLeft);
+                break;
+            case 'right':
+                object.setControlsVisibility(this.hideControlsRight);
+                break;
+        }
     }
 
     objectRotating(event) {
@@ -560,7 +602,7 @@ export default class GoateeEditor {
     addImageFromUrl(imgURL, type = null) {
         this.removeObjectFromCanvas('initialImage');
         let _localCanvas = this.canvas;
-        const _localControlsVisibility = this.hideControls;
+        const _localControlsVisibility = this.hideControlsRight;
 
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
@@ -611,7 +653,7 @@ export default class GoateeEditor {
 
     addImageFile(event) {
         let _localCanvas = this.canvas;
-        const _localControlsVisibility = this.hideControls; 
+        const _localControlsVisibility = this.hideControlsRight; 
         let reader = new FileReader();
 
         // Show alert if the image uploaded by the user has the minimum file size
@@ -674,7 +716,7 @@ export default class GoateeEditor {
         // Create text object this will only occur the first time the object is added
         let _localCanvas = this.canvas;
         const _this = this;
-        const _localControlsVisibility = this.hideControls;
+        const _localControlsVisibility = this.hideControlsRight;
         if (this.textElementInCanvas === true ) {
             _localCanvas.setActiveObject(this.textObject);
             this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
@@ -753,7 +795,7 @@ export default class GoateeEditor {
     updateFont(fontName) {
         let font = new FontFaceObserver(fontName);
         const _localCanvas = this.canvas;
-        const _localControlsVisibility = this.hideControls;
+        const _localControlsVisibility = this.hideControlsRight;
         const _localTextElement = this.textObject;
         const _this = this;
 

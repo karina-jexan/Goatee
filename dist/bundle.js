@@ -695,7 +695,6 @@ class GoateeEditor {
   objectMoving(event) {
     // Hide delete button from canvas
     this.removeOnCanvasDeleteButton();
-    console.log('Moviiing');
   }
 
   objectScaled(event) {
@@ -1416,9 +1415,18 @@ class GoateeEditor {
 
         default:
           break;
-      }
+      } // Check if the object is not out from the rigth side of the canvas
 
-      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+
+      const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject); // Show delete button
+
+      if (checkObjectRightBoundarie) {
+        this.adjustControlsVisibility(activeObject, 'left');
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
+      } else {
+        this.adjustControlsVisibility(activeObject, 'right');
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+      }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
     }
@@ -1478,9 +1486,18 @@ class GoateeEditor {
 
         default:
           break;
-      }
+      } // Check if the object is not out from the rigth side of the canvas
 
-      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+
+      const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject); // Show delete button
+
+      if (checkObjectRightBoundarie) {
+        this.adjustControlsVisibility(activeObject, 'left');
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
+      } else {
+        this.adjustControlsVisibility(activeObject, 'right');
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+      }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
     }
@@ -1489,7 +1506,9 @@ class GoateeEditor {
   zoomElement(objectToZoom, scaleX, scaleY) {
     objectToZoom.scaleX = scaleX;
     objectToZoom.scaleY = scaleY;
-    objectToZoom.setCoords();
+    objectToZoom.setCoords(); // Check if the right boundarie of the object, if this one exceeds the right
+    // boundarie of the canvas then move the delete button from right to left
+
     this.canvas.renderAll();
   }
 
@@ -1513,9 +1532,18 @@ class GoateeEditor {
 
         default:
           break;
-      }
+      } // Check if the object is not out from the rigth side of the canvas
 
-      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+
+      const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject); // Show delete button
+
+      if (checkObjectRightBoundarie) {
+        this.adjustControlsVisibility(activeObject, 'left');
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
+      } else {
+        this.adjustControlsVisibility(activeObject, 'right');
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+      }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
     }

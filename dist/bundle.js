@@ -1099,6 +1099,7 @@ class GoateeEditor {
 
   addImageFile(event) {
     let _localCanvas = this.canvas;
+    const _localControlsVisibility = this.hideControls;
     let reader = new FileReader(); // Show alert if the image uploaded by the user has the minimum file size
     // If not then show an alert
 
@@ -1112,7 +1113,7 @@ class GoateeEditor {
         let image = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image(imgObj);
         image.scaleToWidth(_localCanvas.getWidth() * 0.80);
         image.scaleToHeight(_localCanvas.getHeight() * 0.80);
-        image.setControlsVisibility(this.hideControls);
+        image.setControlsVisibility(_localControlsVisibility);
 
         _localCanvas.add(image);
 

@@ -144,7 +144,7 @@ a.button:active {
       position: absolute;
       z-index: 1;
       bottom: 100%;
-      left: 50%;
+      left: 0;
       margin-left: -60px;
       /* Use half of the width (120/2 = 60), to center the tooltip */ }
       #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper .a-color-picker-row:not(:last-child) {

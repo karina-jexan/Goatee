@@ -26,7 +26,7 @@
                                 class="tab-link position-tab">Adjust</a>
                         </div>
                         <div class="editor-tab">
-                            <a href="#change-position-container" data-optionid="change-position-container"
+                            <a href="#text-container" data-optionid="text-container"
                                 class="tab-link position-tab">Text</a>
                         </div>
                         <div class="editor-tab">
@@ -94,6 +94,38 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="text-container" class="hide">
+                            <div class="col" id="custom-text">
+                                <div class="text-options-wrapper flex">
+                                    <div class="font-select-wrapper">
+                                        <select name="font" id="font">
+                                            <option value="Open Sans" selected>Open Sans</option>
+                                            <option value="Pacifico">Pacifico</option>
+                                            <option value="Roboto Mono">Roboto Mono</option>
+                                            <option value="Dancing Script">Dancing Script</option>
+                                            <option value="Fredoka One">Fredoka One</option>
+                                            <option value="Lobster">Lobster</option>
+                                            <option value="Permanent Marker">Permanent Marker</option>
+                                            <option value="Shadows Into Light">Shadows Into Light</option>
+                                        </select>
+                                    </div>
+                                    <div class="color-picker-options-wrapper">
+                                        <button class="color-picker-button">
+                                            <i class="fas fa-fill-drip color-picker-button"></i>
+                                            <span class="a-color-picker-wrapper">
+                                                <div class="close-color-picker hide">
+                                                    <i class="fas fa-times close-color-picker"></i>
+                                                </div>                                                
+                                            </span>
+                                        </button>
+                                        <input type="hidden" name="text-color" class="text-color" value="#000000">
+                                    </div>
+                                    <div class="loader hide"></div>
+                                </div>
+                                <input type="text" name="add-text-input" id="add-text-input"
+                                    placeholder="Type in your message ;)">
+                            </div>
+                        </div>
                         <div id="add-stickers-container" class="hide">
                             <div class="sticker-options">
                                 <a href="#stickers-carousel" data-optionid="stickers-carousel-wrapper" class="tab-link active">Stickers</a>
@@ -123,37 +155,6 @@
                                 </div>
                                 </div>
                                 <div class="swiper-button-next"><i class="fas fa-chevron-right" data-direction="forward"></i></div>
-                            </div>
-
-                            <div class="hide col" id="custom-text">
-                                <div class="text-options-wrapper flex">
-                                    <div class="font-select-wrapper">
-                                        <select name="font" id="font">
-                                            <option value="Open Sans" selected>Open Sans</option>
-                                            <option value="Pacifico">Pacifico</option>
-                                            <option value="Roboto Mono">Roboto Mono</option>
-                                            <option value="Dancing Script">Dancing Script</option>
-                                            <option value="Fredoka One">Fredoka One</option>
-                                            <option value="Lobster">Lobster</option>
-                                            <option value="Permanent Marker">Permanent Marker</option>
-                                            <option value="Shadows Into Light">Shadows Into Light</option>
-                                        </select>
-                                    </div>
-                                    <div class="color-picker-options-wrapper">
-                                        <button class="color-picker-button">
-                                            <i class="fas fa-fill-drip color-picker-button"></i>
-                                            <span class="a-color-picker-wrapper">
-                                                <div class="close-color-picker hide">
-                                                    <i class="fas fa-times close-color-picker"></i>
-                                                </div>                                                
-                                            </span>
-                                        </button>
-                                        <input type="hidden" name="text-color" class="text-color" value="#000000">
-                                    </div>
-                                    <div class="loader hide"></div>
-                                </div>
-                                <input type="text" name="add-text-input" id="add-text-input"
-                                    placeholder="Type in your message ;)">
                             </div>
                         </div>
                     </div>

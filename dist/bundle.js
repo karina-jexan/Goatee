@@ -650,7 +650,21 @@ class GoateeEditor {
       oImg.center();
 
       _localCanvas.renderAll();
-    }); // Initialize a-color-picker package
+    });
+
+    __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.prototype.getSvgSrc = function () {
+      return this.toDataURLforSVG();
+    };
+
+    __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.prototype.toDataURLforSVG = function (options) {
+      var el = __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].util.createCanvasElement();
+      el.width = this._element.naturalWidth || this._element.width;
+      el.height = this._element.naturalHeight || this._element.height;
+      el.getContext("2d").drawImage(this._element, 0, 0);
+      var data = el.toDataURL(options);
+      return data;
+    }; // Initialize a-color-picker package
+
 
     this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
       "color": "#000000",
@@ -1089,6 +1103,10 @@ class GoateeEditor {
   }
 
   addImageFromUrl(imgURL, type = null) {
+    if (this.textElementInCanvas) {
+      console.log(this.canvas.getObjects().indexOf(this.textObject));
+    }
+
     this.removeObjectFromCanvas('initialImage');
     let _localCanvas = this.canvas;
     const _localControlsVisibility = this.hideControlsRight;
@@ -1101,6 +1119,8 @@ class GoateeEditor {
         oImg;
 
         if (type === 'sticker') {
+          console.log('shake shake');
+
           _localCanvas.insertAt(oImg, 1);
         } else {
           _localCanvas.add(oImg);

@@ -165,6 +165,19 @@ export default class GoateeEditor {
             _localCanvas.renderAll();
         });
 
+        fabric.Image.prototype.getSvgSrc = function() {
+            return this.toDataURLforSVG();
+          };
+          
+        fabric.Image.prototype.toDataURLforSVG = function(options) {
+        var el = fabric.util.createCanvasElement();
+                el.width  = this._element.naturalWidth || this._element.width;
+                el.height = this._element.naturalHeight || this._element.height;
+        el.getContext("2d").drawImage(this._element, 0, 0);
+        var data = el.toDataURL(options);
+        return data;
+        };
+
         // Initialize a-color-picker package
         this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
             "color": "#000000",
@@ -607,6 +620,9 @@ export default class GoateeEditor {
     }
 
     addImageFromUrl(imgURL, type = null) {
+        if(this.textElementInCanvas) {
+            console.log(this.canvas.getObjects().indexOf(this.textObject));
+        }
         this.removeObjectFromCanvas('initialImage');
         let _localCanvas = this.canvas;
         const _localControlsVisibility = this.hideControlsRight;
@@ -618,6 +634,7 @@ export default class GoateeEditor {
                 oImg.setControlsVisibility(_localControlsVisibility);
                 oImg
                 if(type === 'sticker') {
+                    console.log('shake shake');
                     _localCanvas.insertAt(oImg, 1);
                 }
                 else {

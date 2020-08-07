@@ -315,6 +315,12 @@ $inputHeight: 40px;
             border-radius: 5px;
             font-family: 'Nunito';
 
+            i {
+                font-size: 1.2em;
+                cursor: pointer;
+                padding: 0.2em;
+            }
+
             &.error {
                 background-color: $errorBackgroundColor;
                 border-color: $errorBorderColor;

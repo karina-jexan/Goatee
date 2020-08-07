@@ -220,6 +220,10 @@ a.button:active {
       padding: 0.5em;
       border-radius: 5px;
       font-family: 'Nunito'; }
+      #editor-wrapper #alert-container .alert i {
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 0.2em; }
       #editor-wrapper #alert-container .alert.error {
         background-color: #f2dede;
         border-color: #ebccd1;

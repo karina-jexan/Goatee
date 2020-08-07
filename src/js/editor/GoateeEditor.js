@@ -102,6 +102,8 @@ export default class GoateeEditor {
         this.containerActions = this.containerActions.bind(this);
         this.downloadImage = this.downloadImage.bind(this);
         this.checkFileSize = this.checkFileSize.bind(this);
+        this.handleAlertClick = this.handleAlertClick.bind(this);
+
 
         // Canvas event handlers
         this.objectSelected = this.objectSelected.bind(this);
@@ -342,6 +344,7 @@ export default class GoateeEditor {
         const colorPickerOptionsWrapper = this.editorWrapper.querySelector('.color-picker-options-wrapper');
         const deleteContainer = this.editorWrapper.querySelector('.delete-element-container');
         const downloadImage = this.editorWrapper.querySelector('.download-image');
+        const alertContainer = this.editorWrapper.querySelector('#alert-container');
         
        
         if (browseImageFileButton) {
@@ -454,6 +457,10 @@ export default class GoateeEditor {
 
         if(downloadImage) {
             downloadImage.addEventListener('click',  this.downloadImage);
+        }
+
+        if(alertContainer) {
+            alertContainer.addEventListener('click', this.handleAlertClick)
         }
     }
 
@@ -681,7 +688,7 @@ export default class GoateeEditor {
         // Check if file's size is higher than the minimum accepted
         // The show an alert
         if(fileElement.size < this.minimumFileSize) {
-            this.showAlert('warning', 'The file size is not ideal, try to upload one with size higher than 2MB', 7000);
+            this.showAlert('warning', 'The file size is not ideal, try to upload one with size higher than 2MB', null, true);
         }
     }
 
@@ -904,31 +911,55 @@ export default class GoateeEditor {
         this.canvas.renderAll();
     }
 
-    showAlert(type, message, duration = null) {
-        if(duration === null) {
+    showAlert(type, message, duration = null, dismissable = null) {
+        const alertElement = this.createAlert(type, message, dismissable);
+        const alertContainer = this.editorWrapper.querySelector('#alert-container');
+
+        if(duration === null && dismissable === null) {
             duration = 5000;
         }
-        const alertElement = this.createAlert(type, message);
-        const alertContainer = this.editorWrapper.querySelector('#alert-container');
-        alertContainer.classList.add('fade');
-        alertContainer.style.transitionDelay = `${duration / 1000}s`;
+        if(dismissable === null) {
+            alertContainer.classList.add('fade');
+            alertContainer.style.transitionDelay = `${duration / 1000}s`;
+        }
+
         alertContainer.appendChild(alertElement);
-    
+        
+        if(dismissable === null) {
+            setTimeout(() => {
+                alertContainer.classList.remove('fade');
+                alertElement.remove();
+                }, duration); 
+        }
 
-
-        setTimeout(function() {
-            alertContainer.classList.remove('fade');
-            alertElement.remove();
-            }, duration); 
     }
 
-    createAlert(type, message) {
+    createAlert(type, message, dismissable) {
         let alertContainer = document.createElement('DIV');
         let alertMessage = document.createTextNode(message);
-        alertContainer.classList.add('alert', 'fade', type);
+        alertContainer.classList.add('alert', type, 'flex');
         alertContainer.appendChild(alertMessage);
 
+        if(dismissable === null) {
+            alertContainer.classList.add('fade');
+        }
+        else {
+            let closeButtonElement = document.createElement('I');
+            closeButtonElement.classList.add('fas', 'fa-times', 'close-alert', 'dismissable-alert-button');
+            alertContainer.appendChild(closeButtonElement);
+        }
         return alertContainer;
+    }
+
+    handleAlertClick(event) {
+        if(event.target.classList.contains('close-alert')) {
+            this.closeAlert(event);
+        } 
+    }
+
+    closeAlert(event) {
+        const alertContainer = event.target.parentElement;
+        alertContainer.remove();        
     }
 
     zoomElementMagnifying(event) {

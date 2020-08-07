@@ -1179,7 +1179,7 @@ class GoateeEditor {
     // Check if file's size is higher than the minimum accepted
     // The show an alert
     if (fileElement.size < this.minimumFileSize) {
-      this.showAlert('warning', 'The file size is not ideal, try to upload one with size higher than 2MB', null, true);
+      this.showAlert('warning', 'Your uploaded image is too small. The resolution of this image will lead to a poor print quality. Try to upload an image that is at least 2 MB or larger.', null, true);
     }
   }
 

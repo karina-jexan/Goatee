@@ -166,18 +166,18 @@ export default class GoateeEditor {
             _localCanvas.renderAll();
         });
 
-        fabric.Image.prototype.getSvgSrc = function() {
-            return this.toDataURLforSVG();
-          };
+        // fabric.Image.prototype.getSvgSrc = function() {
+        //     return this.toDataURLforSVG();
+        //   };
           
-        fabric.Image.prototype.toDataURLforSVG = function(options) {
-        var el = fabric.util.createCanvasElement();
-                el.width  = this._element.naturalWidth || this._element.width;
-                el.height = this._element.naturalHeight || this._element.height;
-        el.getContext("2d").drawImage(this._element, 0, 0);
-        var data = el.toDataURL(options);
-        return data;
-        };
+        // fabric.Image.prototype.toDataURLforSVG = function(options) {
+        // var el = fabric.util.createCanvasElement();
+        //         el.width  = this._element.naturalWidth || this._element.width;
+        //         el.height = this._element.naturalHeight || this._element.height;
+        // el.getContext("2d").drawImage(this._element, 0, 0);
+        // var data = el.toDataURL(options);
+        // return data;
+        // };
 
         // Initialize a-color-picker package
         this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {

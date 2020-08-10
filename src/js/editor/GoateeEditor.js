@@ -886,19 +886,13 @@ export default class GoateeEditor {
               // when font is loaded, use it.
                 _localTextElement.set({"fontFamily":fontName});
                 _localTextElement.setControlsVisibility(_localControlsVisibility);
-                _localCanvas.bringToFront(_localTextElement);
-                _localCanvas.insertAt(_localTextElement, 0);
-                
-                _localCanvas.renderAll();
+                _this.pushTextToTop();
+    
             }).catch(e => {
-                console.log(e);
                 _localTextElement.setControlsVisibility(_localControlsVisibility);
                 _localTextElement.set("fontFamily", 'Trebuchet MS');
-                _localCanvas.bringToFront(_localTextElement);
-                _localCanvas.insertAt(_localTextElement, 0);
-                
-                _localCanvas.renderAll();
-            });
+                _this.pushTextToTop();
+           });
         }
     }
 

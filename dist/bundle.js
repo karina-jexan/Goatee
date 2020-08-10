@@ -1247,7 +1247,8 @@ class GoateeEditor {
     const _localControlsVisibility = this.hideControlsRight;
 
     if (this.textElementInCanvas === true) {
-      //_localCanvas.setActiveObject(this.textObject);
+      _localCanvas.setActiveObject(this.textObject);
+
       this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
       this.textObject.set('text', event.target.value);
 
@@ -1299,9 +1300,9 @@ class GoateeEditor {
           textElement.setControlsVisibility(_localControlsVisibility);
           textElement.set("fontFamily", 'Trebuchet MS');
 
-          _localCanvas.bringToFront(textElement);
+          _this.canvas.add(textElement);
 
-          _localCanvas.insertAt(textElement, 0);
+          _this.pushTextToTop();
 
           textElement.centerV();
 
@@ -1319,7 +1320,9 @@ class GoateeEditor {
         textElement.set("fontFamily", font);
         textElement.setControlsVisibility(_localControlsVisibility);
 
-        _localCanvas.insertAt(textElement, 0);
+        _this.canvas.add(textElement);
+
+        _this.pushTextToTop();
 
         textElement.centerV();
 

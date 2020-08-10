@@ -747,7 +747,7 @@ export default class GoateeEditor {
         const _this = this;
         const _localControlsVisibility = this.hideControlsRight;
         if (this.textElementInCanvas === true ) {
-            //_localCanvas.setActiveObject(this.textObject);
+            _localCanvas.setActiveObject(this.textObject);
             this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
             this.textObject.set('text', event.target.value);
             _this.pushTextToTop();
@@ -786,8 +786,8 @@ export default class GoateeEditor {
                     _this.hideElement('#custom-text .loader');
                     textElement.setControlsVisibility(_localControlsVisibility);
                     textElement.set("fontFamily", 'Trebuchet MS');
-                    _localCanvas.bringToFront(textElement);
-                    _localCanvas.insertAt(textElement, 0);
+                    _this.canvas.add(textElement);
+                   _this.pushTextToTop();
                     textElement.centerV();
                     _localCanvas.setActiveObject(_this.textObject);
                     _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
@@ -800,7 +800,8 @@ export default class GoateeEditor {
                 _this.hideElement('#custom-text .loader');
                 textElement.set("fontFamily", font);
                 textElement.setControlsVisibility(_localControlsVisibility);
-                _localCanvas.insertAt(textElement, 0);
+                _this.canvas.add(textElement);
+                _this.pushTextToTop();
                 textElement.centerV();
                 _localCanvas.setActiveObject(_this.textObject);
                 _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);

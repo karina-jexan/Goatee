@@ -538,7 +538,9 @@ class GoateeEditor {
       'mr': true,
       'mb': true,
       'mtr': true
-    }; // Main canvas DOM element
+    };
+    this.lowQualityImagesArray = [];
+    this.alertOnScreen = false; // Main canvas DOM element
 
     this.canvasElement = null; // Main canvas object
 
@@ -1048,6 +1050,17 @@ class GoateeEditor {
     if (elementToDelete.get('type') === 'textbox') {
       this.textElementInCanvas = false;
       this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
+    } else if (elementToDelete.get('type' === 'image')) {
+      const index = this.lowQualityImagesArray.indexOf(elementToDelete.get('name'));
+
+      if (index > -1) {
+        this.lowQualityImagesArray.splice(index, 1);
+
+        if (this.lowQualityImagesArray.length === 0) {
+          this.editorWrapper.querySelector('#alert-container i.close-alert').click();
+          this.alertOnScreen = false;
+        }
+      }
     }
 
     this.canvas.remove(elementToDelete);
@@ -1117,12 +1130,11 @@ class GoateeEditor {
         oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
         oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
         oImg.setControlsVisibility(_localControlsVisibility);
-        oImg;
 
         if (type === 'sticker') {
-          console.log('shake shake');
+          oImg.set('name', 'sticker');
 
-          _localCanvas.insertAt(oImg, 1);
+          _localCanvas.add(oImg);
         } else {
           _localCanvas.add(oImg);
 
@@ -1131,7 +1143,9 @@ class GoateeEditor {
 
         _localCanvas.setActiveObject(oImg);
 
-        _this.pushTextToTop();
+        if (_this.textElementInCanvas) {
+          _this.pushTextToTop();
+        }
 
         _localCanvas.renderAll();
       });
@@ -1169,6 +1183,9 @@ class GoateeEditor {
 
   addImageFile(event) {
     let _localCanvas = this.canvas;
+
+    const _this = this;
+
     const _localControlsVisibility = this.hideControlsRight;
     let reader = new FileReader(); // Show alert if the image uploaded by the user has the minimum file size
     // If not then show an alert
@@ -1192,6 +1209,8 @@ class GoateeEditor {
         _localCanvas.setActiveObject(image);
 
         _localCanvas.renderAll();
+
+        _this.pushStickersForward();
       };
     };
 
@@ -1202,7 +1221,14 @@ class GoateeEditor {
     // Check if file's size is higher than the minimum accepted
     // The show an alert
     if (fileElement.size < this.minimumFileSize) {
-      this.showAlert('warning', 'Your uploaded image is too small. The resolution of this image will lead to a poor print quality. Try to upload an image that is at least 2 MB or larger.', null, true);
+      // Check if there is already beign showed an alert
+      if (this.alertOnScreen === false) {
+        this.showAlert('warning', 'Your uploaded image is too small. The resolution of this image will lead to a poor print quality. Try to upload an image that is at least 2 MB or larger.', null, true);
+        this.alertOnScreen = true;
+      } // Push to the aray with the names of the file that do not meet the minimum size requirement
+
+
+      this.lowQualityImagesArray.push(fileElement.name);
     }
   }
 
@@ -1335,6 +1361,21 @@ class GoateeEditor {
   pushTextToTop() {
     this.textObject.bringToFront();
     this.canvas.renderAll();
+  }
+
+  pushStickersForward() {
+    const canvasObjects = this.canvas.getObjects();
+    console.log(canvasObjects);
+    canvasObjects.forEach(object => {
+      if (object.name === 'sticker') {
+        object.bringForward();
+      }
+    });
+    this.canvas.renderAll();
+
+    if (this.textElementInCanvas) {
+      this.pushTextToTop();
+    }
   }
 
   getSelectedFont() {
@@ -1508,7 +1549,7 @@ class GoateeEditor {
     alertContainer.appendChild(alertMessage);
 
     if (dismissable === null) {
-      alertContainer.classList.add('fade');
+      alertContaineOr.classList.add('fade');
     } else {
       let closeButtonElement = document.createElement('I');
       closeButtonElement.classList.add('fas', 'fa-times', 'close-alert', 'dismissable-alert-button');

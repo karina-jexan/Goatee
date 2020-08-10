@@ -593,7 +593,8 @@ class GoateeEditor {
     this.containerActions = this.containerActions.bind(this);
     this.downloadImage = this.downloadImage.bind(this);
     this.checkFileSize = this.checkFileSize.bind(this);
-    this.handleAlertClick = this.handleAlertClick.bind(this); // Canvas event handlers
+    this.handleAlertClick = this.handleAlertClick.bind(this);
+    this.pushTextToTop = this.pushTextToTop.bind(this); // Canvas event handlers
 
     this.objectSelected = this.objectSelected.bind(this);
     this.objectRotating = this.objectRotating.bind(this);
@@ -758,7 +759,11 @@ class GoateeEditor {
   }
 
   objectSelected(event) {
-    // Show delete button
+    const canvasObjects = this.canvas.getObjects();
+    canvasObjects.forEach(element => {
+      console.log(this.canvas.getObjects().indexOf(element), element);
+    }); // Show delete button
+
     this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y); // Show the user the position tab menu when it selects an object from the canvas
     // except if it's a text type object
 
@@ -1043,7 +1048,7 @@ class GoateeEditor {
   }
 
   deleteElement(elementToDelete) {
-    if (elementToDelete.get('type') === 'text') {
+    if (elementToDelete.get('type') === 'textbox') {
       this.textElementInCanvas = false;
       this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
     }
@@ -1103,11 +1108,10 @@ class GoateeEditor {
   }
 
   addImageFromUrl(imgURL, type = null) {
-    if (this.textElementInCanvas) {
-      console.log(this.canvas.getObjects().indexOf(this.textObject));
-    }
-
     this.removeObjectFromCanvas('initialImage');
+
+    const _this = this;
+
     let _localCanvas = this.canvas;
     const _localControlsVisibility = this.hideControlsRight;
 
@@ -1129,6 +1133,8 @@ class GoateeEditor {
         }
 
         _localCanvas.setActiveObject(oImg);
+
+        _this.pushTextToTop();
 
         _localCanvas.renderAll();
       });
@@ -1241,12 +1247,11 @@ class GoateeEditor {
     const _localControlsVisibility = this.hideControlsRight;
 
     if (this.textElementInCanvas === true) {
-      _localCanvas.setActiveObject(this.textObject);
-
+      //_localCanvas.setActiveObject(this.textObject);
       this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
       this.textObject.set('text', event.target.value);
 
-      _localCanvas.bringToFront(this.textObject);
+      _this.pushTextToTop();
 
       _localCanvas.renderAll();
     } else {
@@ -1277,9 +1282,9 @@ class GoateeEditor {
           });
           textElement.setControlsVisibility(_localControlsVisibility);
 
-          _localCanvas.bringToFront(textElement);
+          _this.canvas.add(textElement);
 
-          _localCanvas.insertAt(textElement, 0);
+          _this.pushTextToTop();
 
           textElement.centerV();
 
@@ -1307,6 +1312,8 @@ class GoateeEditor {
           _localCanvas.renderAll();
         });
       } else {
+        console.log('aqui con todos los powers');
+
         _this.hideElement('#custom-text .loader');
 
         textElement.set("fontFamily", font);
@@ -1323,6 +1330,11 @@ class GoateeEditor {
         _localCanvas.renderAll();
       }
     }
+  }
+
+  pushTextToTop() {
+    this.textObject.bringToFront();
+    this.canvas.renderAll();
   }
 
   getSelectedFont() {

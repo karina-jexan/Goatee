@@ -103,6 +103,7 @@ export default class GoateeEditor {
         this.downloadImage = this.downloadImage.bind(this);
         this.checkFileSize = this.checkFileSize.bind(this);
         this.handleAlertClick = this.handleAlertClick.bind(this);
+        this.pushTextToTop = this.pushTextToTop.bind(this);
 
 
         // Canvas event handlers
@@ -272,6 +273,11 @@ export default class GoateeEditor {
     }
 
     objectSelected(event) {
+        const canvasObjects = this.canvas.getObjects();
+        canvasObjects.forEach(element => {
+            console.log(this.canvas.getObjects().indexOf(element), element);
+        });
+        
         // Show delete button
         this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
 
@@ -559,7 +565,7 @@ export default class GoateeEditor {
     }
 
     deleteElement(elementToDelete) {
-        if(elementToDelete.get('type') === 'text') {
+        if(elementToDelete.get('type') === 'textbox') {
             this.textElementInCanvas = false;
             this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
         }
@@ -620,10 +626,8 @@ export default class GoateeEditor {
     }
 
     addImageFromUrl(imgURL, type = null) {
-        if(this.textElementInCanvas) {
-            console.log(this.canvas.getObjects().indexOf(this.textObject));
-        }
         this.removeObjectFromCanvas('initialImage');
+        const _this = this;
         let _localCanvas = this.canvas;
         const _localControlsVisibility = this.hideControlsRight;
 
@@ -642,6 +646,7 @@ export default class GoateeEditor {
                     _localCanvas.sendToBack(oImg);
                 }
                 _localCanvas.setActiveObject(oImg);
+                _this.pushTextToTop();
                 _localCanvas.renderAll();
             });
         }
@@ -742,10 +747,10 @@ export default class GoateeEditor {
         const _this = this;
         const _localControlsVisibility = this.hideControlsRight;
         if (this.textElementInCanvas === true ) {
-            _localCanvas.setActiveObject(this.textObject);
+            //_localCanvas.setActiveObject(this.textObject);
             this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
             this.textObject.set('text', event.target.value);
-            _localCanvas.bringToFront(this.textObject);
+            _this.pushTextToTop();
             _localCanvas.renderAll();
         }
         else {
@@ -760,7 +765,9 @@ export default class GoateeEditor {
             let font = new FontFaceObserver(selectedFont);
 
             this.removeObjectFromCanvas('initialImage');
+
             this.showElement('#custom-text .loader');
+
             if(this.checkIfSafeFont(font) === false) {                
                 font.load()
                 .then(function() {
@@ -768,8 +775,8 @@ export default class GoateeEditor {
                   // when font is loaded, use it.
                     textElement.set({"fontFamily":selectedFont});
                     textElement.setControlsVisibility(_localControlsVisibility);
-                    _localCanvas.bringToFront(textElement);
-                    _localCanvas.insertAt(textElement, 0);
+                    _this.canvas.add(textElement);
+                   _this.pushTextToTop();
                     textElement.centerV();
                     _localCanvas.setActiveObject(_this.textObject);
                     _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
@@ -789,6 +796,7 @@ export default class GoateeEditor {
                 });
             }
             else {
+                console.log('aqui con todos los powers');
                 _this.hideElement('#custom-text .loader');
                 textElement.set("fontFamily", font);
                 textElement.setControlsVisibility(_localControlsVisibility);
@@ -800,6 +808,11 @@ export default class GoateeEditor {
                 _localCanvas.renderAll();
             }
         }
+    }
+
+    pushTextToTop() {
+        this.textObject.bringToFront();
+        this.canvas.renderAll();
     }
 
     getSelectedFont() {

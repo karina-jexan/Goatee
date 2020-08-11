@@ -211,7 +211,6 @@ export default class GoateeEditor {
 
           setTimeout(() => {
             this.mySwiper.update();
-            console.log('updated');
         }, 5000);
          
         this.mySwiper.on('click', function (swiper, event) {
@@ -276,12 +275,7 @@ export default class GoateeEditor {
     }
 
     objectSelected(event) {
-        const canvasObjects = this.canvas.getObjects();
-        canvasObjects.forEach(element => {
-            console.log(this.canvas.getObjects().indexOf(element), element);
-        });
-        
-        // Show delete button
+      // Show delete button
         this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
 
         // Show the user the position tab menu when it selects an object from the canvas
@@ -572,13 +566,17 @@ export default class GoateeEditor {
             this.textElementInCanvas = false;
             this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
         }
-        else if( elementToDelete.get('type' === 'image')) {
+        else if( elementToDelete.get('type') === 'image') {
+            console.log(this.lowQualityImagesArray);
             const index = this.lowQualityImagesArray.indexOf(elementToDelete.get('name'));
             if(index > -1) {
                 this.lowQualityImagesArray.splice(index, 1);
 
                 if(this.lowQualityImagesArray.length === 0) {
-                    this.editorWrapper.querySelector('#alert-container i.close-alert').click();
+                    const closeAlertButton = this.editorWrapper.querySelector('#alert-container i.close-alert');
+                    if(closeAlertButton) {
+                        closeAlertButton.click();
+                    }
                     this.alertOnScreen = false;
                 }
             }
@@ -701,10 +699,10 @@ export default class GoateeEditor {
         const _this = this;
         const _localControlsVisibility = this.hideControlsRight; 
         let reader = new FileReader();
-
+        const fileElement = event.target.files[0];
         // Show alert if the image uploaded by the user has the minimum file size
         // If not then show an alert
-        this.checkFileSize(event.target.files[0]);
+        this.checkFileSize(fileElement);
 
         reader.onload = function (e) {
             let imgObj = new Image();
@@ -714,6 +712,7 @@ export default class GoateeEditor {
                 image.scaleToWidth(_localCanvas.getWidth() * 0.80);
                 image.scaleToHeight(_localCanvas.getHeight() * 0.80);
                 image.setControlsVisibility(_localControlsVisibility);
+                image.set('name', fileElement.name);
                 _localCanvas.add(image);
                 _localCanvas.sendToBack(image, true);
                 _localCanvas.setActiveObject(image);
@@ -736,6 +735,7 @@ export default class GoateeEditor {
            
             // Push to the aray with the names of the file that do not meet the minimum size requirement
             this.lowQualityImagesArray.push(fileElement.name);
+            console.log('%c' + this.lowQualityImagesArray, 'background: #222; color: #bada55');
         }
     }
 
@@ -821,7 +821,6 @@ export default class GoateeEditor {
                 });
             }
             else {
-                console.log('aqui con todos los powers');
                 _this.hideElement('#custom-text .loader');
                 textElement.set("fontFamily", font);
                 textElement.setControlsVisibility(_localControlsVisibility);
@@ -843,7 +842,6 @@ export default class GoateeEditor {
 
     pushStickersForward() {
         const canvasObjects = this.canvas.getObjects();
-        console.log(canvasObjects);
         canvasObjects.forEach(object => {
             if(object.name === 'sticker') {
                 object.bringForward();
@@ -970,7 +968,6 @@ export default class GoateeEditor {
     }
 
     updateObjectCoords(objectToUpdate, xCoords, yCoords) {
-        console.log(objectToUpdate);
         objectToUpdate.left = xCoords;
         objectToUpdate.top = yCoords;
         objectToUpdate.setCoords();

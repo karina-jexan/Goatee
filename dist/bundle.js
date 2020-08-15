@@ -538,7 +538,9 @@ class GoateeEditor {
       'mr': true,
       'mb': true,
       'mtr': true
-    }; // Main canvas DOM element
+    };
+    this.lowQualityImagesArray = [];
+    this.alertOnScreen = false; // Main canvas DOM element
 
     this.canvasElement = null; // Main canvas object
 
@@ -651,21 +653,18 @@ class GoateeEditor {
       oImg.center();
 
       _localCanvas.renderAll();
-    });
-
-    __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.prototype.getSvgSrc = function () {
-      return this.toDataURLforSVG();
-    };
-
-    __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.prototype.toDataURLforSVG = function (options) {
-      var el = __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].util.createCanvasElement();
-      el.width = this._element.naturalWidth || this._element.width;
-      el.height = this._element.naturalHeight || this._element.height;
-      el.getContext("2d").drawImage(this._element, 0, 0);
-      var data = el.toDataURL(options);
-      return data;
-    }; // Initialize a-color-picker package
-
+    }); // fabric.Image.prototype.getSvgSrc = function() {
+    //     return this.toDataURLforSVG();
+    //   };
+    // fabric.Image.prototype.toDataURLforSVG = function(options) {
+    // var el = fabric.util.createCanvasElement();
+    //         el.width  = this._element.naturalWidth || this._element.width;
+    //         el.height = this._element.naturalHeight || this._element.height;
+    // el.getContext("2d").drawImage(this._element, 0, 0);
+    // var data = el.toDataURL(options);
+    // return data;
+    // };
+    // Initialize a-color-picker package
 
     this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
       "color": "#000000",
@@ -695,7 +694,6 @@ class GoateeEditor {
     });
     setTimeout(() => {
       this.mySwiper.update();
-      console.log('updated');
     }, 5000);
     this.mySwiper.on('click', function (swiper, event) {
       if (event.target.tagName === 'IMG') {
@@ -759,11 +757,7 @@ class GoateeEditor {
   }
 
   objectSelected(event) {
-    const canvasObjects = this.canvas.getObjects();
-    canvasObjects.forEach(element => {
-      console.log(this.canvas.getObjects().indexOf(element), element);
-    }); // Show delete button
-
+    // Show delete button
     this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y); // Show the user the position tab menu when it selects an object from the canvas
     // except if it's a text type object
 
@@ -1051,6 +1045,23 @@ class GoateeEditor {
     if (elementToDelete.get('type') === 'textbox') {
       this.textElementInCanvas = false;
       this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
+    } else if (elementToDelete.get('type') === 'image') {
+      console.log(this.lowQualityImagesArray);
+      const index = this.lowQualityImagesArray.indexOf(elementToDelete.get('name'));
+
+      if (index > -1) {
+        this.lowQualityImagesArray.splice(index, 1);
+
+        if (this.lowQualityImagesArray.length === 0) {
+          const closeAlertButton = this.editorWrapper.querySelector('#alert-container i.close-alert');
+
+          if (closeAlertButton) {
+            closeAlertButton.click();
+          }
+
+          this.alertOnScreen = false;
+        }
+      }
     }
 
     this.canvas.remove(elementToDelete);
@@ -1120,12 +1131,11 @@ class GoateeEditor {
         oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
         oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
         oImg.setControlsVisibility(_localControlsVisibility);
-        oImg;
 
         if (type === 'sticker') {
-          console.log('shake shake');
+          oImg.set('name', 'sticker');
 
-          _localCanvas.insertAt(oImg, 1);
+          _localCanvas.add(oImg);
         } else {
           _localCanvas.add(oImg);
 
@@ -1134,7 +1144,9 @@ class GoateeEditor {
 
         _localCanvas.setActiveObject(oImg);
 
-        _this.pushTextToTop();
+        if (_this.textElementInCanvas) {
+          _this.pushTextToTop();
+        }
 
         _localCanvas.renderAll();
       });
@@ -1172,11 +1184,15 @@ class GoateeEditor {
 
   addImageFile(event) {
     let _localCanvas = this.canvas;
+
+    const _this = this;
+
     const _localControlsVisibility = this.hideControlsRight;
-    let reader = new FileReader(); // Show alert if the image uploaded by the user has the minimum file size
+    let reader = new FileReader();
+    const fileElement = event.target.files[0]; // Show alert if the image uploaded by the user has the minimum file size
     // If not then show an alert
 
-    this.checkFileSize(event.target.files[0]);
+    this.checkFileSize(fileElement);
 
     reader.onload = function (e) {
       let imgObj = new Image();
@@ -1187,6 +1203,7 @@ class GoateeEditor {
         image.scaleToWidth(_localCanvas.getWidth() * 0.80);
         image.scaleToHeight(_localCanvas.getHeight() * 0.80);
         image.setControlsVisibility(_localControlsVisibility);
+        image.set('name', fileElement.name);
 
         _localCanvas.add(image);
 
@@ -1195,6 +1212,8 @@ class GoateeEditor {
         _localCanvas.setActiveObject(image);
 
         _localCanvas.renderAll();
+
+        _this.pushStickersForward();
       };
     };
 
@@ -1205,7 +1224,15 @@ class GoateeEditor {
     // Check if file's size is higher than the minimum accepted
     // The show an alert
     if (fileElement.size < this.minimumFileSize) {
-      this.showAlert('warning', 'Your uploaded image is too small. The resolution of this image will lead to a poor print quality. Try to upload an image that is at least 2 MB or larger.', null, true);
+      // Check if there is already beign showed an alert
+      if (this.alertOnScreen === false) {
+        this.showAlert('warning', 'One or more of your uploaded images are too small. The resolution of this image(s) will lead to a poor print quality. Try to upload images that are at least 2 MB or larger', null, true);
+        this.alertOnScreen = true;
+      } // Push to the aray with the names of the file that do not meet the minimum size requirement
+
+
+      this.lowQualityImagesArray.push(fileElement.name);
+      console.log('%c' + this.lowQualityImagesArray, 'background: #222; color: #bada55');
     }
   }
 
@@ -1313,8 +1340,6 @@ class GoateeEditor {
           _localCanvas.renderAll();
         });
       } else {
-        console.log('aqui con todos los powers');
-
         _this.hideElement('#custom-text .loader');
 
         textElement.set("fontFamily", font);
@@ -1338,6 +1363,20 @@ class GoateeEditor {
   pushTextToTop() {
     this.textObject.bringToFront();
     this.canvas.renderAll();
+  }
+
+  pushStickersForward() {
+    const canvasObjects = this.canvas.getObjects();
+    canvasObjects.forEach(object => {
+      if (object.name === 'sticker') {
+        object.bringForward();
+      }
+    });
+    this.canvas.renderAll();
+
+    if (this.textElementInCanvas) {
+      this.pushTextToTop();
+    }
   }
 
   getSelectedFont() {
@@ -1374,23 +1413,13 @@ class GoateeEditor {
 
         _localTextElement.setControlsVisibility(_localControlsVisibility);
 
-        _localCanvas.bringToFront(_localTextElement);
-
-        _localCanvas.insertAt(_localTextElement, 0);
-
-        _localCanvas.renderAll();
+        _this.pushTextToTop();
       }).catch(e => {
-        console.log(e);
-
         _localTextElement.setControlsVisibility(_localControlsVisibility);
 
         _localTextElement.set("fontFamily", 'Trebuchet MS');
 
-        _localCanvas.bringToFront(_localTextElement);
-
-        _localCanvas.insertAt(_localTextElement, 0);
-
-        _localCanvas.renderAll();
+        _this.pushTextToTop();
       });
     }
   }
@@ -1474,7 +1503,6 @@ class GoateeEditor {
   }
 
   updateObjectCoords(objectToUpdate, xCoords, yCoords) {
-    console.log(objectToUpdate);
     objectToUpdate.left = xCoords;
     objectToUpdate.top = yCoords;
     objectToUpdate.setCoords();
@@ -1511,7 +1539,7 @@ class GoateeEditor {
     alertContainer.appendChild(alertMessage);
 
     if (dismissable === null) {
-      alertContainer.classList.add('fade');
+      alertContaineOr.classList.add('fade');
     } else {
       let closeButtonElement = document.createElement('I');
       closeButtonElement.classList.add('fas', 'fa-times', 'close-alert', 'dismissable-alert-button');

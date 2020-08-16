@@ -169,18 +169,18 @@ export default class GoateeEditor {
             _localCanvas.renderAll();
         });
 
-        // fabric.Image.prototype.getSvgSrc = function() {
-        //     return this.toDataURLforSVG();
-        //   };
+        fabric.Image.prototype.getSvgSrc = function() {
+            return this.toDataURLforSVG();
+          };
           
-        // fabric.Image.prototype.toDataURLforSVG = function(options) {
-        // var el = fabric.util.createCanvasElement();
-        //         el.width  = this._element.naturalWidth || this._element.width;
-        //         el.height = this._element.naturalHeight || this._element.height;
-        // el.getContext("2d").drawImage(this._element, 0, 0);
-        // var data = el.toDataURL(options);
-        // return data;
-        // };
+        fabric.Image.prototype.toDataURLforSVG = function(options) {
+        var el = fabric.util.createCanvasElement();
+                el.width  = this._element.naturalWidth || this._element.width;
+                el.height = this._element.naturalHeight || this._element.height;
+        el.getContext("2d").drawImage(this._element, 0, 0);
+        var data = el.toDataURL(options);
+        return data;
+        };
 
         // Initialize a-color-picker package
         this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
@@ -481,15 +481,23 @@ export default class GoateeEditor {
     }
 
     downloadImage(event) {
-       let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
-       let filedata = this.canvas.toSVG(); // the SVG file is now in filedata
+        let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
+        let filedata = this.canvas.toSVG({
+            suppressPreamble: true,
+            width: 1200,
+            height: 800
+        }); // the SVG file is now in filedata
+        console.log(filedata);
  
-       let locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
-       let locfilesrc = URL.createObjectURL(locfile);//mylocfile);
+    //    let locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
+    //    let locfilesrc = URL.createObjectURL(locfile);//mylocfile);
+
+        let locfilesrc = this.canvas.toDataURL("image/png", { pixelRatio: 10 });
     
-       downloadImageLink.href = locfilesrc;
-       downloadImageLink.download = 'mysvg.svg';
+       downloadImageLink.href = filedata;
+       downloadImageLink.download = 'aynose.svg';
        downloadImageLink.click();
+       document.getElementById('svg').innerHTML = filedata;
     }
 
     toggleColorPicker(event) {

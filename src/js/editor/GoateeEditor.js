@@ -1,5 +1,6 @@
 import { fabric } from 'fabric';
 import Swiper, { Navigation, Pagination  } from 'swiper';
+import axios from 'axios';
 const FontFaceObserver = require('fontfaceobserver');
 const AColorPicker = require('a-color-picker');
 
@@ -139,7 +140,9 @@ export default class GoateeEditor {
 
         });
         // Plug the fabricjs plugin
-        this.canvas = new fabric.Canvas('goatee-editor');
+        this.canvas = new fabric.Canvas('goatee-editor', {
+            backgroundColor: '#FFFFFF'
+        });
         // Add event handler when any object is selected;
         this.canvas.on('selection:created', this.objectSelected);
         // Add event handler when any object is selected;
@@ -484,20 +487,35 @@ export default class GoateeEditor {
         let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
         let filedata = this.canvas.toSVG({
             suppressPreamble: true,
-            width: 1200,
-            height: 800
+            width: 2025,
+            height: 1425
         }); // the SVG file is now in filedata
-        console.log(filedata);
  
     //    let locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
     //    let locfilesrc = URL.createObjectURL(locfile);//mylocfile);
 
         let locfilesrc = this.canvas.toDataURL("image/png", { pixelRatio: 10 });
     
-       downloadImageLink.href = filedata;
-       downloadImageLink.download = 'aynose.svg';
-       downloadImageLink.click();
-       document.getElementById('svg').innerHTML = filedata;
+    //    downloadImageLink.href = filedata;
+    //    downloadImageLink.download = 'aynose.svg';
+    //    downloadImageLink.click();
+        document.getElementById('svg').innerHTML = filedata;
+    let data = {
+        svg: filedata
+    }
+
+    let headers = {
+        'X-CSFR-TOKEN' : 'UwRtBDhDyyIBmg9BOPWasHmODFM0Pa1vaEdgVykc',
+        'Content-Type' : 'image/svg+xml'
+    }
+    axios.post('http://localhost:8000/save_image', data, headers)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     }
 
     toggleColorPicker(event) {

@@ -729,7 +729,7 @@ export default class GoateeEditor {
         if(fileElement.size < this.minimumFileSize) {
             // Check if there is already beign showed an alert
             if(this.alertOnScreen === false) {
-                this.showAlert('warning', 'One or more of your uploaded images are too small. The resolution of this image(s) will lead to a poor print quality. Try to upload images that are at least 2 MB or larger', null, true);
+                this.showAlert('warning', 'One or more of your uploaded images are too small. The resolution of this image(s) will lead to a poor print quality. Try to upload images that are at least 2 MB or larger.', null, true);
                 this.alertOnScreen = true;
             }
            

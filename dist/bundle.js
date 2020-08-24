@@ -1538,8 +1538,7 @@ class GoateeEditor {
     alertContainer.classList.add('alert', type, 'flex');
     alertContainer.appendChild(alertMessage);
 
-    if (dismissable === null) {
-      alertContaineOr.classList.add('fade');
+    if (dismissable === null) {//alertContainer.classList.add('fade');
     } else {
       let closeButtonElement = document.createElement('I');
       closeButtonElement.classList.add('fas', 'fa-times', 'close-alert', 'dismissable-alert-button');

@@ -1004,7 +1004,7 @@ export default class GoateeEditor {
         alertContainer.appendChild(alertMessage);
 
         if(dismissable === null) {
-            alertContaineOr.classList.add('fade');
+            alertContainer.classList.add('fade');
         }
         else {
             let closeButtonElement = document.createElement('I');

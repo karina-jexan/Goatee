@@ -605,6 +605,7 @@ class GoateeEditor {
     this.objectMoving = this.objectMoving.bind(this);
     this.canvasCleared = this.canvasCleared.bind(this);
     this.textChanged = this.textChanged.bind(this);
+    this.resizeAndExport = this.resizeAndExport.bind(this);
     this.init();
     this.addEvents();
     this.initSwiper();
@@ -623,7 +624,9 @@ class GoateeEditor {
       cornerSize: 25
     }); // Plug the fabricjs plugin
 
-    this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor'); // Add event handler when any object is selected;
+    this.canvas = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Canvas('goatee-editor', {
+      backgroundColor: "#ffffff"
+    }); // Add event handler when any object is selected;
 
     this.canvas.on('selection:created', this.objectSelected); // Add event handler when any object is selected;
 
@@ -955,17 +958,16 @@ class GoateeEditor {
   }
 
   downloadImage(event) {
-    let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
-    let filedata = this.canvas.toSVG(); // the SVG file is now in filedata
+    this.resizeAndExport();
+  }
 
-    let locfile = new Blob([filedata], {
-      type: "image/svg+xml;charset=utf-8"
-    });
-    let locfilesrc = URL.createObjectURL(locfile); //mylocfile);
-
-    downloadImageLink.href = locfilesrc;
-    downloadImageLink.download = 'mysvg.svg';
-    downloadImageLink.click();
+  resizeAndExport() {
+    let hiddenCanvasWrapper = document.getElementById('hidden-canvas');
+    hiddenCanvasWrapper.append(this.canvas.toCanvasElement(8));
+    let hiddenCanvas = hiddenCanvasWrapper.querySelector('canvas');
+    let exportedImage = new Image();
+    exportedImage.src = hiddenCanvas.toDataURL('image/jpeg', 1.0);
+    document.getElementById('hidden-exported-image').appendChild(exportedImage);
   }
 
   toggleColorPicker(event) {
@@ -1539,7 +1541,7 @@ class GoateeEditor {
     alertContainer.appendChild(alertMessage);
 
     if (dismissable === null) {
-      alertContaineOr.classList.add('fade');
+      alertContainer.classList.add('fade');
     } else {
       let closeButtonElement = document.createElement('I');
       closeButtonElement.classList.add('fas', 'fa-times', 'close-alert', 'dismissable-alert-button');

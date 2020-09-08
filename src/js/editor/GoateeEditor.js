@@ -118,6 +118,8 @@ export default class GoateeEditor {
         this.canvasCleared = this.canvasCleared.bind(this);
         this.textChanged = this.textChanged.bind(this);
 
+        this.resizeAndExport = this.resizeAndExport.bind(this);
+
         this.init();
         this.addEvents();
         this.initSwiper();
@@ -139,7 +141,7 @@ export default class GoateeEditor {
 
         });
         // Plug the fabricjs plugin
-        this.canvas = new fabric.Canvas('goatee-editor');
+        this.canvas = new fabric.Canvas('goatee-editor', {backgroundColor : "#ffffff"});
         // Add event handler when any object is selected;
         this.canvas.on('selection:created', this.objectSelected);
         // Add event handler when any object is selected;
@@ -481,15 +483,18 @@ export default class GoateeEditor {
     }
 
     downloadImage(event) {
-       let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
-       let filedata = this.canvas.toSVG(); // the SVG file is now in filedata
- 
-       let locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
-       let locfilesrc = URL.createObjectURL(locfile);//mylocfile);
-    
-       downloadImageLink.href = locfilesrc;
-       downloadImageLink.download = 'mysvg.svg';
-       downloadImageLink.click();
+     this.resizeAndExport();
+    }
+
+    resizeAndExport() {
+        let hiddenCanvasWrapper = document.getElementById('hidden-canvas');
+        hiddenCanvasWrapper.append(this.canvas.toCanvasElement(8));
+        let hiddenCanvas = hiddenCanvasWrapper.querySelector('canvas');
+        let exportedImage = new Image();  
+        exportedImage.src = hiddenCanvas.toDataURL('image/jpeg', 1.0); 
+        document.getElementById('hidden-exported-image').appendChild(exportedImage);
+
+
     }
 
     toggleColorPicker(event) {

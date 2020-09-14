@@ -119,8 +119,6 @@ export default class GoateeEditor {
         this.canvasCleared = this.canvasCleared.bind(this);
         this.textChanged = this.textChanged.bind(this);
 
-        this.resizeAndExport = this.resizeAndExport.bind(this);
-
         this.init();
         this.addEvents();
         this.initSwiper();
@@ -484,18 +482,18 @@ export default class GoateeEditor {
             alertContainer.addEventListener('click', this.handleAlertClick)
         }
     }
-
     downloadImage(event) {
-       let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
-       let filedata = this.canvas.toSVG(); // the SVG file is now in filedata
- 
-       let locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
-       let locfilesrc = URL.createObjectURL(locfile);//mylocfile);
+        this.resizeAndExport();
+      }
     
-       downloadImageLink.href = locfilesrc;
-       downloadImageLink.download = 'mysvg.svg';
-       downloadImageLink.click();
-    }
+      resizeAndExport() {
+        let hiddenCanvasWrapper = document.getElementById('hidden-canvas');
+        hiddenCanvasWrapper.append(this.canvas.toCanvasElement(6));
+        let hiddenCanvas = hiddenCanvasWrapper.querySelector('canvas');
+        let exportedImage = new Image();
+        exportedImage.src = hiddenCanvas.toDataURL('image/jpeg', 1.0);
+        document.getElementById('hidden-exported-image').appendChild(exportedImage);
+      }
 
     toggleColorPicker(event) {
         // Open or close the color picker
@@ -1009,7 +1007,7 @@ export default class GoateeEditor {
         alertContainer.appendChild(alertMessage);
 
         if(dismissable === null) {
-            alertContaineOr.classList.add('fade');
+            //alertContainer.classList.add('fade');
         }
         else {
             let closeButtonElement = document.createElement('I');

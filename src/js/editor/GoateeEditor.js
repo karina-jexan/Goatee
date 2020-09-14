@@ -714,10 +714,9 @@ export default class GoateeEditor {
                 image.setControlsVisibility(_localControlsVisibility);
                 image.set('name', fileElement.name);
                 _localCanvas.add(image);
-                _localCanvas.sendToBack(image, true);
                 _localCanvas.setActiveObject(image);
-                _localCanvas.renderAll();                
-                _this.pushStickersForward();
+                _localCanvas.renderAll();
+                _this.pushStickersForward(); 
             }
         }
         reader.readAsDataURL(event.target.files[0]);
@@ -844,7 +843,7 @@ export default class GoateeEditor {
         const canvasObjects = this.canvas.getObjects();
         canvasObjects.forEach(object => {
             if(object.name === 'sticker') {
-                object.bringForward();
+                object.bringToFront();
             }
         });
 

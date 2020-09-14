@@ -319,15 +319,11 @@ export default class GoateeEditor {
         let btnTop = y - 20;
 
         let deleteButton = document.createElement('div');
-        let iconElement = document.createElement('i');
-        
-        iconElement.classList.add('fas', 'fa-times', 'delete-button');
-
+        deleteButton.innerHTML = "×";
         deleteButton.classList.add('delete-button');
+
         deleteButton.style.left = btnLeft + 'px';
         deleteButton.style.top = btnTop + 'px';
-
-        deleteButton.appendChild(iconElement);
 
         return deleteButton;
     }
@@ -356,7 +352,7 @@ export default class GoateeEditor {
         const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container div');
         const layerButtons = this.editorWrapper.querySelectorAll('.layers-container i');
         const stickerOptionButtons = this.editorWrapper.querySelectorAll('.sticker-options a');
-        const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
+        const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel');
         const stickerImages = this.editorWrapper.querySelectorAll('#stickers-carousel img');
         const fontSelect = this.editorWrapper.querySelector('.font-select-wrapper select');
         const colorPickerButton = this.editorWrapper.querySelector(".text-options-wrapper .color-picker-options-wrapper");
@@ -522,8 +518,9 @@ export default class GoateeEditor {
         }
 
         // Update open color picker icon color
-        const colorPickerButtonIcon = this.editorWrapper.querySelector('.color-picker-options-wrapper .color-picker-button i');
-        colorPickerButtonIcon.style.borderBottomColor = hexColor;    
+        //COMMENTING THIS FOR PRODUCTION
+        // const colorPickerButtonIcon = this.editorWrapper.querySelector('.color-picker-options-wrapper .color-picker-button i');
+        // colorPickerButtonIcon.style.borderBottomColor = hexColor;    
     }
 
     updateTextColor(color) {

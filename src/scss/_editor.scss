@@ -40,11 +40,10 @@ $inputHeight: 40px;
             background-color: $errorTextColor;
             position: absolute;
             cursor: pointer;
-
-            i {
-                color: white;
-                padding: 12px;
-            }
+            line-height: 40px;
+            font-size: 140%;
+            font-weight: 900;
+            color: white;
         }
 
     }
@@ -217,12 +216,10 @@ $inputHeight: 40px;
                 height: 35px;
                 background-color: $mainColor;
                 border-radius: 50%;
-
-                i {
-                    color: white;
-                    padding: 7px;
-                }
-                
+                line-height: 35px;
+                color: white;
+                font-weight: 900;
+                font-size: 140%;                
              }
         }
        }

@@ -351,9 +351,9 @@ export default class GoateeEditor {
         const cancelUploadFromInstagramButton = this.editorWrapper.querySelector('#cancel-instagram-image');
         const submitImageURLInstagramButton = this.editorWrapper.querySelector('#submit-image-url-instagram');
         const addTextInput = this.editorWrapper.querySelector('#add-text-input');
-        const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container i');
-        const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container i');
-        const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container i');
+        const positionArrows = this.editorWrapper.querySelectorAll('.position-arrows-container .direction-arrow');
+        const zoomMagnifying = this.editorWrapper.querySelectorAll('.zoom-container div');
+        const rotateButtons = this.editorWrapper.querySelectorAll('.rotate-container div');
         const layerButtons = this.editorWrapper.querySelectorAll('.layers-container i');
         const stickerOptionButtons = this.editorWrapper.querySelectorAll('.sticker-options a');
         const stickersCarouselButtons = this.editorWrapper.querySelectorAll('#stickers-carousel i');
@@ -985,7 +985,6 @@ export default class GoateeEditor {
             duration = 5000;
         }
         if(dismissable === null) {
-            alertContainer.classList.add('fade');
             alertContainer.style.transitionDelay = `${duration / 1000}s`;
         }
 

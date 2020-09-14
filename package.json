@@ -20,6 +20,7 @@
   "dependencies": {
     "@babel/core": "^7.10.4",
     "a-color-picker": "^1.2.1",
+    "axios": "^0.19.2",
     "babel-loader": "^8.1.0",
     "css-loader": "^0.28.7",
     "fabric": "^3.6.3",

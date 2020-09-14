@@ -1,5 +1,6 @@
 import { fabric } from 'fabric';
 import Swiper, { Navigation, Pagination  } from 'swiper';
+import axios from 'axios';
 const FontFaceObserver = require('fontfaceobserver');
 const AColorPicker = require('a-color-picker');
 
@@ -141,7 +142,9 @@ export default class GoateeEditor {
 
         });
         // Plug the fabricjs plugin
-        this.canvas = new fabric.Canvas('goatee-editor', {backgroundColor : "#ffffff"});
+        this.canvas = new fabric.Canvas('goatee-editor', {
+            backgroundColor: '#FFFFFF'
+        });
         // Add event handler when any object is selected;
         this.canvas.on('selection:created', this.objectSelected);
         // Add event handler when any object is selected;
@@ -171,18 +174,18 @@ export default class GoateeEditor {
             _localCanvas.renderAll();
         });
 
-        // fabric.Image.prototype.getSvgSrc = function() {
-        //     return this.toDataURLforSVG();
-        //   };
+        fabric.Image.prototype.getSvgSrc = function() {
+            return this.toDataURLforSVG();
+          };
           
-        // fabric.Image.prototype.toDataURLforSVG = function(options) {
-        // var el = fabric.util.createCanvasElement();
-        //         el.width  = this._element.naturalWidth || this._element.width;
-        //         el.height = this._element.naturalHeight || this._element.height;
-        // el.getContext("2d").drawImage(this._element, 0, 0);
-        // var data = el.toDataURL(options);
-        // return data;
-        // };
+        fabric.Image.prototype.toDataURLforSVG = function(options) {
+        var el = fabric.util.createCanvasElement();
+                el.width  = this._element.naturalWidth || this._element.width;
+                el.height = this._element.naturalHeight || this._element.height;
+        el.getContext("2d").drawImage(this._element, 0, 0);
+        var data = el.toDataURL(options);
+        return data;
+        };
 
         // Initialize a-color-picker package
         this.pickerElement = AColorPicker.createPicker('#editor-wrapper .a-color-picker-wrapper', {
@@ -483,18 +486,15 @@ export default class GoateeEditor {
     }
 
     downloadImage(event) {
-     this.resizeAndExport();
-    }
-
-    resizeAndExport() {
-        let hiddenCanvasWrapper = document.getElementById('hidden-canvas');
-        hiddenCanvasWrapper.append(this.canvas.toCanvasElement(8));
-        let hiddenCanvas = hiddenCanvasWrapper.querySelector('canvas');
-        let exportedImage = new Image();  
-        exportedImage.src = hiddenCanvas.toDataURL('image/jpeg', 1.0); 
-        document.getElementById('hidden-exported-image').appendChild(exportedImage);
-
-
+       let downloadImageLink = this.editorWrapper.querySelector("#download-image-link");
+       let filedata = this.canvas.toSVG(); // the SVG file is now in filedata
+ 
+       let locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
+       let locfilesrc = URL.createObjectURL(locfile);//mylocfile);
+    
+       downloadImageLink.href = locfilesrc;
+       downloadImageLink.download = 'mysvg.svg';
+       downloadImageLink.click();
     }
 
     toggleColorPicker(event) {
@@ -1009,7 +1009,7 @@ export default class GoateeEditor {
         alertContainer.appendChild(alertMessage);
 
         if(dismissable === null) {
-            alertContainer.classList.add('fade');
+            alertContaineOr.classList.add('fade');
         }
         else {
             let closeButtonElement = document.createElement('I');

@@ -108,6 +108,7 @@ export default class GoateeEditor {
         this.checkFileSize = this.checkFileSize.bind(this);
         this.handleAlertClick = this.handleAlertClick.bind(this);
         this.pushTextToTop = this.pushTextToTop.bind(this);
+        this.updateNumberOfObjects = this.updateNumberOfObjects.bind(this);
 
 
         // Canvas event handlers
@@ -221,6 +222,18 @@ export default class GoateeEditor {
             _this.addImageFromUrl(event.target.src, 'sticker');
         }
         });
+    }
+
+    updateNumberOfObjects() {
+        const canvasObjects = this.canvas.getObjects();
+        let numberOfObjects = canvasObjects.length;
+        canvasObjects.forEach(element => {
+            if (element.name && element.name === 'initialImage') {
+                numberOfObjects = numberOfObjects - 1;
+            }
+        });
+        document.getElementById('objects-in-canvas').value = numberOfObjects;
+        return numberOfObjects;
     }
 
     updateSwiper() {
@@ -583,6 +596,11 @@ export default class GoateeEditor {
         }
         this.canvas.remove(elementToDelete);
         this.canvas.renderAll();
+        const numberOfObjects = this.updateNumberOfObjects();
+        if(numberOfObjects <= 0) {
+            const uploadImageTab = this.editorWrapper.querySelector('#tabs-container .choose-image-tab');
+            uploadImageTab.click();
+        }
     }
 
 
@@ -662,6 +680,7 @@ export default class GoateeEditor {
                     _this.pushTextToTop();
                 }
                 _localCanvas.renderAll();
+                _this.updateNumberOfObjects();
             });
         }
     }
@@ -716,7 +735,8 @@ export default class GoateeEditor {
                 _localCanvas.add(image);
                 _localCanvas.setActiveObject(image);
                 _localCanvas.renderAll();
-                _this.pushStickersForward(); 
+                _this.pushStickersForward();
+                _this.updateNumberOfObjects(); 
             }
         }
         reader.readAsDataURL(event.target.files[0]);
@@ -776,6 +796,7 @@ export default class GoateeEditor {
             this.textObject.set('text', event.target.value);
             _this.pushTextToTop();
             _localCanvas.renderAll();
+            _this.updateNumberOfObjects();
         }
         else {
             this.textElementInCanvas = true;
@@ -806,6 +827,7 @@ export default class GoateeEditor {
                     _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
                     
                     _localCanvas.renderAll();
+                    _this.updateNumberOfObjects();
                 }).catch(e => {
                     _this.hideElement('#custom-text .loader');
                     textElement.setControlsVisibility(_localControlsVisibility);
@@ -817,6 +839,7 @@ export default class GoateeEditor {
                     _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
 
                     _localCanvas.renderAll();
+                    _this.updateNumberOfObjects();
                 });
             }
             else {
@@ -830,6 +853,7 @@ export default class GoateeEditor {
                 _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
 
                 _localCanvas.renderAll();
+                _this.updateNumberOfObjects();
             }
         }
     }
@@ -999,6 +1023,7 @@ export default class GoateeEditor {
         let alertContainer = document.createElement('DIV');
         let alertMessage = document.createTextNode(message);
         alertContainer.classList.add('alert', type, 'flex');
+        alertContainer.setAttribute('key', `alert-id-${Math.ceil(Math.random() * 10)}`);
         alertContainer.appendChild(alertMessage);
 
         if(dismissable === null) {

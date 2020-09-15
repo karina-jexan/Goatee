@@ -37,6 +37,7 @@
                     <a href="" class="hide" id="download-link" download>Download</a>
                     <button class="hide" type="button" id="download">Download</button>
                       <div id="alert-container"></div>
+                      <input type="hidden" name="objects-in-canvas" id="objects-in-canvas" value="0">
                     <div id="options-fields-container">
                         <div id="add-image-container">
                             <div id="image-options-container" class="flex even-cols">
@@ -51,27 +52,27 @@
                             <div class="change-position-mini-container flex even-cols width-60">
                                 <div class="position-arrows-container col">
                                     <div class="arrows-row flex justify-center">
-                                        <div class="direction-arrow">
-                                            <i class="fas fa-arrow-up" data-direction="up"></i>
+                                        <div class="direction-arrow" data-direction="up">
+                                            <i class="fas fa-arrow-up direction-arrow" data-direction="up"></i>
                                         </div>
-                                        <div class="direction-arrow">
-                                            <i class="fas fa-arrow-down" data-direction="down"></i>
+                                        <div class="direction-arrow" data-direction="down">
+                                            <i class="fas fa-arrow-down direction-arrow" data-direction="down"></i>
                                         </div>
                                     </div>
                                     <div class="arrows-row flex justify-center">
-                                        <div class="direction-arrow">
-                                            <i class="fas fa-arrow-left" data-direction="left"></i>
+                                        <div class="direction-arrow" data-direction="left">
+                                            <i class="fas fa-arrow-left direction-arrow" data-direction="left"></i>
                                         </div>
-                                        <div class="direction-arrow">
-                                            <i class="fas fa-arrow-right" data-direction="right"></i>
+                                        <div class="direction-arrow" data-direction="right"> 
+                                            <i class="fas fa-arrow-right direction-arrow" data-direction="right"></i>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="zoom-container col">
-                                    <div class="zoom-in flex justify-center">
-                                        <i class="fas fa-search-plus" data-zoom="in"></i>
+                                    <div class="zoom-in zoom-button flex justify-center" data-zoom="in">
+                                        <i class="fas fa-search-plus zoom-button " data-zoom="in"></i>
                                     </div>
-                                    <div class="zoom-out flex justify-center">
+                                    <div class="zoom-out flex justify-center zoom-button">
                                         <i class="fas fa-search-minus" data-zoom="out"></i>
                                     </div>                             
                                 </div>
@@ -113,9 +114,7 @@
                                         <button class="color-picker-button">
                                             <i class="fas fa-fill-drip color-picker-button"></i>
                                             <span class="a-color-picker-wrapper">
-                                                <div class="close-color-picker hide">
-                                                    <i class="fas fa-times close-color-picker"></i>
-                                                </div>                                                
+                                                <div class="close-color-picker hide">&times;</div>                                                
                                             </span>
                                         </button>
                                         <input type="hidden" name="text-color" class="text-color" value="#000000">
@@ -128,7 +127,9 @@
                         </div>
                         <div id="add-stickers-container" class="hide">
                             <div id="stickers-carousel-wrapper" class="flex align-center justify-center">
-                                <div class="swiper-button-prev"><i class="fas fa-chevron-left" data-direction="back"></i></div>                               <!-- Slider main container -->
+                                <div class="swiper-button-prev" data-direction="back">
+                                    <i class="fas fa-chevron-left" style="pointer-events: none;"></i>
+                                </div>                               <!-- Slider main container -->
                                 <div class="swiper-container">
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
@@ -150,7 +151,9 @@
                                     <div class="swiper-slide"><img src="./img/stickers/sticker_17.png" alt="Dog - WOW"></div>
                                 </div>
                                 </div>
-                                <div class="swiper-button-next"><i class="fas fa-chevron-right" data-direction="forward"></i></div>
+                                <div class="swiper-button-next" data-direction="forward">
+                                    <i class="fas fa-chevron-right" style="pointer-events: none;"></i>
+                                </div>
                             </div>
                         </div>
                     </div>

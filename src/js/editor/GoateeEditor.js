@@ -21,7 +21,7 @@ export default class GoateeEditor {
         this.loadedImages = 0;
         this.totalStickerImages = 0;
         this.mySwiper = null;
-        this.minimumFileSize = (2 * 1024) * 1024;
+        this.minimumFileSize = (1 * 1024) * 1024;
 
         this.hideControlsRight = {
             'tl':true,
@@ -234,6 +234,19 @@ export default class GoateeEditor {
         });
         document.getElementById('objects-in-canvas').value = numberOfObjects;
         return numberOfObjects;
+    }
+
+    checkifCorrectFileType(fileElement) {
+        const fileName = fileElement.name;
+        const fileExtension = fileName.substring(fileName.lastIndexOf('.')+1, fileName.length) || fileName;
+        const allowedExtensions = ["jpg", "JPG", "png", "PNG", "svg", "SVG", "gif", "GIF", "jpeg", "JPEG"];
+        const searchResult = allowedExtensions.indexOf(fileExtension);
+        console.log(searchResult);
+        console.log(fileExtension);
+        if(searchResult != -1) {            
+            return true;
+        }
+        return false;
     }
 
     updateSwiper() {
@@ -696,10 +709,8 @@ export default class GoateeEditor {
         const displayNameInput = this.editorWrapper.querySelector(`input[data-fileinputid="${event.target.id}"]`);
         if (displayNameInput) {
             displayNameInput.value = event.target.files[0].name;
-        }
-        this.removeObjectFromCanvas('initialImage');
-        this.addImageFile(event);
-        this.editorWrapper.querySelector('#tabs-container .position-tab').click();
+        }        
+        this.addImageFile(event);        
     }
 
     showHideImageOptions(event) {
@@ -719,27 +730,39 @@ export default class GoateeEditor {
         const _localControlsVisibility = this.hideControlsRight; 
         let reader = new FileReader();
         const fileElement = event.target.files[0];
-        // Show alert if the image uploaded by the user has the minimum file size
-        // If not then show an alert
-        this.checkFileSize(fileElement);
+        //Show alert if file type is not image
+        const fileTypeCheck = this.checkifCorrectFileType(fileElement);
+        console.log(fileTypeCheck);
+        if(fileTypeCheck === true) {
+            this.removeObjectFromCanvas('initialImage');
+            this.editorWrapper.querySelector('#tabs-container .position-tab').click();
+           // Show alert if the image uploaded by the user has the minimum file size
+            // If not then show an alert
+            this.checkFileSize(fileElement);
 
-        reader.onload = function (e) {
-            let imgObj = new Image();
-            imgObj.src = e.target.result;
-            imgObj.onload = function () {
-                let image = new fabric.Image(imgObj);
-                image.scaleToWidth(_localCanvas.getWidth() * 0.80);
-                image.scaleToHeight(_localCanvas.getHeight() * 0.80);
-                image.setControlsVisibility(_localControlsVisibility);
-                image.set('name', fileElement.name);
-                _localCanvas.add(image);
-                _localCanvas.setActiveObject(image);
-                _localCanvas.renderAll();
-                _this.pushStickersForward();
-                _this.updateNumberOfObjects(); 
+            reader.onload = function (e) {
+                let imgObj = new Image();
+                imgObj.src = e.target.result;
+                imgObj.onload = function () {
+                    let image = new fabric.Image(imgObj);
+                    image.scaleToWidth(_localCanvas.getWidth() * 0.80);
+                    image.scaleToHeight(_localCanvas.getHeight() * 0.80);
+                    image.setControlsVisibility(_localControlsVisibility);
+                    image.set('name', fileElement.name);
+                    _localCanvas.add(image);
+                    _localCanvas.setActiveObject(image);
+                    _localCanvas.renderAll();
+                    _this.pushStickersForward();
+                    _this.updateNumberOfObjects(); 
+                }
             }
+            reader.readAsDataURL(event.target.files[0]);
         }
-        reader.readAsDataURL(event.target.files[0]);
+        else {
+            this.showAlert('warning', 'Please upload a file in any of these formats: jpg, png, gif or svg', null, true);
+            this.alertOnScreen = true; 
+        }
+
     }
 
     checkFileSize(fileElement) {
@@ -1019,7 +1042,7 @@ export default class GoateeEditor {
 
     }
 
-    createAlert(type, message, dismissable) {
+    createAlert(type, message, dismissable = null) {
         let alertContainer = document.createElement('DIV');
         let alertMessage = document.createTextNode(message);
         alertContainer.classList.add('alert', type, 'flex');
@@ -1030,8 +1053,9 @@ export default class GoateeEditor {
             //alertContainer.classList.add('fade');
         }
         else {
-            let closeButtonElement = document.createElement('I');
-            closeButtonElement.classList.add('fas', 'fa-times', 'close-alert', 'dismissable-alert-button');
+            let closeButtonElement = document.createElement('span');
+            closeButtonElement.classList.add('close-alert', 'dismissable-alert-button');
+            closeButtonElement.innerHTML = "×";
             alertContainer.appendChild(closeButtonElement);
         }
         return alertContainer;

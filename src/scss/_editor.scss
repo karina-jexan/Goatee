@@ -302,9 +302,18 @@ $inputHeight: 40px;
         margin: 0.5em 0;
         opacity: 1;
         transition: opacity 1s;
+        position: relative;
 
         &.fade {
             opacity: 0;
+        }
+
+        .close-alert {
+            right: 0;
+            position: absolute;
+            font-size: 160%;
+            top: -5px;
+            cursor: pointer;
         }
 
         .alert {

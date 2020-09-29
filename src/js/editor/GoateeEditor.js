@@ -109,6 +109,7 @@ export default class GoateeEditor {
         this.handleAlertClick = this.handleAlertClick.bind(this);
         this.pushTextToTop = this.pushTextToTop.bind(this);
         this.updateNumberOfObjects = this.updateNumberOfObjects.bind(this);
+        this.allowObjectSelectionByType = this.allowObjectSelectionByType.bind(this);
 
 
         // Canvas event handlers
@@ -306,13 +307,6 @@ export default class GoateeEditor {
     objectSelected(event) {
       // Show delete button
         this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
-
-        // Show the user the position tab menu when it selects an object from the canvas
-        // except if it's a text type object
-        if(event.target.get('type') !== 'textbox') {
-            const positionTabElement = this.editorWrapper.querySelector('#tabs-container .position-tab');
-            positionTabElement.click();
-        }
     }
 
     textChanged(event) {
@@ -526,6 +520,26 @@ export default class GoateeEditor {
         }        
     }
 
+    allowObjectSelectionByType(objectType = null) {
+        let canvasObjects = this.canvas.getObjects();
+        console.log
+        canvasObjects.forEach(object => {
+            if(objectType === null){
+                object.set('selectable', true);
+            }
+            else {
+                if(object.get('name') == objectType) {
+                    object.set('selectable', true);
+                }
+                else {
+                    object.set('selectable', false);
+                }
+            }
+            this.canvas.renderAll();
+        });
+        
+    }
+
     closeColorPicker() {
         this.editorWrapper.querySelector('.color-picker-options-wrapper .close-color-picker').classList.add('hide');
         this.pickerElement.hide();
@@ -593,13 +607,12 @@ export default class GoateeEditor {
             this.editorWrapper.querySelector('#custom-text #add-text-input').value = '';
         }
         else if( elementToDelete.get('type') === 'image') {
-            console.log(this.lowQualityImagesArray);
-            const index = this.lowQualityImagesArray.indexOf(elementToDelete.get('name'));
+            
+            const index = this.lowQualityImagesArray.indexOf(elementToDelete.get('filename'));
             if(index > -1) {
                 this.lowQualityImagesArray.splice(index, 1);
-
                 if(this.lowQualityImagesArray.length === 0) {
-                    const closeAlertButton = this.editorWrapper.querySelector('#alert-container i.close-alert');
+                    const closeAlertButton = this.editorWrapper.querySelector('#alert-container .close-alert');
                     if(closeAlertButton) {
                         closeAlertButton.click();
                     }
@@ -748,7 +761,8 @@ export default class GoateeEditor {
                     image.scaleToWidth(_localCanvas.getWidth() * 0.80);
                     image.scaleToHeight(_localCanvas.getHeight() * 0.80);
                     image.setControlsVisibility(_localControlsVisibility);
-                    image.set('name', fileElement.name);
+                    image.set('filename', fileElement.name);
+                    image.set('name', 'image');
                     _localCanvas.add(image);
                     _localCanvas.setActiveObject(image);
                     _localCanvas.renderAll();
@@ -797,8 +811,25 @@ export default class GoateeEditor {
             this.editorWrapper.querySelector('#' + optionID).classList.remove('hide');
         }
 
-        if(optionID == 'add-stickers-container') {
-            this.updateSwiper();
+        // Disable object types in the canvas according to the tab that the user clicked
+        switch(optionID) {
+            case 'add-image-container':
+                // Enable all type "image" objects
+                this.allowObjectSelectionByType("image");
+                break;
+            case 'change-position-container':
+                // Enable all objects
+                this.allowObjectSelectionByType();
+                break;
+            case 'text-container':
+                // Enable textbox type object
+                this.allowObjectSelectionByType("textElement");
+                break;
+            case 'add-stickers-container':
+                this.updateSwiper();
+                // Enable sticker type object
+                this.allowObjectSelectionByType("sticker");
+                break;
         }
     }
 

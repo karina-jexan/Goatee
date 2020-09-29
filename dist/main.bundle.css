@@ -34,7 +34,7 @@ a.button:active {
     position: relative;
     width: 100%; }
     #editor-wrapper #editor-container canvas {
-      box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.1);
       width: 100%; }
     #editor-wrapper #editor-container div.delete-button {
       text-align: center;
@@ -43,10 +43,11 @@ a.button:active {
       height: 40px;
       background-color: #a94442;
       position: absolute;
-      cursor: pointer; }
-      #editor-wrapper #editor-container div.delete-button i {
-        color: white;
-        padding: 12px; }
+      cursor: pointer;
+      line-height: 40px;
+      font-size: 140%;
+      font-weight: 900;
+      color: white; }
   #editor-wrapper #tabs-container {
     justify-content: space-evenly;
     margin-top: 0.5em;
@@ -158,10 +159,11 @@ a.button:active {
         width: 35px;
         height: 35px;
         background-color: #88008B;
-        border-radius: 50%; }
-        #editor-wrapper #custom-text button.color-picker-button .a-color-picker-wrapper div.close-color-picker i {
-          color: white;
-          padding: 7px; }
+        border-radius: 50%;
+        line-height: 35px;
+        color: white;
+        font-weight: 900;
+        font-size: 140%; }
   #editor-wrapper a {
     font-weight: bold;
     text-decoration: none;
@@ -210,9 +212,16 @@ a.button:active {
   #editor-wrapper #alert-container {
     margin: 0.5em 0;
     opacity: 1;
-    transition: opacity 1s; }
+    transition: opacity 1s;
+    position: relative; }
     #editor-wrapper #alert-container.fade {
       opacity: 0; }
+    #editor-wrapper #alert-container .close-alert {
+      right: 0;
+      position: absolute;
+      font-size: 160%;
+      top: -5px;
+      cursor: pointer; }
     #editor-wrapper #alert-container .alert {
       padding: 0.5em;
       border-radius: 5px;

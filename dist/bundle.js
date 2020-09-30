@@ -1404,7 +1404,7 @@ class GoateeEditor {
     this.minimumFileSize = 1 * 1024 * 1024;
     this.hideControlsRight = {
       'tl': true,
-      'tr': false,
+      'tr': true,
       'bl': true,
       'br': true,
       'ml': true,
@@ -1414,7 +1414,7 @@ class GoateeEditor {
       'mtr': true
     };
     this.hideControlsLeft = {
-      'tl': false,
+      'tl': true,
       'tr': true,
       'bl': true,
       'br': true,
@@ -1568,6 +1568,10 @@ class GoateeEditor {
     this.pickerElement.on('change', this.updateTextColorInput);
     this.pickerElement.toggle();
   }
+  /**
+   * Initialize Swiper element (stickers)
+   */
+
 
   initSwiper() {
     const _this = this; // configure Swiper to use modules
@@ -1593,6 +1597,12 @@ class GoateeEditor {
       }
     });
   }
+  /**
+   * Update DOM element that holds the current number of elements in the canvas.
+   * This is used to validate if the user has added any elements to the canvas or is it empty.
+   * 
+   */
+
 
   updateNumberOfObjects() {
     const canvasObjects = this.canvas.getObjects();
@@ -1605,6 +1615,11 @@ class GoateeEditor {
     document.getElementById('objects-in-canvas').value = numberOfObjects;
     return numberOfObjects;
   }
+  /**
+   * Checks if the just uploaded file is in a valid format
+   * @param {File} fileElement 
+   */
+
 
   checkifCorrectFileType(fileElement) {
     const fileName = fileElement.name;
@@ -1620,33 +1635,57 @@ class GoateeEditor {
 
     return false;
   }
+  /**
+   * Updates the stickers Swiper element
+   */
+
 
   updateSwiper() {
     this.mySwiper.update();
   }
+  /**
+   * Used to perform action everytime any object in the canvas is beign moved
+   * @param {fabricJS Event} event 
+   */
+
 
   objectMoving(event) {
     // Hide delete button from canvas
     this.removeOnCanvasDeleteButton();
   }
+  /**
+   * Used to perform action everytime any object in the canvas is beign scaled
+   * @param {fabricJS Event} event 
+   */
+
 
   objectScaled(event) {
     // Hide delete button from canvas
     this.removeOnCanvasDeleteButton();
   }
+  /**
+   * Used to perform action everytime any object in the canvas is modified
+   * @param {fabricJS Event} event 
+   */
+
 
   objectModified(event) {
     // Check if the object is not out from the rigth side of the canvas
     const checkObjectRightBoundarie = this.checkObjectRightBoundarie(event.target); // Show delete button
 
     if (checkObjectRightBoundarie) {
-      this.adjustControlsVisibility(event.target, 'left');
-      this.addOnCanvasDeleteBtn(event.target.oCoords.tl.x, event.target.oCoords.tl.y);
+      this.addOnCanvasDeleteBtn(event.target.oCoords.tl.x, event.target.oCoords.tl.y, 'tl');
     } else {
-      this.adjustControlsVisibility(event.target, 'right');
-      this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+      this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y, 'tr');
     }
   }
+  /**
+   * Checks if an object has crossed the right boundary of the canvas
+   * 
+   * @param {fabricJS object} object Object to check if it has crossed the right boundary of the canvas
+   * @return {boolean}
+   */
+
 
   checkObjectRightBoundarie(object) {
     let boundingRect = object.getBoundingRect(true);
@@ -1657,6 +1696,14 @@ class GoateeEditor {
 
     return false;
   }
+  /**
+   * Hides or shows an object's controls/handles visibility
+   * (Not used at the moment)
+   * 
+   * @param {fabricJS object} object Element to set the controls visibility
+   * @param {string} direction Directin of which set of controls to show 
+   */
+
 
   adjustControlsVisibility(object, direction) {
     switch (direction) {
@@ -1669,16 +1716,31 @@ class GoateeEditor {
         break;
     }
   }
+  /**
+   * Used to perform action everytime any object in the canvas is beign rotated
+   * @param {fabricJS Event} event 
+   */
+
 
   objectRotating(event) {
     // Hide delete button
     this.removeOnCanvasDeleteButton();
   }
+  /**
+   * Used to perform action everytime any object in the canvas is selected by the user
+   * @param {fabricJS Event} event 
+   */
+
 
   objectSelected(event) {
     // Show delete button
-    this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
+    this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y, 'tr');
   }
+  /**
+   * Used to perform action everytime the text element in the canvas is modified
+   * @param {fabricJS Event} event 
+   */
+
 
   textChanged(event) {
     // Set the text element as active so the user can see the textbox
@@ -1687,13 +1749,25 @@ class GoateeEditor {
 
     addTextInput.value = event.target.text;
   }
+  /**
+   * Adds a delete button given an object's coordinates
+   * 
+   * @param {float} x X coordinates of the object that the delete button belongs to
+   * @param {float} y Y coordinates of the object that the delete button belongs to
+   * @param {string} direction If the coordinates are from the top-right or top-left 
+   */
 
-  addOnCanvasDeleteBtn(x, y) {
+
+  addOnCanvasDeleteBtn(x, y, direction = null) {
     // Remove the exisent (if any) delete button
     this.removeOnCanvasDeleteButton();
-    const deleteButton = this.createDeleteButton(x, y);
+    const deleteButton = this.createDeleteButton(x, y, direction);
     this.editorContainer.appendChild(deleteButton);
   }
+  /**
+   * Removes the current delete button from the canvas
+   */
+
 
   removeOnCanvasDeleteButton() {
     // Remove current delete button
@@ -1703,22 +1777,48 @@ class GoateeEditor {
       domDeleteButton.remove();
     }
   }
+  /**
+   * Creates a delete button element given an object coordinates
+   * 
+   * @param {float} x X coordinates of the object that the delete button belongs to  
+   * @param {*} y Y coordinates of the object that the delete button belongs to
+   * @param {string} direction If the coordinates are from the top-right or top-left 
+   * 
+   * @return {DOM element} 
+   */
 
-  createDeleteButton(x, y) {
-    let btnLeft = x - 10;
+
+  createDeleteButton(x, y, direction = null) {
+    let btnHorizontal = x;
     let btnTop = y - 20;
     let deleteButton = document.createElement('div');
     deleteButton.innerHTML = "×";
     deleteButton.classList.add('delete-button');
-    deleteButton.style.left = btnLeft + 'px';
+
+    if (direction == 'tr') {
+      btnHorizontal = btnHorizontal - 80;
+    } else if (direction == 'tl') {
+      btnHorizontal = btnHorizontal + 40;
+    }
+
+    deleteButton.style.left = btnHorizontal + 'px';
     deleteButton.style.top = btnTop + 'px';
     return deleteButton;
   }
+  /**
+   * Used to perform action everytime the canvas in empty
+   * @param {fabricJS Event} event 
+   */
+
 
   canvasCleared(event) {
     this.removeOnCanvasDeleteButton();
     this.closeColorPicker();
   }
+  /**
+   * Add event handlers
+   */
+
 
   addEvents() {
     window.addEventListener('resize', this.resizeCanvas, false); //document.addEventListener('click', this.closeEverything);
@@ -1864,10 +1964,21 @@ class GoateeEditor {
       alertContainer.addEventListener('click', this.handleAlertClick);
     }
   }
+  /**
+   * When programmaticaly the download button is clicked to export the image
+   * @param {Event} event 
+   */
+
 
   downloadImage(event) {
     this.resizeAndExport();
   }
+  /**
+   * Creates a bigger (hidden) canvas so the image created by the user
+   * is exported in a bigger size. Also this method exports the image and appends
+   * the DaraURL to a DOM element.
+   */
+
 
   resizeAndExport() {
     let hiddenCanvasWrapper = document.getElementById('hidden-canvas');
@@ -1877,6 +1988,11 @@ class GoateeEditor {
     exportedImage.src = hiddenCanvas.toDataURL('image/jpeg', 1.0);
     document.getElementById('hidden-exported-image').appendChild(exportedImage);
   }
+  /**
+   * Open/Close color picker
+   * @param {Event} event 
+   */
+
 
   toggleColorPicker(event) {
     // Open or close the color picker
@@ -1886,6 +2002,13 @@ class GoateeEditor {
       this.editorWrapper.querySelector('.color-picker-options-wrapper .close-color-picker').classList.toggle('hide');
     }
   }
+  /**
+   * Enable a type of object to be selectable by the user. The rest is disabled. Of
+   * the objectType parameter is null the all the bjects in the canvas are enabled.
+   * 
+   * @param {String} objectType What type of object to allow selection by the user 
+   */
+
 
   allowObjectSelectionByType(objectType = null) {
     let canvasObjects = this.canvas.getObjects();
@@ -2017,7 +2140,7 @@ class GoateeEditor {
     const activeObject = this.canvas.getActiveObject();
 
     if (activeObject !== undefined) {
-      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+      this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y, 'tr');
     }
   }
 
@@ -2057,13 +2180,11 @@ class GoateeEditor {
     const _this = this;
 
     let _localCanvas = this.canvas;
-    const _localControlsVisibility = this.hideControlsRight;
 
     if (imgURL != '') {
       __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image.fromURL(imgURL, function (oImg) {
         oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
         oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
-        oImg.setControlsVisibility(_localControlsVisibility);
 
         if (type === 'sticker') {
           oImg.set('name', 'sticker');
@@ -2142,7 +2263,6 @@ class GoateeEditor {
           let image = new __WEBPACK_IMPORTED_MODULE_0_fabric__["fabric"].Image(imgObj);
           image.scaleToWidth(_localCanvas.getWidth() * 0.80);
           image.scaleToHeight(_localCanvas.getHeight() * 0.80);
-          image.setControlsVisibility(_localControlsVisibility);
           image.set('filename', fileElement.name);
           image.set('name', 'image');
 
@@ -2241,7 +2361,7 @@ class GoateeEditor {
     if (this.textElementInCanvas === true) {
       _localCanvas.setActiveObject(this.textObject);
 
-      this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y);
+      this.addOnCanvasDeleteBtn(this.textObject.oCoords.tr.x, this.textObject.oCoords.tr.y, 'tr');
       this.textObject.set('text', event.target.value);
 
       _this.pushTextToTop();
@@ -2275,7 +2395,6 @@ class GoateeEditor {
           textElement.set({
             "fontFamily": selectedFont
           });
-          textElement.setControlsVisibility(_localControlsVisibility);
 
           _this.canvas.add(textElement);
 
@@ -2285,7 +2404,7 @@ class GoateeEditor {
 
           _localCanvas.setActiveObject(_this.textObject);
 
-          _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
+          _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y, 'tr');
 
           _localCanvas.renderAll();
 
@@ -2293,7 +2412,6 @@ class GoateeEditor {
         }).catch(e => {
           _this.hideElement('#custom-text .loader');
 
-          textElement.setControlsVisibility(_localControlsVisibility);
           textElement.set("fontFamily", 'Trebuchet MS');
 
           _this.canvas.add(textElement);
@@ -2304,7 +2422,7 @@ class GoateeEditor {
 
           _localCanvas.setActiveObject(_this.textObject);
 
-          _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
+          _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y, 'tr');
 
           _localCanvas.renderAll();
 
@@ -2314,7 +2432,6 @@ class GoateeEditor {
         _this.hideElement('#custom-text .loader');
 
         textElement.set("fontFamily", font);
-        textElement.setControlsVisibility(_localControlsVisibility);
 
         _this.canvas.add(textElement);
 
@@ -2324,7 +2441,7 @@ class GoateeEditor {
 
         _localCanvas.setActiveObject(_this.textObject);
 
-        _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y);
+        _this.addOnCanvasDeleteBtn(_this.textObject.oCoords.tr.x, _this.textObject.oCoords.tr.y, 'tr');
 
         _localCanvas.renderAll();
 
@@ -2384,12 +2501,8 @@ class GoateeEditor {
           "fontFamily": fontName
         });
 
-        _localTextElement.setControlsVisibility(_localControlsVisibility);
-
         _this.pushTextToTop();
       }).catch(e => {
-        _localTextElement.setControlsVisibility(_localControlsVisibility);
-
         _localTextElement.set("fontFamily", 'Trebuchet MS');
 
         _this.pushTextToTop();
@@ -2464,11 +2577,9 @@ class GoateeEditor {
       const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject); // Show delete button
 
       if (checkObjectRightBoundarie) {
-        this.adjustControlsVisibility(activeObject, 'left');
-        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y, 'tl');
       } else {
-        this.adjustControlsVisibility(activeObject, 'right');
-        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y, 'tr');
       }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
@@ -2561,11 +2672,9 @@ class GoateeEditor {
       const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject); // Show delete button
 
       if (checkObjectRightBoundarie) {
-        this.adjustControlsVisibility(activeObject, 'left');
-        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y, 'tl');
       } else {
-        this.adjustControlsVisibility(activeObject, 'right');
-        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y, 'tr');
       }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');
@@ -2607,11 +2716,9 @@ class GoateeEditor {
       const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject); // Show delete button
 
       if (checkObjectRightBoundarie) {
-        this.adjustControlsVisibility(activeObject, 'left');
-        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y, 'tl');
       } else {
-        this.adjustControlsVisibility(activeObject, 'right');
-        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
+        this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y, 'tr');
       }
     } else {
       this.showAlert('error', 'Please select an element from the editor first.');

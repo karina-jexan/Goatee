@@ -49,7 +49,7 @@ export default class GoateeEditor {
 
         this.lowQualityImagesArray = [];
         this.alertOnScreen = false;
-
+        this.boundingBox = null;
 
         // Main canvas DOM element
         this.canvasElement = null;
@@ -110,6 +110,7 @@ export default class GoateeEditor {
         this.pushTextToTop = this.pushTextToTop.bind(this);
         this.updateNumberOfObjects = this.updateNumberOfObjects.bind(this);
         this.allowObjectSelectionByType = this.allowObjectSelectionByType.bind(this);
+        this.checkInsideCanvas = this.checkInsideCanvas.bind(this);
 
 
         // Canvas event handlers
@@ -197,7 +198,28 @@ export default class GoateeEditor {
         });
         this.pickerElement.on('change', this.updateTextColorInput)
         this.pickerElement.toggle();
+
+        this.addBoundingBox();
     }
+
+    addBoundingBox() {
+        let boundingBox = new fabric.Rect({
+            fill: '#ffffff',
+            width: this.canvas.getWidth(),
+            height: this.canvas.getHeight(),
+            hasBorders: false,
+            hasControls: false,
+            lockMovementX: true,
+            lockMovementY: true,
+            evented: false,
+            selectable: false,
+          });
+          
+          this.canvas.add(boundingBox);
+          this.canvas.renderAll();
+          this.boundingBox = boundingBox;
+    }
+
     /**
      * Initialize Swiper element (stickers)
      */
@@ -275,6 +297,8 @@ export default class GoateeEditor {
     objectMoving(event) {
         // Hide delete button from canvas
         this.removeOnCanvasDeleteButton();
+        // Constantly check if the object that is beign moved is inside the canvas
+        this.checkInsideCanvas(event.target);
     }
     /**
      * Used to perform action everytime any object in the canvas is beign scaled
@@ -315,6 +339,28 @@ export default class GoateeEditor {
         }
 
         return false;
+    }
+
+    /**
+     * Checks if a given object is still inside the canvas
+     * @param {fabricJS Object} object 
+     */
+    checkInsideCanvas(object) {
+        // Get the canvas top-right and bottom-left points
+        const canvasCoords = this.canvas.vptCoords;
+
+        let top = object.top;
+        let bottom = top + object.height;
+        let left = object.left;
+        let right = left + object.width;
+  
+        let topBound = this.boundingBox.top;
+        let bottomBound = topBound + this.boundingBox.height;
+        let leftBound = this.boundingBox.left;
+        let rightBound = leftBound + this.boundingBox.width;
+  
+        object.set('left', Math.min(Math.max(left, leftBound), rightBound - object.width));
+        object.set('top', Math.min(Math.max(top, topBound), bottomBound - object.height));
     }
     /**
      * Hides or shows an object's controls/handles visibility

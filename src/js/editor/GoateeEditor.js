@@ -110,7 +110,7 @@ export default class GoateeEditor {
         this.pushTextToTop = this.pushTextToTop.bind(this);
         this.updateNumberOfObjects = this.updateNumberOfObjects.bind(this);
         this.allowObjectSelectionByType = this.allowObjectSelectionByType.bind(this);
-        this.checkInsideCanvas = this.checkInsideCanvas.bind(this);
+        this.keepInsideCanvas = this.keepInsideCanvas.bind(this);
 
 
         // Canvas event handlers
@@ -197,9 +197,7 @@ export default class GoateeEditor {
             "showAlpha" : false
         });
         this.pickerElement.on('change', this.updateTextColorInput)
-        this.pickerElement.toggle();
-
-        this.addBoundingBox();
+        this.pickerElement.toggle();        
     }
 
     addBoundingBox() {
@@ -298,7 +296,7 @@ export default class GoateeEditor {
         // Hide delete button from canvas
         this.removeOnCanvasDeleteButton();
         // Constantly check if the object that is beign moved is inside the canvas
-        this.checkInsideCanvas(event.target);
+        this.keepInsideCanvas(event.target);
     }
     /**
      * Used to perform action everytime any object in the canvas is beign scaled
@@ -342,25 +340,34 @@ export default class GoateeEditor {
     }
 
     /**
-     * Checks if a given object is still inside the canvas
+     * Keeps the moving object inside the canvas
      * @param {fabricJS Object} object 
      */
-    checkInsideCanvas(object) {
-        // Get the canvas top-right and bottom-left points
-        const canvasCoords = this.canvas.vptCoords;
+    keepInsideCanvas(object) {
+        let obj = object;
 
-        let top = object.top;
-        let bottom = top + object.height;
-        let left = object.left;
-        let right = left + object.width;
+        // if object is too big ignore
+        if(obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width){
+            return;
+        }        
   
-        let topBound = this.boundingBox.top;
-        let bottomBound = topBound + this.boundingBox.height;
-        let leftBound = this.boundingBox.left;
-        let rightBound = leftBound + this.boundingBox.width;
+        // set offset for moving out the canvas (20 % of object persists in canvas)
+        let offsetWidth = obj.getBoundingRect().width * 0.8;
+        let offsetHeight = obj.getBoundingRect().height * 0.8;
   
-        object.set('left', Math.min(Math.max(left, leftBound), rightBound - object.width));
-        object.set('top', Math.min(Math.max(top, topBound), bottomBound - object.height));
+        obj.setCoords();        
+  
+        // top-left  corner
+        if(obj.getBoundingRect().top < -offsetHeight || obj.getBoundingRect().left < -offsetWidth){
+            obj.top = Math.max(obj.top, obj.top-(obj.getBoundingRect().top+offsetHeight));
+            obj.left = Math.max(obj.left, obj.left-(obj.getBoundingRect().left+offsetWidth));
+        }
+        // bottom-right corner
+        if(obj.getBoundingRect().top+obj.getBoundingRect().height  > obj.canvas.height + offsetHeight || obj.getBoundingRect().left+obj.getBoundingRect().width  > obj.canvas.width + offsetWidth){
+            obj.top = Math.min(obj.top, obj.canvas.height-obj.getBoundingRect().height+obj.top-obj.getBoundingRect().top+offsetHeight);
+            obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left+offsetWidth);
+        }
+
     }
     /**
      * Hides or shows an object's controls/handles visibility

@@ -25,7 +25,7 @@ export default class GoateeEditor {
 
         this.hideControlsRight = {
             'tl':true,
-            'tr':false,
+            'tr':true,
             'bl':true,
             'br':true,
             'ml':true,
@@ -36,7 +36,7 @@ export default class GoateeEditor {
         };
 
         this.hideControlsLeft = {
-            'tl':false,
+            'tl':true,
             'tr':true,
             'bl':true,
             'br':true,
@@ -270,15 +270,19 @@ export default class GoateeEditor {
         const checkObjectRightBoundarie = this.checkObjectRightBoundarie(event.target);
         // Show delete button
         if(checkObjectRightBoundarie) {
-            this.adjustControlsVisibility(event.target,'left');
             this.addOnCanvasDeleteBtn(event.target.oCoords.tl.x, event.target.oCoords.tl.y);
         }
         else {
-            this.adjustControlsVisibility(event.target,'right');
             this.addOnCanvasDeleteBtn(event.target.oCoords.tr.x, event.target.oCoords.tr.y);
         }      
     }
 
+    /**
+     * Checks if an object has crossed the right boundary of the canvas
+     * 
+     * @param {fabricJS object} object Object to check if it has crossed the right boundary of the canvas
+     * @return {boolean}
+     */
     checkObjectRightBoundarie(object) {
         let boundingRect = object.getBoundingRect(true);
         if(boundingRect.left + boundingRect.width > this.canvas.getWidth()) {
@@ -287,6 +291,13 @@ export default class GoateeEditor {
 
         return false;
     }
+    /**
+     * Hides or shows an object's controls/handles visibility
+     * (Not used at the moment)
+     * 
+     * @param {fabricJS object} object Element to set the controls visibility
+     * @param {string} direction Directin of which set of controls to show 
+     */
 
     adjustControlsVisibility(object, direction) {
         switch (direction) {
@@ -685,13 +696,12 @@ export default class GoateeEditor {
         this.removeObjectFromCanvas('initialImage');
         const _this = this;
         let _localCanvas = this.canvas;
-        const _localControlsVisibility = this.hideControlsRight;
+        
 
         if (imgURL != '') {
             fabric.Image.fromURL(imgURL, function (oImg) {
                 oImg.scaleToWidth(_localCanvas.getWidth() * 0.80);
-                oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);
-                oImg.setControlsVisibility(_localControlsVisibility);
+                oImg.scaleToHeight(_localCanvas.getHeight() * 0.80);                
                 
                 if(type === 'sticker') {
                     oImg.set('name', 'sticker');
@@ -759,8 +769,7 @@ export default class GoateeEditor {
                 imgObj.onload = function () {
                     let image = new fabric.Image(imgObj);
                     image.scaleToWidth(_localCanvas.getWidth() * 0.80);
-                    image.scaleToHeight(_localCanvas.getHeight() * 0.80);
-                    image.setControlsVisibility(_localControlsVisibility);
+                    image.scaleToHeight(_localCanvas.getHeight() * 0.80);                    
                     image.set('filename', fileElement.name);
                     image.set('name', 'image');
                     _localCanvas.add(image);
@@ -872,8 +881,7 @@ export default class GoateeEditor {
                 .then(function() {
                     _this.hideElement('#custom-text .loader');
                   // when font is loaded, use it.
-                    textElement.set({"fontFamily":selectedFont});
-                    textElement.setControlsVisibility(_localControlsVisibility);
+                    textElement.set({"fontFamily":selectedFont});                    
                     _this.canvas.add(textElement);
                    _this.pushTextToTop();
                     textElement.centerV();
@@ -883,8 +891,7 @@ export default class GoateeEditor {
                     _localCanvas.renderAll();
                     _this.updateNumberOfObjects();
                 }).catch(e => {
-                    _this.hideElement('#custom-text .loader');
-                    textElement.setControlsVisibility(_localControlsVisibility);
+                    _this.hideElement('#custom-text .loader');                    
                     textElement.set("fontFamily", 'Trebuchet MS');
                     _this.canvas.add(textElement);
                    _this.pushTextToTop();
@@ -898,8 +905,7 @@ export default class GoateeEditor {
             }
             else {
                 _this.hideElement('#custom-text .loader');
-                textElement.set("fontFamily", font);
-                textElement.setControlsVisibility(_localControlsVisibility);
+                textElement.set("fontFamily", font);                
                 _this.canvas.add(textElement);
                 _this.pushTextToTop();
                 textElement.centerV();
@@ -959,12 +965,10 @@ export default class GoateeEditor {
             .then(function() {
                 _this.hideElement('#custom-text .loader');
               // when font is loaded, use it.
-                _localTextElement.set({"fontFamily":fontName});
-                _localTextElement.setControlsVisibility(_localControlsVisibility);
+                _localTextElement.set({"fontFamily":fontName});               
                 _this.pushTextToTop();
     
-            }).catch(e => {
-                _localTextElement.setControlsVisibility(_localControlsVisibility);
+            }).catch(e => {               
                 _localTextElement.set("fontFamily", 'Trebuchet MS');
                 _this.pushTextToTop();
            });
@@ -1031,11 +1035,9 @@ export default class GoateeEditor {
             const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject);
             // Show delete button
             if(checkObjectRightBoundarie) {
-                this.adjustControlsVisibility(activeObject,'left');
                 this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
             }
             else {
-                this.adjustControlsVisibility(activeObject,'right');
                 this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
             }  
         }
@@ -1129,11 +1131,9 @@ export default class GoateeEditor {
             const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject);
             // Show delete button
             if(checkObjectRightBoundarie) {
-                this.adjustControlsVisibility(activeObject,'left');
                 this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
             }
             else {
-                this.adjustControlsVisibility(activeObject,'right');
                 this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
             }    
         }
@@ -1176,11 +1176,9 @@ export default class GoateeEditor {
             const checkObjectRightBoundarie = this.checkObjectRightBoundarie(activeObject);
             // Show delete button
             if(checkObjectRightBoundarie) {
-                this.adjustControlsVisibility(activeObject,'left');
                 this.addOnCanvasDeleteBtn(activeObject.oCoords.tl.x, activeObject.oCoords.tl.y);
             }
             else {
-                this.adjustControlsVisibility(activeObject,'right');
                 this.addOnCanvasDeleteBtn(activeObject.oCoords.tr.x, activeObject.oCoords.tr.y);
             }  
         }
